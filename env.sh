@@ -55,6 +55,8 @@ fi
 ### SAMPLE KBP DATA DUMP
 ###
 
-export DATA_FILE=$curr_dir/data/data10k.csv
+export TEST_DATA_FILE=$curr_dir/data/test.csv
 
+cat $curr_dir/data/train* > $curr_dir/data/train.tsv
+export TRAIN_DATA_FILE=$curr_dir/data/train.tsv
 echo "Done."
