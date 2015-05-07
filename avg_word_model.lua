@@ -37,7 +37,7 @@ function avg_word_model:accGradParameters(input, gradOutput, scale)
   self.model:accGradParameters(input, gradOutput, scale)
 end
 
--- Add a training function that supports reading from disk with negative log likelihood criterion
+-- Add a training function that supports reading training data from disk with negative log likelihood criterion
 function avg_word_model:train(lr, lrdecay)
 
 end
