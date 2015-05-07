@@ -55,6 +55,6 @@ fi
 ### SAMPLE KBP DATA DUMP
 ###
 
-export KBP_10k=$curr_dir/data/data10k.csv
+export DATA_FILE=$curr_dir/data/data10k.csv
 
 echo "Done."
