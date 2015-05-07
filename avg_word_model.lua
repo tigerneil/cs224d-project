@@ -25,11 +25,18 @@ function avg_word_model:__init(initial_embeddings, hidden_dimension, output_dime
 end
 
 function avg_word_model:updateOutput(input)
-   
+   self.output = self.model.updateOutput(input)
+   return self.output
 end
 
 function avg_word_model:updateGradInput(input, gradOutput)
-
+   return self.model:updateGradInput(input, gradOutput)
 end
+
+function avg_word_model:accGradParameters(input, gradOutput, scale)
+  self.model:accGradParameters(input, gradOutput, scale)
+end
+
+
 
 
