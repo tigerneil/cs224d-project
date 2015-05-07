@@ -10,7 +10,7 @@ function avg_word_model:__init(initial_embeddings, hidden_dimension, output_dime
    
    self.model = nn.Sequential()
    -- use the word_embeddings as input, should be in nn.lookuptable format 
-   self.model:add(initial_embeddings)
+   self.model:add(self.getlookuptable(initial_embeddings))
 
    -- mean of selected words
    self.model:add(nn.Mean(1))
@@ -37,6 +37,14 @@ function avg_word_model:accGradParameters(input, gradOutput, scale)
   self.model:accGradParameters(input, gradOutput, scale)
 end
 
+-- Add a training function that supports reading from disk with negative log likelihood criterion
+function avg_word_model:train(lr, lrdecay)
+
+end
+-- Add a function to generate lookup table from dictionary
+function avg_word_model:get_lookup_table(initial_embeddings)
+
+end
 
 
 
