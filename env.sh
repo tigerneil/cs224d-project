@@ -57,6 +57,14 @@ fi
 
 export TEST_DATA_FILE=$curr_dir/data/test.csv
 
+# command to split a large file
+#split -l lines file prefix
+
 cat $curr_dir/data/train* > $curr_dir/data/train.tsv
+
+cat $curr_dir/data/train_processed* > $curr_dir/data/train_processed.tsv
+
 export TRAIN_DATA_FILE=$curr_dir/data/train.tsv
+export TRAIN_DATA_FILE_PROCESSED=$curr_dir/data/train_processed.tsv
+
 echo "Done."

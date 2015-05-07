@@ -1,6 +1,11 @@
 data/glove/glove*.txt
 data/glove/glove*.gz
 
+data/train/train.tsv
+
+*.pyc
+*.DS_Store
+
 # Compiled Lua sources
 luac.out
 
