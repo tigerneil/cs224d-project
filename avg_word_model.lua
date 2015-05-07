@@ -25,7 +25,7 @@ function avg_word_model:__init(initial_embeddings, num_words, word_dim, hidden_d
 	
 	self.model = nn.Sequential()
 	
-	-- use the lookup table generated sbove, should be in nn.lookuptable format 
+	-- use the lookup table generated above, should be in nn.lookuptable format 
 	self.model:add(self.lookup)
 
 	-- mean of selected words
@@ -45,11 +45,11 @@ function avg_word_model:updateOutput(input)
 	return self.output
 end
 
-function avg_word_model:updateGradInput(words, gradOutput)
+function avg_word_model:updateGradInput(input, gradOutput)
 	return self.model:updateGradInput(input, gradOutput)
 end
 
-function avg_word_model:accGradParameters(words, gradOutput, scale)
+function avg_word_model:accGradParameters(input, gradOutput, scale)
 	self.model:accGradParameters(input, gradOutput, scale)
 end
 
@@ -58,3 +58,11 @@ function avg_word_model:autotrain(data_loc, lr, lrdecay)
 
 end
 
+-- function to convert table of words to longtensor of indices
+function avg_word_model:words_to_indices(words)
+	indices = {}
+	for i, word in ipairs(words) do
+		table.insert(indices, self.word_to_ind[word])
+	end
+	return torch.LongTensor(indices)
+end
