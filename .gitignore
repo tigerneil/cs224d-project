@@ -6,6 +6,8 @@ data/train/train.tsv
 *.pyc
 *.DS_Store
 
+.ipynb_checkpoints/*
+
 # Compiled Lua sources
 luac.out
 
