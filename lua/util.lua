@@ -6,3 +6,16 @@ function script.setDefault(t, d)
 end
 
 return script
+
+
+function readDataFile(path)
+    local path = path
+    print "in read"
+    local inputFile = io.open(path)
+    
+    local line = inputFile:read("*l")
+    while line do
+       processLine(line) -- replace this with any function
+       line = inputFile:read("*l")
+    end
+end
