@@ -97,28 +97,21 @@ function avg_word_model:autotest(data_loc)
 	local path = data_loc
     	local inputFile = io.open(path)
 
-    	for i = 1,nepochs do
-		count = 0
-		local line = inputFile:read("*l")
-		while line do
-			self.predict(self, line)
-			line = inputFile:read("*l")
-			if count%printevery == 0 then
-				print(count)
-			end
-			count = count + 1 
-		end
+	local line = inputFile:read("*l")
+	while line do
+		self.predict(self, line)
+		line = inputFile:read("*l")
 	end
+
 end
 
 function avg_word_model:predict(line)
 	-- Get nn input and output from line
 	tokens = utils.parseTestProcessedLine(line)
 	input = self.words_to_indices(self, tokens)
-
 	self.model:forward(input)
-	_, index = torch.max(self.model.output)
-	print(self.ind_to_rel[index])
+	_, index = torch.max(self.model.output, 1)
+	print(self.ind_to_rel[index[1]])
 end
 -- function to convert table of words to longtensor of indices
 function avg_word_model:words_to_indices(words)
