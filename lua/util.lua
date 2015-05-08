@@ -11,9 +11,9 @@ end
 -- Splits a string similar to python's str.split().
 -- Source: http://stackoverflow.com/questions/1426954/split-string-in-lua
 function util.split(inputstr, sep)
-		if sep == "" then
-			return {}
-		end
+        if sep == "" then
+            return {}
+        end
         if sep == nil then
                 sep = "%s"
         end
@@ -25,17 +25,27 @@ function util.split(inputstr, sep)
         return t
 end
 
--- File IO utility
-function util.readDataFile(path, processLine)
+-- Syntax for reading a file. Can't actually use!
+function util.readDataFile(path, func)
     local path = path
     print "in read"
     local inputFile = io.open(path)
     
     local line = inputFile:read("*l")
     while line do
-       processLine(line)
+       func(line)
        line = inputFile:read("*l")
     end
+end
+
+
+-- Parse a line form a python-processed file.
+function util.parseProcessedLine(line)
+    -- split the line by tab
+    vals = util.split(line, "\t")
+    tokens = util.split(vals[1], ",")
+    relations = util.split(vals[2], ",")
+    return tokens, relations
 end
 
 return util
