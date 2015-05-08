@@ -55,6 +55,11 @@ end
 
 -- Add a training function that supports reading training data from disk with negative log likelihood criterion
 function avg_word_model:autotrain(data_loc, lr, lrdecay)
+	
+end
+
+-- Add a testing function that reads test data from disk and outputs predictions
+function avg_word_model:autotest(data_loc)
 
 end
 
