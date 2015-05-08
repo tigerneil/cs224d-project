@@ -53,7 +53,7 @@ function util.read_relations(path)
    local rel_file = io.open(path)
    
    local relations_table = {}
-   local i = 0
+   local i = 1
    local line = rel_file:read("*l")
    while line do
       relations_table[i] = line

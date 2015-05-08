@@ -43,22 +43,30 @@ function avg_word_model:__init(initial_embeddings, relations, num_words, word_di
 
 	-- Relations to output index
 	self.rel_to_ind = {}
+	self.ind_to_rel = {}
 	for i,rel in ipairs(relations) do
 		self.rel_to_ind[rel] = i
+		self.ind_to_rel[i] = rel
 	end
+	print 'Model initialized'
 end
 
 -- Add a training function that supports reading training data from disk with negative log likelihood criterion
-function avg_word_model:autotrain(data_loc, lr, reg, nepochs)
+function avg_word_model:autotrain(data_loc, lr, reg, nepochs, printevery)
 	--Iterate the next lines over the dataset
 	local path = data_loc
     	local inputFile = io.open(path)
 
-    	for i in 1,nepochs do
+    	for i = 1,nepochs do
+		count = 0
 		local line = inputFile:read("*l")
 		while line do
-			sgd_step(line, lr, reg)
+			self.sgd_step(self, line, lr, reg)
 			line = inputFile:read("*l")
+			if count%printevery == 0 then
+				print(count)
+			end
+			count = count + 1 
 		end
 	end
 end
@@ -66,8 +74,9 @@ end
 function avg_word_model:sgd_step(line, lr, reg)
 	-- Get nn input and output from line
 	tokens, relations = utils.parseProcessedLine(line)
-	input = self.words_to_indices(tokens)
+	input = self.words_to_indices(self, tokens)
 	output = self.rel_to_ind[relations[1]]
+
 	self.criterion:forward(self.model:forward(input), output)
 	-- (1) zero the accumulation of the gradients
 	self.model:zeroGradParameters()
@@ -84,9 +93,33 @@ end
 
 -- Add a testing function that reads test data from disk and outputs predictions
 function avg_word_model:autotest(data_loc)
-	
+	--Iterate the next lines over the dataset
+	local path = data_loc
+    	local inputFile = io.open(path)
+
+    	for i = 1,nepochs do
+		count = 0
+		local line = inputFile:read("*l")
+		while line do
+			self.predict(self, line)
+			line = inputFile:read("*l")
+			if count%printevery == 0 then
+				print(count)
+			end
+			count = count + 1 
+		end
+	end
 end
 
+function avg_word_model:predict(line)
+	-- Get nn input and output from line
+	tokens = utils.parseTestProcessedLine(line)
+	input = self.words_to_indices(self, tokens)
+
+	self.model:forward(input)
+	_, index = torch.max(self.model.output)
+	print(self.ind_to_rel[index])
+end
 -- function to convert table of words to longtensor of indices
 function avg_word_model:words_to_indices(words)
 	indices = {}
