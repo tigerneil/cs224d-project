@@ -3,6 +3,8 @@ data/glove/glove*.gz
 
 data/train/train.tsv
 
+lua/*.ipynb
+
 *.pyc
 *.DS_Store
 

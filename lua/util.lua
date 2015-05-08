@@ -11,6 +11,9 @@ end
 -- Splits a string similar to python's str.split().
 -- Source: http://stackoverflow.com/questions/1426954/split-string-in-lua
 function util.split(inputstr, sep)
+        if inputstr == "" then
+            return {}
+        end
         if sep == "" then
             return {}
         end
@@ -45,6 +48,13 @@ function util.parseProcessedLine(line)
     tokens = util.split(vals[1], ",")
     relations = util.split(vals[2], ",")
     return tokens, relations
+end
+
+-- Parse a line form a python-processed file.
+function util.parseTestProcessedLine(line)
+    -- split the line by tab
+    tokens = util.split(line, ",")
+    return tokens
 end
 
 -- A function to read the relations file and return a table from indices to relation strings
