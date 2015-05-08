@@ -3,7 +3,7 @@ require "nn"
 local utils = require("util")
 
 local avg_word_model, parent = torch.class('avg_word_model', 'nn.Module')
-function avg_word_model:__init(initial_embeddings, num_words, word_dim, hidden_dimension, output_dimension)
+function avg_word_model:__init(initial_embeddings, relations, num_words, word_dim, hidden_dimension, output_dimension)
 	parent.__init(self)
 	self.hdim = hidden_dimension
 	self.odim = output_dimension
@@ -41,24 +41,33 @@ function avg_word_model:__init(initial_embeddings, num_words, word_dim, hidden_d
 	self.reg_layers = {self.model:get(3).weight, self.model:get(5).weight}
 	self.criterion = nn.ClassNLLCriterion()  
 
+	-- Relations to output index
+	self.rel_to_ind = {}
+	for i,rel in ipairs(relations) do
+		self.rel_to_ind[rel] = i
+	end
 end
 
 -- Add a training function that supports reading training data from disk with negative log likelihood criterion
-function avg_word_model:autotrain(data_loc, lr, reg)
+function avg_word_model:autotrain(data_loc, lr, reg, nepochs)
 	--Iterate the next lines over the dataset
 	local path = data_loc
     	local inputFile = io.open(path)
 
-    	local line = inputFile:read("*l")
-    	while line do
-       		sgd_step(line, lr, reg)
-       		line = inputFile:read("*l")
-    	end
+    	for i in 1,nepochs do
+		local line = inputFile:read("*l")
+		while line do
+			sgd_step(line, lr, reg)
+			line = inputFile:read("*l")
+		end
+	end
 end
 
 function avg_word_model:sgd_step(line, lr, reg)
 	-- Get nn input and output from line
-	
+	tokens, relations = utils.parseProcessedLine(line)
+	input = self.words_to_indices(tokens)
+	output = self.rel_to_ind[relations[1]]
 	self.criterion:forward(self.model:forward(input), output)
 	-- (1) zero the accumulation of the gradients
 	self.model:zeroGradParameters()
