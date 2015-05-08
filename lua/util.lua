@@ -26,17 +26,17 @@ function util.split(inputstr, sep)
 end
 
 -- Syntax for reading a file. Can't actually use!
-function util.readDataFile(path, func)
-    local path = path
-    print "in read"
-    local inputFile = io.open(path)
+-- function util.readDataFile(path, func)
+--     local path = path
+--     print "in read"
+--     local inputFile = io.open(path)
     
-    local line = inputFile:read("*l")
-    while line do
-       func(line)
-       line = inputFile:read("*l")
-    end
-end
+--     local line = inputFile:read("*l")
+--     while line do
+--        func(line)
+--        line = inputFile:read("*l")
+--     end
+-- end
 
 
 -- Parse a line form a python-processed file.
