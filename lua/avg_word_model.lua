@@ -3,13 +3,13 @@ require "nn"
 local utils = require("util")
 
 local avg_word_model, parent = torch.class('avg_word_model', 'nn.Module')
-function avg_word_model:__init(initial_embeddings, num_words, word_dim, hidden_dimension, output_dimension)
+function avg_word_model:__init(initial_embeddings, relations, num_words, word_dim, hidden_dimension, output_dimension)
 	parent.__init(self)
 	self.hdim = hidden_dimension
 	self.odim = output_dimension
 	self.wvdim = word_dim
 	self.Vdim = num_words
-	
+
 	-- generating lookup table and dictionary from words to lookup table indices from word -> vector maps
 	self.word_to_ind = {}
 	self.lookup = nn.LookupTable(self.Vdim + 1, self.wvdim)
@@ -37,30 +37,54 @@ function avg_word_model:__init(initial_embeddings, num_words, word_dim, hidden_d
 
 	-- output layer
 	self.model:add(nn.Linear(self.hdim, self.odim))
-	self.model:add(nn.SoftMax())
-end
+	self.model:add(nn.LogSoftMax())
+	self.reg_layers = {self.model:get(3).weight, self.model:get(5).weight}
+	self.criterion = nn.ClassNLLCriterion()  
 
-function avg_word_model:updateOutput(input)
-	self.output = self.model:updateOutput(input)
-	return self.output
-end
-
-function avg_word_model:updateGradInput(input, gradOutput)
-	return self.model:updateGradInput(input, gradOutput)
-end
-
-function avg_word_model:accGradParameters(input, gradOutput, scale)
-	self.model:accGradParameters(input, gradOutput, scale)
+	-- Relations to output index
+	self.rel_to_ind = {}
+	for i,rel in ipairs(relations) do
+		self.rel_to_ind[rel] = i
+	end
 end
 
 -- Add a training function that supports reading training data from disk with negative log likelihood criterion
-function avg_word_model:autotrain(data_loc, lr, lrdecay)
-	
+function avg_word_model:autotrain(data_loc, lr, reg, nepochs)
+	--Iterate the next lines over the dataset
+	local path = data_loc
+    	local inputFile = io.open(path)
+
+    	for i in 1,nepochs do
+		local line = inputFile:read("*l")
+		while line do
+			sgd_step(line, lr, reg)
+			line = inputFile:read("*l")
+		end
+	end
+end
+
+function avg_word_model:sgd_step(line, lr, reg)
+	-- Get nn input and output from line
+	tokens, relations = utils.parseProcessedLine(line)
+	input = self.words_to_indices(tokens)
+	output = self.rel_to_ind[relations[1]]
+	self.criterion:forward(self.model:forward(input), output)
+	-- (1) zero the accumulation of the gradients
+	self.model:zeroGradParameters()
+	-- (2) accumulate gradients
+	self.model:backward(input, self.criterion:backward(self.model.output, output))
+	-- (3) update parameters with a 0.01 learning rate
+	self.model:updateParameters(lr)
+
+	-- Adding regularization for all linear layers, ignoring the word vectors
+	for _,w in ipairs(self.reg_layers) do
+		w:add(-lr*reg, w)
+	end
 end
 
 -- Add a testing function that reads test data from disk and outputs predictions
 function avg_word_model:autotest(data_loc)
-
+	
 end
 
 -- function to convert table of words to longtensor of indices
