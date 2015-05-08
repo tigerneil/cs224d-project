@@ -46,12 +46,19 @@ end
 -- Add a training function that supports reading training data from disk with negative log likelihood criterion
 function avg_word_model:autotrain(data_loc, lr, reg)
 	--Iterate the next lines over the dataset
-	
+	local path = data_loc
+    	local inputFile = io.open(path)
+
+    	local line = inputFile:read("*l")
+    	while line do
+       		sgd_step(line, lr, reg)
+       		line = inputFile:read("*l")
+    	end
 end
 
 function avg_word_model:sgd_step(line, lr, reg)
 	-- Get nn input and output from line
-
+	
 	self.criterion:forward(self.model:forward(input), output)
 	-- (1) zero the accumulation of the gradients
 	self.model:zeroGradParameters()
