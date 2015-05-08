@@ -11,6 +11,9 @@ end
 -- Splits a string similar to python's str.split().
 -- Source: http://stackoverflow.com/questions/1426954/split-string-in-lua
 function util.split(inputstr, sep)
+        if inputstr == "" then
+            return {}
+        end
         if sep == "" then
             return {}
         end
