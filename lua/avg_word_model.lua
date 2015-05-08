@@ -92,26 +92,33 @@ function avg_word_model:sgd_step(line, lr, reg)
 end
 
 -- Add a testing function that reads test data from disk and outputs predictions
-function avg_word_model:autotest(data_loc)
+function avg_word_model:autotest(data_loc, out_path)
 	--Iterate the next lines over the dataset
 	local path = data_loc
     	local inputFile = io.open(path)
 
 	local line = inputFile:read("*l")
+	local outFile = io.open(out_path, "w")
+	local out = 0
 	while line do
-		self.predict(self, line)
+		out = self.predict(self, line)
+		outFile:write(line)
+		outFile:write("\t")
+		outFile:write(out)
+		outFile:write("\n")
+
 		line = inputFile:read("*l")
 	end
-
+	outFile:close()
 end
 
 function avg_word_model:predict(line)
 	-- Get nn input and output from line
-	tokens = utils.parseTestProcessedLine(line)
-	input = self.words_to_indices(self, tokens)
+	local tokens = utils.parseTestProcessedLine(line)
+	local input = self.words_to_indices(self, tokens)
 	self.model:forward(input)
 	_, index = torch.max(self.model.output, 1)
-	print(self.ind_to_rel[index[1]])
+	return self.ind_to_rel[index[1]]
 end
 -- function to convert table of words to longtensor of indices
 function avg_word_model:words_to_indices(words)
