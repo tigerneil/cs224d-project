@@ -2,7 +2,13 @@ import sys
 import csv
 import StringIO
 
+'''
+Process input from stdin as tsv lines.
+Input: string from stdin
+Output: string (the same lines as input) to stdout
+'''
 
+# Process a single line of TSV and print result to stdout
 def process_line(line):
 	strio = StringIO.StringIO(line)
 	reader = csv.reader(strio, delimiter='\t', quoting=csv.QUOTE_NONE)
@@ -45,11 +51,23 @@ def process_line(line):
 		else:
 			words_between = words_list[object_begin : subject_end]
 		
-		known_relations = known_relations[1:-1]
-		known_relations_list = known_relations.split(',')
-		relations = ','.join(known_relations_list)
+		relations = ''
+		if len(row) > 18:
+			known_relations = known_relations[1:-1]
+			known_relations_list = known_relations.split(',')
+			relations = ','.join(known_relations_list)
 
 		# create a string to return
 		output = ','.join(words_between) + "\t" + relations
-		return output
-		
+		print output
+
+
+
+#
+# MAIN SCRIPT
+#
+
+for line in sys.stdin:
+	line = line.strip()
+	if line and line != '':
+		process_line(line)
