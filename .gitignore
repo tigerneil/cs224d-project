@@ -5,7 +5,8 @@ data/train/train.tsv
 
 lua/*.ipynb
 
-data/test_out.txt
+*_out.txt
+data/train/100k/train_100k.tsv
 
 *.pyc
 *.DS_Store

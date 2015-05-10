@@ -55,20 +55,14 @@ fi
 ### SAMPLE KBP DATA DUMP
 ###
 
-export TEST_DATA_FILE=$curr_dir/data/test.csv
-
 # command to split a large file
 #split -l lines file prefix
 
-if [ ! -f "$curr_dir/data/train.tsv" ]; then 
-	cat $curr_dir/data/train* > $curr_dir/data/train.tsv
+if [ ! -f "$curr_dir/data/train/100k/train_100k.tsv" ]; then 
+	cat $curr_dir/data/train/100k/train_100k_chunk* > $curr_dir/data/train/100k/train_100k.tsv
 fi
 
-if [ ! -f "$curr_dir/data/train/processed/train_processed.tsv" ]; then 
-	cat $curr_dir/data/train/processed/train_processed* > $curr_dir/data/train/processed/train_processed.tsv
-fi
-
-export TRAIN_DATA_FILE=$curr_dir/data/train/train.tsv
-export TRAIN_DATA_FILE_PROCESSED=$curr_dir/data/train/processed/train_processed.tsv
+#export TRAIN_DATA_FILE=$curr_dir/data/train/train.tsv
+#export TRAIN_DATA_FILE_PROCESSED=$curr_dir/data/train/processed/train_processed.tsv
 
 echo "Done."
