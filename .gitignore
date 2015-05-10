@@ -11,6 +11,8 @@ data/test_out.txt
 *.DS_Store
 
 lua/.ipynb_checkpoints/*
+.ipynb_checkpoints/*
+
 
 # Compiled Lua sources
 luac.out
