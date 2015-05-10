@@ -8,18 +8,18 @@ word_vec_file = "../data/glove/glove.6B.100d.txt"
 word_vec_model = "glove"
 
 relations_file = "../data/relations.txt"
-train_file = "../data/train/processed/train_processed.tsv"
+train_file = "../data/train/processed/train1m_processed.tsv"
 test_file = "../data/test_processed.tsv"
 output_file = "../data/test_out.txt"
 
 num_words = 400000
 word_dim = 100
-hidden_dimension = 200
+hidden_dimension = 500
 output_dimension = 42
 
-nepochs = 1
-batch_size = 10
-printevery = 10000
+nepochs = 20
+batch_size = 20
+printevery = 100000
 lrate = 0.01
 reg = 0.001
 
