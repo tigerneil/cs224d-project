@@ -88,6 +88,7 @@ function avg_word_model:autotrain(data_loc, lr, reg, nepochs, batch_size, printe
 			end 
 		end
 	end
+	torch.save("./saved_model_" .. "ep_" .. nepochs .. "_lr_" .. lr .. "_reg_" .. reg .. "_bs_" .. batch_size ..".net", self)
 end
 
 function avg_word_model:batch_sgd_step(lines, lr, reg)
