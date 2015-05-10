@@ -65,4 +65,11 @@ fi
 #export TRAIN_DATA_FILE=$curr_dir/data/train/train.tsv
 #export TRAIN_DATA_FILE_PROCESSED=$curr_dir/data/train/processed/train_processed.tsv
 
+# get the 1m processed sentences from the cluster
+
+if [ ! -f $curr_dir/data/train/1m/train1m_processed.tsv ]; then
+    mkdir -p $curr_dir/data/train/1m
+    scp jacob:/juicer/scr82/scr/nlp/data/tac-kbp/tackbp2015/master/tmp/train1m_processed.tsv $curr_dir/data/train/1m/train1m_processed.tsv
+fi
+
 echo "Done."
