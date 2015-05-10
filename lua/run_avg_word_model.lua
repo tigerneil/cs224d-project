@@ -8,9 +8,9 @@ word_vec_file = "../data/glove/glove.6B.100d.txt"
 word_vec_model = "glove"
 
 relations_file = "../data/relations.txt"
-train_file = "../data/train/processed/train_processed.tsv"
-test_file = "../data/test_processed.tsv"
-output_file = "../data/test_out.txt"
+train_file = "../data/train/100k/train_100k_processed.tsv"
+test_file = "../data/test/10k/test_10k_processed.tsv"
+output_file = "../data/test/10k/test_10k_out.txt"
 
 num_words = 400000
 word_dim = 100
