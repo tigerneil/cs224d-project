@@ -63,7 +63,7 @@ function avg_word_model:__init(initial_embeddings, relations, num_words, word_di
 end
 
 -- Add a training function that supports reading training data from disk with negative log likelihood criterion
-function avg_word_model:autotrain(data_loc, lr, reg, nepochs, batch_size, printevery)
+function avg_word_model:autotrain(data_loc, lr, ldecay, reg, nepochs, batch_size, printevery)
 	--Iterate the next lines over the dataset
 	local path = data_loc
         count = 0
@@ -80,12 +80,13 @@ function avg_word_model:autotrain(data_loc, lr, reg, nepochs, batch_size, printe
 
 			if count % printevery == 0 then
 				print("Read " .. count .. " lines")
-				print("Average cost for print" .. cost)
+				print("Total cost over training samples " .. cost)
 				cost = 0.0
 			end
 
 			if count % batch_size == 0 then
-				cost = cost + self.batch_sgd_step(self, batch_of_lines, lr, reg)
+				templr = ldecay*lr/(ldecay + count)
+				cost = cost + self.batch_sgd_step(self, batch_of_lines, templr, reg)
 				batch_of_lines = {}
 			end 
 		end
