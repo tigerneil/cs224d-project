@@ -3,6 +3,10 @@
 
 TODO
 
+5/10/15:
+- train average model on 1 million sentences and test using validation set
+- utilities to save and load a model
+
 5/3/15:
 - DL word vectors (glove)
 - get code to extract dep path between mentions
