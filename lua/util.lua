@@ -11,14 +11,16 @@ end
 -- Splits a string similar to python's str.split().
 -- Source: http://stackoverflow.com/questions/1426954/split-string-in-lua
 function util.split(inputstr, sep)
-        if inputstr == "" then
+        if inputstr == nil or inputstr == "" then
             return {}
         end
         if sep == "" then
-            return {}
+            local t = {}
+            t[1] = inputstr
+            return t
         end
         if sep == nil then
-                sep = "%s"
+            sep = "%s"
         end
         local t={} ; i=1
         for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
