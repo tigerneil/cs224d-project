@@ -78,7 +78,7 @@ function avg_word_model:autotrain(data_loc, lr, reg, nepochs, batch_size, printe
 			count = count + 1
 
 			if count % printevery == 0 then
-				print(count)
+				print("Read " .. count .. " lines")
 			end
 
 			if count % batch_size == 0 then
