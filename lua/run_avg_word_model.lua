@@ -21,7 +21,7 @@ nepochs = 20
 batch_size = 20
 printevery = 100000
 lrate = 0.01
-reg = 0.001
+reg = 0.01
 
 use_cuda = false
 
