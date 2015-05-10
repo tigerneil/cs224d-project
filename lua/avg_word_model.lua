@@ -1,5 +1,7 @@
 require "torch"
 require "nn"
+require "cutorch"
+require "cunn"
 local utils = require("util")
 
 local avg_word_model, parent = torch.class('avg_word_model', 'nn.Module')
@@ -38,6 +40,8 @@ function avg_word_model:__init(initial_embeddings, relations, num_words, word_di
 	-- output layer
 	self.model:add(nn.Linear(self.hdim, self.odim))
 	self.model:add(nn.LogSoftMax())
+	self.model:cuda()
+	
 	self.reg_layers = {self.model:get(3).weight, self.model:get(5).weight}
 	self.criterion = nn.ClassNLLCriterion()  
 
@@ -55,10 +59,9 @@ end
 function avg_word_model:autotrain(data_loc, lr, reg, nepochs, printevery)
 	--Iterate the next lines over the dataset
 	local path = data_loc
-    	local inputFile = io.open(path)
-
+        count = 0
     	for i = 1,nepochs do
-		count = 0
+		local inputFile = io.open(path)
 		local line = inputFile:read("*l")
 		while line do
 			self.sgd_step(self, line, lr, reg)
@@ -102,8 +105,6 @@ function avg_word_model:autotest(data_loc, out_path)
 	local out = 0
 	while line do
 		out = self.predict(self, line)
-		outFile:write(line)
-		outFile:write("\t")
 		outFile:write(out)
 		outFile:write("\n")
 
