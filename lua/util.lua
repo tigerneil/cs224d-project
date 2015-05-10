@@ -41,13 +41,30 @@ end
 --     end
 -- end
 
--- Parse a line form a python-processed file.
+-- Parse a line from a python-processed file.
 function util.parseProcessedLine(line)
     -- split the line by tab
     vals = util.split(line, "\t")
     tokens = util.split(vals[1], ",")
     relations = util.split(vals[2], ",")
     return tokens, relations
+end
+
+-- Parse several lines line from a python-processed file.
+-- lines is a table of lines
+function util.parseProcessedLines(lines)
+    token_table = {}
+    relations_table = {}
+
+    for line in lines do
+        vals = util.split(line, "\t")
+        tokens = util.split(vals[1], ",")
+        relations = util.split(vals[2], ",")
+        
+        table.insert(token_table, tokens)
+        table.insert(relations_table, relations)
+    end
+    return token_table, relations_table
 end
 
 -- Parse a line form a python-processed file.

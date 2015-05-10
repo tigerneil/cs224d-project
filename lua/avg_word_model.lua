@@ -1,16 +1,19 @@
 require "torch"
 require "nn"
-require "cutorch"
-require "cunn"
 local utils = require("util")
 
 local avg_word_model, parent = torch.class('avg_word_model', 'nn.Module')
-function avg_word_model:__init(initial_embeddings, relations, num_words, word_dim, hidden_dimension, output_dimension)
+function avg_word_model:__init(initial_embeddings, relations, num_words, word_dim, hidden_dimension, output_dimension, use_cuda)
 	parent.__init(self)
 	self.hdim = hidden_dimension
 	self.odim = output_dimension
 	self.wvdim = word_dim
 	self.Vdim = num_words
+
+	if use_cuda then
+		require "cutorch"
+		require "cunn"
+	end
 
 	-- generating lookup table and dictionary from words to lookup table indices from word -> vector maps
 	self.word_to_ind = {}
@@ -40,7 +43,10 @@ function avg_word_model:__init(initial_embeddings, relations, num_words, word_di
 	-- output layer
 	self.model:add(nn.Linear(self.hdim, self.odim))
 	self.model:add(nn.LogSoftMax())
-	self.model:cuda()
+	
+	if use_cuda then
+		self.model:cuda()
+	end
 	
 	self.reg_layers = {self.model:get(3).weight, self.model:get(5).weight}
 	self.criterion = nn.ClassNLLCriterion()  
@@ -56,21 +62,54 @@ function avg_word_model:__init(initial_embeddings, relations, num_words, word_di
 end
 
 -- Add a training function that supports reading training data from disk with negative log likelihood criterion
-function avg_word_model:autotrain(data_loc, lr, reg, nepochs, printevery)
+function avg_word_model:autotrain(data_loc, lr, reg, nepochs, batch_size, printevery)
 	--Iterate the next lines over the dataset
 	local path = data_loc
         count = 0
     	for i = 1,nepochs do
 		local inputFile = io.open(path)
 		local line = inputFile:read("*l")
+
+		local batch_of_lines = {}
+
 		while line do
-			self.sgd_step(self, line, lr, reg)
 			line = inputFile:read("*l")
-			if count%printevery == 0 then
+			table.insert(batch_of_lines, line)
+			count = count + 1
+
+			if count % printevery == 0 then
 				print(count)
 			end
-			count = count + 1 
+
+			if count % batch_size == 0 then
+				self.batch_sgd_step(self, batch_of_lines, lr, reg)
+				batch_of_lines = {}
+			end 
 		end
+	end
+end
+
+function avg_word_model:batch_sgd_step(lines, lr, reg)
+	-- Get nn input and output from line batch
+	token_table, relation_table = utils.parseProcessedLines(lines)
+
+	self.model:zeroGradParameters()
+
+	for i, token in ipairs(token_table) do
+		relation = relation_table[i]
+
+		input = self.words_to_indices(self, tokens)
+		output = self.rel_to_ind[relations[1]]
+
+		self.criterion:forward(self.model:forward(input), output)
+		self.model:backward(input, self.criterion:backward(self.model.output, output))
+	end
+
+	self.model:updateParameters(lr)
+
+	-- Adding regularization for all linear layers, ignoring the word vectors
+	for _,w in ipairs(self.reg_layers) do
+		w:add(-lr*reg, w)
 	end
 end
 
