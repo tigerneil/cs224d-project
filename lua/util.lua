@@ -56,11 +56,11 @@ function util.parseProcessedLines(lines)
     token_table = {}
     relations_table = {}
 
-    for line in lines do
+    for i, line in ipairs(lines) do
         vals = util.split(line, "\t")
         tokens = util.split(vals[1], ",")
         relations = util.split(vals[2], ",")
-        
+
         table.insert(token_table, tokens)
         table.insert(relations_table, relations)
     end
