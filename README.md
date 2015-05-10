@@ -4,6 +4,9 @@
 TODO
 
 5/10/15:
+- mikhail: batch_size = 20, lr = 0.001, reg = 0.001
+- ankur: batch_size = 20, lr = 0.01, reg = 0.001
+- melvin: batch_size = 20, lr = 0.01, reg = 0.01
 - train average model on 1 million sentences and test using validation set
 - utilities to save and load a model
 
