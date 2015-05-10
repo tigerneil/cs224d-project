@@ -1,7 +1,7 @@
 require "torch"
 require "nn"
-require "cutorch"
-require "cunn"
+--require "cutorch"
+--require "cunn"
 local utils = require("util")
 
 local avg_word_model, parent = torch.class('avg_word_model', 'nn.Module')
@@ -40,7 +40,7 @@ function avg_word_model:__init(initial_embeddings, relations, num_words, word_di
 	-- output layer
 	self.model:add(nn.Linear(self.hdim, self.odim))
 	self.model:add(nn.LogSoftMax())
-	self.model:cuda()
+	--self.model:cuda()
 	
 	self.reg_layers = {self.model:get(3).weight, self.model:get(5).weight}
 	self.criterion = nn.ClassNLLCriterion()  
