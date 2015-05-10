@@ -72,7 +72,7 @@ function avg_word_model:autotrain(data_loc, lr, reg, nepochs, batch_size, printe
 		local line = inputFile:read("*l")
 
 		local batch_of_lines = {}
-
+		local cost = 0.0
 		while line do
 			line = inputFile:read("*l")
 			table.insert(batch_of_lines, line)
@@ -80,10 +80,12 @@ function avg_word_model:autotrain(data_loc, lr, reg, nepochs, batch_size, printe
 
 			if count % printevery == 0 then
 				print("Read " .. count .. " lines")
+				print("Average cost for print" .. cost)
+				cost = 0.0
 			end
 
 			if count % batch_size == 0 then
-				self.batch_sgd_step(self, batch_of_lines, lr, reg)
+				cost = cost + self.batch_sgd_step(self, batch_of_lines, lr, reg)
 				batch_of_lines = {}
 			end 
 		end
@@ -96,14 +98,14 @@ function avg_word_model:batch_sgd_step(lines, lr, reg)
 	token_table, relation_table = utils.parseProcessedLines(lines)
 
 	self.model:zeroGradParameters()
-
+	cost = 0.0
 	for i, token in ipairs(token_table) do
 		relation = relation_table[i]
 
 		input = self.words_to_indices(self, tokens)
 		output = self.rel_to_ind[relations[1]]
 
-		self.criterion:forward(self.model:forward(input), output)
+		cost = cost + self.criterion:forward(self.model:forward(input), output)
 		self.model:backward(input, self.criterion:backward(self.model.output, output))
 	end
 
@@ -113,6 +115,7 @@ function avg_word_model:batch_sgd_step(lines, lr, reg)
 	for _,w in ipairs(self.reg_layers) do
 		w:add(-lr*reg, w)
 	end
+	return cost
 end
 
 function avg_word_model:sgd_step(line, lr, reg)

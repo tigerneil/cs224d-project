@@ -10,16 +10,16 @@ word_vec_model = "glove"
 relations_file = "../data/relations.txt"
 train_file = "../data/train/1m/train1m_processed.tsv"
 test_file = "../data/test/10k/test_10k_processed.tsv"
-output_file = "../data/test/test_10k_out.txt"
+output_file = "../data/test/test_10k_temp.txt"
 
 num_words = 400000
 word_dim = 100
 hidden_dimension = 500
 output_dimension = 42
 
-nepochs = 20
-batch_size = 20
-printevery = 100000
+nepochs = 1
+batch_size = 25
+printevery = 10000
 lrate = 0.01
 reg = 0.001
 
