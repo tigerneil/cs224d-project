@@ -17,10 +17,18 @@ word_dim = 100
 hidden_dimension = 200
 output_dimension = 42
 
+nepochs = 1
+batch_size = 10
+printevery = 10000
+lrate = 0.01
+reg = 0.001
+
+use_cuda = false
+
 wv = load_wordVector(word_vec_file, word_dim, word_vec_model)
 rel = util.read_relations(relations_file)
 print('Done reading relations and word vectors.')
 
-mod = avg_word_model(wv, rel, num_words, word_dim, hidden_dimension, output_dimension)
-mod:autotrain(train_file, lrate, reg, nepochs, printevery)
+mod = avg_word_model(wv, rel, num_words, word_dim, hidden_dimension, output_dimension, use_cuda)
+mod:autotrain(train_file, lrate, reg, nepochs, batch_size, printevery)
 mod:autotest(test_file, output_file)
