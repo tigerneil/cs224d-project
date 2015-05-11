@@ -97,15 +97,12 @@ end
 function avg_word_model:batch_sgd_step(lines, lr, reg)
 	-- Get nn input and output from line batch
 	token_table, relation_table = utils.parseProcessedLines(lines)
-
 	self.model:zeroGradParameters()
 	cost = 0.0
-	for i, token in ipairs(token_table) do
-		relation = relation_table[i]
-
+	for i, tokens in ipairs(token_table) do
+		relations = relation_table[i]
 		input = self.words_to_indices(self, tokens)
 		output = self.rel_to_ind[relations[1]]
-
 		cost = cost + self.criterion:forward(self.model:forward(input), output)
 		self.model:backward(input, self.criterion:backward(self.model.output, output))
 	end
