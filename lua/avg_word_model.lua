@@ -17,12 +17,14 @@ function avg_word_model:__init(initial_embeddings, relations, num_words, word_di
 	end
 
 	-- generating lookup table and dictionary from words to lookup table indices from word -> vector maps
-	self.word_to_ind = {}
-	self.lookup = nn.LookupTable(self.Vdim + 1, self.wvdim)
-	count = 1
 	-- Adding word vector for comma replacement
 	initial_embeddings["~^~COMMA~^~"] = initial_embeddings[","]
+	self.Vdim = self.Vdim + 1
+	self.word_to_ind = {}
+	self.lookup = nn.LookupTable(self.Vdim + 1, self.wvdim)
+	
 
+	count = 1
 	for word, tensor in pairs(initial_embeddings) do
 		self.word_to_ind[word] = count
 		self.lookup.weight[count] = tensor
@@ -95,7 +97,7 @@ function avg_word_model:autotrain(data_loc, lr, ldecay, reg, nepochs, batch_size
 			end 
 
 			if count % saveevery == 0 then
-				torch.save("./saved_model/" .. "lr_" .. lr .. "_reg_" .. reg .. "_bs_" .. batch_size .. "_iter_" .. count .. ".net", self)
+				torch.save("./saved_model/" .. "lr_" .. lr .. "_reg_" .. reg .. "_bs_" ..batch_size .. "_lrdecay_" .. ldecay .. "_iter_" .. count .. ".net", self)
 			end
 		end
 	end

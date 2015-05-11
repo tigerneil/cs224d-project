@@ -46,7 +46,7 @@ function load_wordVector(wordVectorPath, inputDim, model)
     local inputDim = inputDim
     local path = wordVectorPath
     if model == 'wv' then
-      return load_word2vec(wordVectorPaht, inputDim)
+      return load_word2vec(wordVectorPath, inputDim)
     end
     local wordVector_file = io.open(path)
     local wordVector_table = {}
