@@ -64,7 +64,7 @@ function avg_word_model:__init(initial_embeddings, relations, num_words, word_di
 end
 
 -- Add a training function that supports reading training data from disk with negative log likelihood criterion
-function avg_word_model:autotrain(data_loc, lr, ldecay, reg, nepochs, batch_size, printevery)
+function avg_word_model:autotrain(data_loc, lr, ldecay, reg, nepochs, batch_size, printevery, saveevery)
 	--Iterate the next lines over the dataset
 	local path = data_loc
         count = 0
@@ -90,11 +90,14 @@ function avg_word_model:autotrain(data_loc, lr, ldecay, reg, nepochs, batch_size
 				cost = cost + self.batch_sgd_step(self, batch_of_lines, templr, reg)
 				batch_of_lines = {}
 			end 
+
+			if count % saveevery == 0 then
+				torch.save("./saved_model/" .. "lr_" .. lr .. "_reg_" .. reg .. "_bs_" .. batch_size .. "_iter_" .. count .. ".net", self)
+			end
 		end
 	end
 	print("Training samples missed = ")
 	print(self.training_samples_missed)
-	torch.save("./saved_model_" .. "ep_" .. nepochs .. "_lr_" .. lr .. "_reg_" .. reg .. "_bs_" .. batch_size ..".net", self)
 end
 
 function avg_word_model:batch_sgd_step(lines, lr, reg)
