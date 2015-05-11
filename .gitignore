@@ -7,6 +7,7 @@ lua/*.ipynb
 
 # all saved models
 lua/saved_model*
+lua/saved_model/
 
 *_out.txt
 data/train/100k/train_100k.tsv

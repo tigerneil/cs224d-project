@@ -22,9 +22,9 @@ batch_size = 25
 printevery = 100000
 saveevery = 2000000
 lrate = 0.01
-ldecay = 1000000
+ldecay = 500000
 reg = 0.001
-output_file = "../data/dev/predictions_ep_"..nepochs .."_lr_" ..lrate .."_reg_" ..reg .."_bs_" ..batch_size ..".out"
+output_file = "../data/dev/predictions_ep_"..nepochs .."_lr_" ..lrate .."_reg_" ..reg .."_bs_" ..batch_size .. "_lrdecay_" .. ldecay..".out"
 use_cuda = false
 
 wv = load_wordVector(word_vec_file, word_dim, word_vec_model)
