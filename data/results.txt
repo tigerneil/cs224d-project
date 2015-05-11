@@ -1,5 +1,8 @@
 Results on the dev set:
 
+random 2.4
+org:city_of_headquarters 8.7
+
 predictions_ep_20_lr_0.001_reg_0.001_bs_20.txt 10.468
 predictions_ep_20_lr_0.01_reg_0.001_bs_20.txt 9.827
 predictions_ep_20_lr_0.01_reg_0.01_bs_20.txt 2.183
