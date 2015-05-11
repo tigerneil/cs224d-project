@@ -9,8 +9,8 @@ word_vec_model = "glove"
 
 relations_file = "../data/relations.txt"
 train_file = "../data/train/1m/train1m_processed.tsv"
-test_file = "../data/test/10k/test_10k_processed.tsv"
-output_file = "../data/test/test_10k_temp.txt"
+test_file = "../data/dev/validation_set_processed.tab"
+
 
 num_words = 400000
 word_dim = 100
@@ -21,9 +21,9 @@ nepochs = 20
 batch_size = 25
 printevery = 100000
 lrate = 0.01
-ldecay = 100000
+ldecay = 1000000
 reg = 0.001
-
+output_file = "../data/dev/predictions_ep_"..nepochs .."_lr_" ..lrate .."_reg_" ..reg .."_bs_" ..batch_size ..".out"
 use_cuda = false
 
 wv = load_wordVector(word_vec_file, word_dim, word_vec_model)
