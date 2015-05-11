@@ -59,6 +59,7 @@ function avg_word_model:__init(initial_embeddings, relations, num_words, word_di
 		self.rel_to_ind[rel] = i
 		self.ind_to_rel[i] = rel
 	end
+	self.training_samples_missed = 0
 	print 'Model initialized'
 end
 
@@ -91,6 +92,8 @@ function avg_word_model:autotrain(data_loc, lr, ldecay, reg, nepochs, batch_size
 			end 
 		end
 	end
+	print("Training samples missed = ")
+	print(self.training_samples_missed)
 	torch.save("./saved_model_" .. "ep_" .. nepochs .. "_lr_" .. lr .. "_reg_" .. reg .. "_bs_" .. batch_size ..".net", self)
 end
 
@@ -103,8 +106,12 @@ function avg_word_model:batch_sgd_step(lines, lr, reg)
 		relations = relation_table[i]
 		input = self.words_to_indices(self, tokens)
 		output = self.rel_to_ind[relations[1]]
-		cost = cost + self.criterion:forward(self.model:forward(input), output)
-		self.model:backward(input, self.criterion:backward(self.model.output, output))
+		if output then
+			cost = cost + self.criterion:forward(self.model:forward(input), output)
+			self.model:backward(input, self.criterion:backward(self.model.output, output))
+		else 
+			self.training_samples_missed = self.training_samples_missed + 1
+		end
 	end
 
 	self.model:updateParameters(lr)
