@@ -20,6 +20,9 @@ function avg_word_model:__init(initial_embeddings, relations, num_words, word_di
 	self.word_to_ind = {}
 	self.lookup = nn.LookupTable(self.Vdim + 1, self.wvdim)
 	count = 1
+	-- Adding word vector for comma replacement
+	initial_embeddings["~^~COMMA~^~"] = initial_embeddings[","]
+
 	for word, tensor in pairs(initial_embeddings) do
 		self.word_to_ind[word] = count
 		self.lookup.weight[count] = tensor
