@@ -53,9 +53,10 @@ fi
 
 ### make directories required by certain scripts
 
-if [ ! -d "$curr_dir/data/dev/dev_out" ]; then
-    mkdir -p $curr_dir/data/dev/dev_out
-fi
+mkdir -p $curr_dir/data/dev/dev_out
+mkdir -p $curr_dir/lua/saved_model
+
+
 
 
 
