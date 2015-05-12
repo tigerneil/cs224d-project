@@ -17,9 +17,6 @@ function avg_word_model:__init(initial_embeddings, relations, num_words, word_di
 	end
 
 	-- generating lookup table and dictionary from words to lookup table indices from word -> vector maps
-	-- Adding word vector for comma replacement
-	initial_embeddings["~^~COMMA~^~"] = initial_embeddings[","]
-	self.Vdim = self.Vdim + 1
 	self.word_to_ind = {}
 	self.lookup = nn.LookupTable(self.Vdim + 1, self.wvdim)
 	
