@@ -51,6 +51,14 @@ if [ ! -f "$GLOVE_300" ]; then
 fi
 
 
+### make directories required by certain scripts
+
+if [ ! -d "$curr_dir/data/dev/dev_out" ]; then
+    mkdir -p $curr_dir/data/dev/dev_out
+fi
+
+
+
 ###
 ### SAMPLE KBP DATA DUMP
 ###
