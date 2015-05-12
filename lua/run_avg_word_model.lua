@@ -23,7 +23,7 @@ printevery = 100000
 saveevery = 2000000
 lrate = 0.01
 ldecay = 1000000
-reg = 0.001
+reg = 0.00
 output_file = "../data/dev/predictions_ep_"..nepochs .."_lr_" ..lrate .."_reg_" ..reg .."_bs_" ..batch_size .. "_lrdecay_" .. ldecay..".out"
 use_cuda = false
 
