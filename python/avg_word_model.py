@@ -4,10 +4,11 @@ from keras.models import *
 from keras.optimizers import SGD
 import numpy as np
 from avg_layer import avg_layer
-
+import utils
+import pickle
 
 class avg_word_model:
-	def __init__(self, initial_embeddings, relations, num_words, word_dim, hidden_dimension, output_dimension, reg, alpha, lrdecay, bs, ep)
+	def __init__(self, initial_embeddings, relations, num_words, word_dim, hidden_dimension, output_dimension, reg, alpha, lrdecay, bs, ep):
 		self.hdim = hidden_dimension
 		self.odim = output_dimension
 		self.wvdim = word_dim
@@ -54,10 +55,9 @@ class avg_word_model:
 			self.rel_to_ind[rel] = i
 			self.ind_to_rel[i] = rel
 		print 'Model initialized'
-	end
 
 	#Add a training function that supports reading training data from disk with negative log likelihood criterion
-	def autotrain(self, data_loc, printevery, saveevery):
+	def autotrain(self, data_loc, save_loc, printevery, saveevery):
 		#Iterate the next lines over the dataset
 		count = 0
 		for i in range(self.nepochs):
@@ -86,7 +86,7 @@ class avg_word_model:
 		token_list, relation_list = utils.parse_processed_lines(lines)
 		inp = []
 		for tokens in token_list:
-			inp.append([self.word_to_ind[token] for token in tokens])
+			inp.append([self.word_to_ind.get(token, self.Vdim) for token in tokens])
 		inp = np.asarray(inp)
 		rel = [self.rel_to_ind[relation] for relation in relation_list]
 		out = np.zeros((len(lines), self.odim))
@@ -96,7 +96,7 @@ class avg_word_model:
 		return hist['loss']*len(lines)
 
 	# Add a testing function that reads test data from disk and outputs predictions
-	def autotest(data_loc, out_path, num_lines):
+	def autotest(self, data_loc, out_path):
 		#Iterate the next lines over the dataset
 		inputFile = open(data_loc)
 
@@ -107,11 +107,16 @@ class avg_word_model:
 			outFile.write(out)
 			outFile.write('\n')
 
-	def predict(line):
+	def predict(self, line):
 		#Get nn input and output from line
 		tokens = utils.parse_test_processed_line(line)
-		tmp = [self.word_to_ind[token] for token in tokens]
+		tmp = [self.word_to_ind.get(token, self.Vdim) for token in tokens]
 		inp = [tmp]
 		return self.ind_to_rel[self.model.predict_classes(inp)[0]]
-	end
 
+	def save_model(self, count):
+		name = save_loc + 'hid_' + str(self.hdim) + '_lr_' + str(self.lr) + '_lrdecay_' + str(self.lrdecay) + '_reg_' + str(self.reg) + '_batchsize_' + self.bs + '_iter_' + str(count)
+		pickle.dump(self, open(name, 'w'))
+
+	def load_model(model_loc):
+		return pickle.load(open(model_loc))
