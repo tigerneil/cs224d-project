@@ -12,7 +12,7 @@ class avg_word_model:
 		self.hdim = hidden_dimension
 		self.odim = output_dimension
 		self.wvdim = word_dim
-		self.Vdim = num_words
+		self.Vdim = num_words + 1
 		self.reg = reg
 		self.lr = alpha
 		self.lrdecay = lrdecay
@@ -22,7 +22,7 @@ class avg_word_model:
 
 		# generating lookup table and dictionary from words to lookup table indices from word -> vector maps
 		self.word_to_ind = {}
-		embed = np.empty((self.Vdim+1, self.wvdim))
+		embed = np.empty((self.Vdim, self.wvdim))
 		count = 0
 		for word, tensor in initial_embeddings.iteritems():
 			self.word_to_ind[word] = count
@@ -118,13 +118,18 @@ class avg_word_model:
 		token_list, relation_list = utils.parse_processed_lines(lines)
 		inp = []
 		for tokens in token_list:
-			inp.append([self.word_to_ind.get(token, self.Vdim) for token in tokens])
+			sen = []
+			for token in tokens:
+				sen.append([self.word_to_ind.get(token, self.Vdim)])
+			inp.append(sen)
 		inp = np.asarray(inp)
+		print 'Example input', inp[0]
 		rel = [self.rel_to_ind[relation] for relation in relation_list]
+		print 'Example output', rel[0]
 		out = np.zeros((len(lines), self.odim))
 		out[range(len(lines)), rel] = 1
 		out = np.asarray(out)
-		hist = self.model.fit(inp, out, batch_size = self.bs, nb_epoch = self.nepochs, verbose = 1)
+		hist = self.model.fit(inp, out, batch_size = self.batch_size, nb_epoch = self.nepochs, verbose = 1)
 
 
 	# Add a testing function that reads test data from disk and outputs predictions
