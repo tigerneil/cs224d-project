@@ -22,6 +22,7 @@ saveevery = 2000000
 lrate = 0.01
 ldecay = 1000000
 reg = 0.00
+momentum = 0.1
 output_file = "../data/dev/predictions_ep_" + str(nepochs) + "_lr_" + str(lrate) + "_reg_" + str(reg) + "_bs_" + str(batch_size) + "_lrdecay_" + str(ldecay) + ".out"
 model_loc = 'saved_models/'
 
@@ -29,6 +30,6 @@ wv = load_word_vectors(word_vec_file, word_dim)
 rel = read_relations(relations_file)
 print('Done reading relations and word vectors.')
 
-mod = avg_word_model(wv, rel, num_words, word_dim, hidden_dimension, output_dimension, reg, lrate, ldecay, batch_size, nepochs)
+mod = avg_word_model(wv, rel, num_words, word_dim, hidden_dimension, output_dimension, reg, lrate, ldecay, batch_size, nepochs, momentum)
 mod.autotrain(train_file, model_loc)
 mod.autotest(test_file, output_file)
