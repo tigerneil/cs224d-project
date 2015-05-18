@@ -6,7 +6,7 @@ word_vec_file = "../data/glove/glove.6B.100d.txt"
 word_vec_model = "glove"
 
 relations_file = "../data/relations.txt"
-train_file = "../data/train/1m/train1m_processed.tsv"
+train_file = "../data/train/100k/train_100k_processed.tsv"
 test_file = "../data/dev/validation_set_processed.tab"
 
 
@@ -16,7 +16,7 @@ hidden_dimension = 500
 output_dimension = 42
 
 nepochs = 50
-batch_size = 1
+batch_size = 100
 printevery = 100
 saveevery = 2000000
 lrate = 0.01

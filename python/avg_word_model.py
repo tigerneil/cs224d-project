@@ -4,15 +4,17 @@ from keras.models import *
 from keras.optimizers import SGD
 import numpy as np
 from avg_layer import avg_layer
+from custom_embedding_layer import custom_Embedding
 import utils
 import pickle
+from keras.preprocessing import sequence
 
 class avg_word_model:
 	def __init__(self, initial_embeddings, relations, num_words, word_dim, hidden_dimension, output_dimension, reg, alpha, lrdecay, bs, ep, momentum):
 		self.hdim = hidden_dimension
 		self.odim = output_dimension
 		self.wvdim = word_dim
-		self.Vdim = num_words + 1
+		self.Vdim = num_words
 		self.reg = reg
 		self.lr = alpha
 		self.lrdecay = lrdecay
@@ -22,14 +24,15 @@ class avg_word_model:
 
 		# generating lookup table and dictionary from words to lookup table indices from word -> vector maps
 		self.word_to_ind = {}
-		embed = np.empty((self.Vdim, self.wvdim))
-		count = 0
+		embed = np.empty((self.Vdim + 2, self.wvdim))
+		count = 1
 		for word, tensor in initial_embeddings.iteritems():
 			self.word_to_ind[word] = count
 			embed[count] = initial_embeddings[word]
 			count = count + 1
 		embed[count] = np.random.rand(self.wvdim)
 		
+		self.default_index = self.Vdim + 1
 		self.model = Sequential()
 		
 		# use the lookup table generated above to initialize embeddings 
@@ -76,7 +79,7 @@ class avg_word_model:
 					cost = 0.0
 
 				if count % self.batch_size == 0:
-					cost += self.batch_sgd_step(batch_of_lines, self.lr/(1 + self.lrdecay*count))
+					cost += self.batch_sgd_step_disk(batch_of_lines, self.lr/(1 + self.lrdecay*count))
 					batch_of_lines = []
 
 				if count % saveevery == 0:
@@ -87,12 +90,14 @@ class avg_word_model:
 		token_list, relation_list = utils.parse_processed_lines(lines)
 		inp = []
 		for tokens in token_list:
-			inp.append([self.word_to_ind.get(token, self.Vdim) for token in tokens])
+			inp.append(np.asarray([self.word_to_ind.get(token, self.default_index) for token in tokens]))
 		inp = np.asarray(inp)
 		rel = [self.rel_to_ind[relation] for relation in relation_list]
 		out = np.zeros((len(lines), self.odim))
 		out[range(len(lines)), rel] = 1
 		out = np.asarray(out)
+		print 'Example input', type(inp), inp.size, type(inp[0]), inp[0].size
+		#print 'Example output', rel
 		hist = self.model.fit(inp, out, batch_size = len(lines), nb_epoch = 1, verbose = 0)
 		return hist['loss'][0]*len(lines)
 
@@ -118,14 +123,12 @@ class avg_word_model:
 		token_list, relation_list = utils.parse_processed_lines(lines)
 		inp = []
 		for tokens in token_list:
-			sen = []
-			for token in tokens:
-				sen.append([self.word_to_ind.get(token, self.Vdim)])
-			inp.append(sen)
+			inp.append(np.asarray([self.word_to_ind.get(token, self.default_index) for token in tokens]))
 		inp = np.asarray(inp)
-		print 'Example input', inp[0]
+		inp = sequence.pad_sequences(inp)
+		print 'Example input', type(inp), inp.size, type(inp[0]), inp[0].size
 		rel = [self.rel_to_ind[relation] for relation in relation_list]
-		print 'Example output', rel[0]
+		#print 'Example output', rel
 		out = np.zeros((len(lines), self.odim))
 		out[range(len(lines)), rel] = 1
 		out = np.asarray(out)
@@ -136,7 +139,7 @@ class avg_word_model:
 	def autotest(self, data_loc, out_path):
 		#Iterate the next lines over the dataset
 		inputFile = open(data_loc)
-
+		
 		outFile = open(out_path, "w")
 		out = 0
 		for line in inputFile:
@@ -147,8 +150,8 @@ class avg_word_model:
 	def predict(self, line):
 		#Get nn input and output from line
 		tokens = utils.parse_test_processed_line(line)
-		tmp = [self.word_to_ind.get(token, self.Vdim) for token in tokens]
-		inp = [tmp]
+		tmp = [self.word_to_ind.get(token, self.default_index) for token in tokens]
+		inp = sequence.pad_sequences([tmp])
 		return self.ind_to_rel[self.model.predict_classes(inp)[0]]
 
 	def save_model(self):
