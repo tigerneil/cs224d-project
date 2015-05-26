@@ -92,5 +92,5 @@ class recurrent_model:
 		words = line.split(" ")
 		return [self.word_to_ind[word] for word in words]
 
-	def train(self, data_loc, print_every, save_every, reg, lr, bs, ep):
+	def train(self, data_loc, print_every, save_every):
 		pass

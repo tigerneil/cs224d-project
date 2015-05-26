@@ -31,10 +31,11 @@ Input query:
 """
 
 import sys
-from lib import dd as ddlib
-
+import dd as ddlib
+import string
+import re
 # the delimiter used to separate columns in the input
-ARR_DELIM = '~^~'
+ARR_DELIM = ','
 
 
 def dep_format_parser(dep_edge_str):
@@ -46,43 +47,46 @@ def dep_format_parser(dep_edge_str):
              (e.g. "31 prep_of 33")
   Returns: tuple of (integer, string, integer) (e.g. (30, "prep_of", 32))
   """
-  parent, label, child = dep_edge_str.split()
+  child, parent, label = dep_edge_str.split()
   return (int(parent) - 1, label, int(child) - 1) # input edge used 1-based indexing       
 
 
-for row in sys.stdin:
-  # row is a string where the columns are separated by tabs
-  (doc_id, sentence_id, lemma_str, dep_graph_str, words_str, mention_ids_str, \
-    mention_words_str, types_str, starts_str, ends_str) = row.strip().split('\t')
 
+def get_recurrent_features(row):
+  line = row.strip().split('\t')
+  dep_graph_str = string.replace(line[1], '\\t', '\t')
+  dep_graph_str = string.replace(dep_graph_str, '\\n', '\n')
+  lemma_str = line[3]
+  words_str = line[2]
+  #words_str = string.replace(words_str, "\",\"", "~^~")
   # skip sentences with empty dependency graphs
   if dep_graph_str == "":
-    continue
-
+    return ""
+  types = [line[9], line[13]]
+  starts = [line[14], line[16]]
+  ends = [line[15], line[17]]
   lemma = lemma_str.split(ARR_DELIM)
-  dep_graph = dep_graph_str.split(ARR_DELIM)
-  words = words_str.split(ARR_DELIM)
-  mention_ids = mention_ids_str.split(ARR_DELIM)
-  mention_words = mention_words_str.split(ARR_DELIM)
-  types = types_str.split(ARR_DELIM)
-  starts = starts_str.split(ARR_DELIM)
-  ends = ends_str.split(ARR_DELIM)
-
+  dep_graph = dep_graph_str.split("\n")
+  PATTERN = re.compile(r'''((?:[^,"']|"[^"]*"|'[^']*')+)''')
+  words = PATTERN.split(words_str[1:-1])[1::2]
+  for i,word in enumerate(words):
+	if word == "\",\"":
+		words[i] = ","
+  mention_ids = [line[7], line[11]]
+  mention_words = [[words[int(starts[0]): int(ends[0])]],[words[int(starts[1]):int(ends[1])]]]
   # create a list of mentions
   mentions = zip(mention_ids, mention_words, types, starts, ends)
   mentions = map(lambda x: {"mention_id" : x[0], "word" : x[1], "type" : x[2], "start" : int(x[3]), "end" : int(x[4])}, mentions)
 
-  # don't output features for sentences that are too long
-  if len(mentions) > 20 or len(lemma) > 100:
-    continue
-
+  relation = None
+  if len(line) == 21:
+	relation = line[18]
   # get a list of Word objects
   obj = {}
   obj['lemma'] = lemma
   obj['words'] = words
   obj['dep_graph'] = dep_graph
-  word_obj_list = ddlib.unpack_words(obj, lemma='lemma', words='words', dep_graph='dep_graph', \
-    dep_graph_parser=dep_format_parser)
+  word_obj_list = ddlib.unpack_words(obj, lemma='lemma', words='words', dep_graph='dep_graph', dep_graph_parser=dep_format_parser)
 
   # at this point we have a list of the mentions in this sentence
 
@@ -176,19 +180,12 @@ for row in sys.stdin:
 
         path = left_path + root + right_path
 
-        feat = [doc_id, m1["mention_id"], m2["mention_id"], m1["word"], m2["word"], m1["type"], m2["type"], path]
+        feat = [m1["word"], m2["word"], m1["type"], m2["type"], path]
 
         # make sure each of the strings we will output is encoded as utf-8
-        map(lambda x: x.decode('utf-8', 'ignore'), feat)
-        print "\t".join(feat)
-
-        if 'wife' in path or 'widow' in path or 'husband' in path:
-          feature = 'LEN_%d_wife/widow/husband' % (num_left + num_right)
-
-          feat = [doc_id, m1["mention_id"], m2["mention_id"], m1["word"], m2["word"], m1["type"], m2["type"], feature]
-
-          # make sure each of the strings we will output is encoded as utf-8
-          map(lambda x: x.decode('utf-8', 'ignore'), feat)
-
-          print "\t".join(feat)
-        
+	if relation is not None:
+		feat.append(relation[1:-1])
+	return feat
+               
+for line in sys.stdin:
+	print get_recurrent_features(line)
