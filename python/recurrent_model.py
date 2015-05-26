@@ -6,7 +6,7 @@ import theano.tensor as T
 
 #Bi-directional recurrent model, we accumulate the state from both directions along the dependency path and use the concatenated vector for prediction
 class recurrent_model:
-	def __init__(self, initial_embeddings, relations, activation, num_words, word_dim, state_dimension, output_dimension, regularization, l_r, batch_size, nepochs):
+	def __init__(self, initial_embeddings, relations, activation, num_words, word_dim, state_dimension, output_dimension, regularization, l_r, l_r_decay, batch_size, nepochs):
 		self.sdim = state_dimension
 		self.odim = output_dimension
 		self.wvdim = word_dim
@@ -14,6 +14,7 @@ class recurrent_model:
 		self.activ = activation
 		self.reg = T.scalar(regularization)
 		self.lr = T.scalar(l_r)
+		self.lrdecay = T.scalar(l_r_decay)
 		self.bs = batch_size
 		self.ep = nepochs
 		# generating lookup table and dictionary from words to lookup table indices from word -> vector maps
