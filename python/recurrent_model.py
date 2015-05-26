@@ -27,22 +27,22 @@ class recurrent_model:
 			count = count + 1
 		self.embeddings = theano.shared(embed.astype(theano.config.floatX))
 		
-        self.wf = theano.shared(name='wf',value=0.2 * np.random.uniform(-1.0, 1.0, (self.sdim + self.wvdim, self.sdim)).astype(theano.config.floatX))
+        	self.wf = theano.shared(name='wf',value=0.2 * np.random.uniform(-1.0, 1.0, (self.sdim + self.wvdim, self.sdim)).astype(theano.config.floatX))
 		self.wb = theano.shared(name='wb',value=0.2 * np.random.uniform(-1.0, 1.0,(self.sdim + self.wvdim, self.sdim)))
-        self.w = theano.shared(name='w', value=0.2 * np.random.uniform(-1.0, 1.0,(self.odim, 2*self.sdim)).astype(theano.config.floatX))
-        self.bf = theano.shared(name='bf',value=np.zeros(self.sdim,dtype=theano.config.floatX))
+        	self.w = theano.shared(name='w', value=0.2 * np.random.uniform(-1.0, 1.0,(self.odim, 2*self.sdim)).astype(theano.config.floatX))
+        	self.bf = theano.shared(name='bf',value=np.zeros(self.sdim,dtype=theano.config.floatX))
 		self.bb = theano.shared(name='bb',value=np.zeros(self.sdim,dtype=theano.config.floatX))
-        self.b = theano.shared(name='b',value=np.zeros(self.odim,dtype=theano.config.floatX))
-        self.hf = theano.shared(name='hf',value=np.zeros(self.sdim,dtype=theano.config.floatX))
+        	self.b = theano.shared(name='b',value=np.zeros(self.odim,dtype=theano.config.floatX))
+        	self.hf = theano.shared(name='hf',value=np.zeros(self.sdim,dtype=theano.config.floatX))
 		self.hb = theano.shared(name='hb',value=np.zeros(self.sdim,dtype=theano.config.floatX))
 		
 		self.dwf = theano.shared(name='wf',value=np.zeros((self.sdim + self.wvdim, self.sdim)).astype(theano.config.floatX))
 		self.dwb = theano.shared(name='wb',value=np.zeros((self.sdim + self.wvdim, self.sdim)).astype(theano.config.floatx))
-        self.dw = theano.shared(name='w', value=np.zeros((self.odim, 2*self.sdim)).astype(theano.config.floatX))
-        self.dbf = theano.shared(name='bf',value=np.zeros(self.sdim,dtype=theano.config.floatX))
+        	self.dw = theano.shared(name='w', value=np.zeros((self.odim, 2*self.sdim)).astype(theano.config.floatX))
+        	self.dbf = theano.shared(name='bf',value=np.zeros(self.sdim,dtype=theano.config.floatX))
 		self.dbb = theano.shared(name='bb',value=np.zeros(self.sdim,dtype=theano.config.floatX))
-        self.db = theano.shared(name='b',value=np.zeros(self.odim,dtype=theano.config.floatX))
-        self.dhf = theano.shared(name='hf',value=np.zeros(self.sdim,dtype=theano.config.floatX))
+        	self.db = theano.shared(name='b',value=np.zeros(self.odim,dtype=theano.config.floatX))
+        	self.dhf = theano.shared(name='hf',value=np.zeros(self.sdim,dtype=theano.config.floatX))
 		self.dhb = theano.shared(name='hb',value=np.zeros(self.sdim,dtype=theano.config.floatX))	
 		#bundling
 		self.params = [self.wf, self.wb, self.w, self.bf,self.bb, self.b, self.hf, self.hb]
