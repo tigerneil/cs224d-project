@@ -3,6 +3,10 @@
 
 TODO
 
+5/26/15:
+- Mikhail: convert conll dependencies (given by SQL script) to python tree objects (use library to do this)
+- Mikhail: start on recursive implementation (reuse code from hw3)
+
 5/17/15:
 - Compute word2vec for KBP corpus
 - Keras - implement basic MLP with triples
