@@ -3,6 +3,12 @@
 
 TODO
 
+5/26/15:
+- Melvin: concat 2 entity vectors, predict softmax of relation at the top
+- Melvin: avg of trained word vectors, predict relation at the top
+- Ankur: recurrent NN, using dep path
+- Mikhail: recursive NN (hw3 implementation); use NLTK to get constituency parse for sentences (but only keep the subtree that contains the mentions)
+
 5/17/15:
 - Compute word2vec for KBP corpus
 - Keras - implement basic MLP with triples
