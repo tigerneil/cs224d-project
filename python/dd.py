@@ -30,7 +30,7 @@ def unpack_words(input_dict, character_offset_begin=None, character_offset_end=N
 	for i in range(0,len(ziped_tags)):
 		if i not in dep_tree : dep_tree[i] = {"parent":-1, "label":"ROOT"}
 		wordobjs.append(Word(begin_char_offset=ziped_tags[i][0], 
-			end_char_offset=ziped_tags[i][1], lemma=ziped_tags[i][2], word=ziped_tags[i][3], pos=ziped_tags[i][4], 
+			end_char_offset=ziped_tags[i][1], lemma=ziped_tags[i][2], word=ziped_tags[i][5], pos=ziped_tags[i][4], 
 			ner=ziped_tags[i][5], dep_par=dep_tree[i]["parent"], dep_label=dep_tree[i]["label"]))
 	return wordobjs
 
@@ -101,6 +101,7 @@ def dep_path_between_words(words, begin_idx, end_idx):
 	Returns:
 	    An Array of Edge objects, each of which corresponds to one edge on the dependency path.
 	"""
+	#print words
 	path_to_root1 = _path_to_root(words, begin_idx)
 	path_to_root2 = _path_to_root(words, end_idx)
 	common = set(path_to_root1) & set(path_to_root2)
@@ -117,3 +118,51 @@ def dep_path_between_words(words, begin_idx, end_idx):
 	for e in reversed(path_right):
 		path.append(e)
 	return path
+
+def _path_to_root_new(words, word_idx):
+	rs = []
+	c_word_idx = word_idx
+	while True:
+		if words[c_word_idx].dep_par == -1 or words[c_word_idx].dep_par == c_word_idx:
+			break
+		c_word_idx = words[c_word_idx].dep_par
+		rs.append(words[c_word_idx])
+	return rs
+
+def dep_path_between_words_new(words, begin_idx, end_idx):
+	"""Given a sequence of Word objects and two indices, return the sequence of Edges 
+	corresponding to the dependency path between these two words.
+
+	Args:
+	    words: A sequence of Word objects.
+	    span1: A word index
+	    span2: A word index
+
+	Returns:
+	    An Array of Edge objects, each of which corresponds to one edge on the dependency path.
+	"""
+	#print words
+	path_to_root1 = _path_to_root(words, begin_idx)
+	path_to_root2 = _path_to_root(words, end_idx)
+	common = set(path_to_root1) & set(path_to_root2)
+	#if len(common) == 0:
+	#	raise Exception('Dep Path Must be Wrong: No Common Element Between Word %d & %d.' % (begin_idx, end_idx))
+	path = []
+	link = []
+	for word in path_to_root1:
+		if word in common: break
+		path.append(word.word)
+		link.append(word.dep_label)
+	path_right = []
+	link_right = []
+	for word in path_to_root2:
+		if word in common: 
+			path_right.append(word.word)
+			link_right.append(word.dep_label)
+			break
+		path_right.append(word.word)
+		link_right.append(word.dep_label)
+	for e in reversed(path_right):
+		path.append(e)
+	link.extend(list(reversed(link_right)))
+	return path, link
