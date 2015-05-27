@@ -34,6 +34,7 @@ import sys
 import dd as ddlib
 import string
 import re
+import csv
 # the delimiter used to separate columns in the input
 ARR_DELIM = ','
 
@@ -50,28 +51,28 @@ def dep_format_parser(dep_edge_str):
   child, parent, label = dep_edge_str.split()
   return (int(parent) - 1, label, int(child) - 1) # input edge used 1-based indexing       
 
-
-
 def get_recurrent_features(row):
   line = row.strip().split('\t')
   dep_graph_str = string.replace(line[1], '\\t', '\t')
   dep_graph_str = string.replace(dep_graph_str, '\\n', '\n')
+  #dep_graph_str = string.replace(dep_graph_str, '\\\'', '\'')
   lemma_str = line[3]
   words_str = line[2]
-  #words_str = string.replace(words_str, "\",\"", "~^~")
+  words_str = string.replace(words_str, "\",\"", "~^~")
   # skip sentences with empty dependency graphs
-  if dep_graph_str == "":
-    return ""
+  #if dep_graph_str == "":
+  #  return ""
   types = [line[9], line[13]]
   starts = [line[14], line[16]]
   ends = [line[15], line[17]]
   lemma = lemma_str.split(ARR_DELIM)
   dep_graph = dep_graph_str.split("\n")
-  PATTERN = re.compile(r'''((?:[^,"']|"[^"]*"|'[^']*')+)''')
-  words = PATTERN.split(words_str[1:-1])[1::2]
+  #PATTERN = re.compile(r'''((?:"[^"]*")+)''')
+  #words = PATTERN.split(words_str[1:-1])[1::2]
+  words = words_str.split(",")
   for i,word in enumerate(words):
-	if word == "\",\"":
-		words[i] = ","
+	if word == "~^~":
+		words[i] = ','
   mention_ids = [line[7], line[11]]
   mention_words = [[words[int(starts[0]): int(ends[0])]],[words[int(starts[1]):int(ends[1])]]]
   # create a list of mentions
@@ -95,12 +96,12 @@ def get_recurrent_features(row):
     start1 = m1["start"]
     end1 = m1["end"]
 
-    if m1["type"] not in ["PERSON", "ORGANIZATION"]:
-      continue
+    #if m1["type"] not in ["PERSON", "ORGANIZATION"]:
+    #  continue
 
     for m2 in mentions:
-      if m1["mention_id"] == m2["mention_id"]:
-        continue
+      #if m1["mention_id"] == m2["mention_id"]:
+        #continue
 
       start2 = m2["start"]
       end2 = m2["end"]
@@ -181,11 +182,14 @@ def get_recurrent_features(row):
         path = left_path + root + right_path
 
         feat = [m1["word"], m2["word"], m1["type"], m2["type"], path]
-
         # make sure each of the strings we will output is encoded as utf-8
 	if relation is not None:
 		feat.append(relation[1:-1])
 	return feat
-               
+  return [m1["word"], m2["word"], m1["type"], m2["type"], ""]
+
 for line in sys.stdin:
-	print get_recurrent_features(line)
+	temp =  get_recurrent_features(line)
+ 	if temp == None:
+		break
+	print temp
