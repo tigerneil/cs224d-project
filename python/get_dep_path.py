@@ -35,6 +35,7 @@ import dd as ddlib
 import string
 import re
 import csv
+import numpy as np
 # the delimiter used to separate columns in the input
 ARR_DELIM = ','
 
@@ -232,7 +233,7 @@ def get_recurrent_features_new(row):
 
   m1 = mentions[0]
   m2 = mentions[1]
-  print row
+  #print row
   if m1 != m2:
 	link, path = ddlib.dep_path_between_words_new(word_obj_list, int(ends[0])-1, int(ends[1])-1)
 	feat = [m1["word"], m2["word"], m1["type"], m2["type"], path, link]
@@ -240,9 +241,25 @@ def get_recurrent_features_new(row):
 		feat.append(relation)
 	return feat
 
+#outputs just the words along the dependency path
+def get_basic_rnn_features(line):
+	lis = get_recurrent_features_new(line)
+	ret = []
+	ret.extend(lis[0][0])
+	ret.extend(lis[5][1:-1])
+	ret.extend(lis[1][0])
+	rel = lis[6]
+	return ret, rel	
+
 for line in sys.stdin:
-	temp =  get_recurrent_features_new(line)
+	temp, rel =  get_basic_rnn_features(line)
  	if temp == None:
 		break
-	print temp
-        print '-----------------------------------------------------------------------------------------------------------------------'
+	out = " ".join(temp)
+	if rel is not None:
+		rel = rel[1:-1]
+		rel = rel.split(",")
+		#rel = rel[np.random.randint(0, len(rel))]
+		out = out + "\t" + rel[0]
+	print out
+        #print '-----------------------------------------------------------------------------------------------------------------------'
