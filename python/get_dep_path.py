@@ -233,7 +233,7 @@ def get_recurrent_features_new(row):
 
   m1 = mentions[0]
   m2 = mentions[1]
-  #print row
+  print row
   if m1 != m2:
 	link, path = ddlib.dep_path_between_words_new(word_obj_list, int(ends[0])-1, int(ends[1])-1)
 	feat = [m1["word"], m2["word"], m1["type"], m2["type"], path, link]
@@ -248,11 +248,17 @@ def get_basic_rnn_features(line):
 	ret.extend(lis[0][0])
 	ret.extend(lis[5][1:-1])
 	ret.extend(lis[1][0])
-	rel = lis[6]
-	return ret, rel	
+	rel = None
+	try:
+		rel = lis[6]
+	except:
+		pass
+	return ret, rel, lis[4]	
 
+dep_types = set()
 for line in sys.stdin:
-	temp, rel =  get_basic_rnn_features(line)
+	temp, rel, link =  get_basic_rnn_features(line)
+	dep_types.update(link)
  	if temp == None:
 		break
 	out = " ".join(temp)
@@ -263,3 +269,5 @@ for line in sys.stdin:
 		out = out + "\t" + rel[0]
 	print out
         #print '-----------------------------------------------------------------------------------------------------------------------'
+
+#print len(dep_types)
