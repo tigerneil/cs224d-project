@@ -1,3 +1,5 @@
+*.class
+
 data/glove/glove*.txt
 data/glove/glove*.gz
 
