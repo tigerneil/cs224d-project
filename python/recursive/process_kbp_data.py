@@ -125,7 +125,9 @@ def process_line(line):
         ind2 = max(m1_begin, m2_begin)
 
         output = [new_gloss, str(ind1), str(ind2), relations]
-        print json.dumps(output)
+        #print json.dumps(output)
+        sys.stdout.write(json.dumps(output)) # maybe this will fix broken pipe error
+        sys.stdout.write("\n")
 
 for line in sys.stdin:
     line = line.strip()

@@ -31,10 +31,10 @@ public class ProcessData {
 		PrintStream err = System.err;
 
 		// now make all writes to the System.err stream silent 
-		System.setErr(new PrintStream(new OutputStream() {
-			public void write(int b) {
-			}
-		}));
+		// System.setErr(new PrintStream(new OutputStream() {
+		// 	public void write(int b) {
+		// 	}
+		// }));
 
 		// set up corenlp stuff
 		props = new Properties();
