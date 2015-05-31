@@ -1,11 +1,10 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.TreeMap;
 
 import com.google.gson.Gson;
 
@@ -24,18 +23,6 @@ public class ProcessData {
 	static Gson gson = new Gson();
 
 	public static void main(String[] args) throws IOException {
-		// the code around the call to processInput() just suppresses corenlp output so that we can pipe
-		// the output of this file through
-
-		// this is your print stream, store the reference
-		PrintStream err = System.err;
-
-		// now make all writes to the System.err stream silent 
-		System.setErr(new PrintStream(new OutputStream() {
-			public void write(int b) {
-			}
-		}));
-
 		// set up corenlp stuff
 		props = new Properties();
 		props.setProperty("annotators", "tokenize, ssplit, pos, parse");
@@ -43,9 +30,6 @@ public class ProcessData {
 		pipeline = new StanfordCoreNLP(props);
 
 		processInput();
-
-		// set everything back to its original state afterwards
-		System.setErr(err); 
 	}
 
 	// Processes input from stdin, and calls processLine on each line.
@@ -65,16 +49,18 @@ public class ProcessData {
 	public static void processLine(String jsonLine) {
 		String[] vals = gson.fromJson(jsonLine, String[].class);
 
-		// [new_gloss, str(ind1), str(ind2), relations]
-		//System.out.println(Arrays.toString(vals));
-
+		// [new_gloss, subject_entity, object_entity, str(subject_begin), str(subject_end), str(object_begin), str(object_end), relations]
 		String gloss = vals[0];
-		int m1_ind = Integer.parseInt(vals[1]);
-		int m2_ind = Integer.parseInt(vals[2]);
-		String rels = vals[3];
+		String subject_entity = vals[1];
+		String object_entity = vals[2];
+		int subject_begin = Integer.parseInt(vals[3]);
+		int subject_end = Integer.parseInt(vals[4]);
+		int object_begin = Integer.parseInt(vals[5]);
+		int object_end = Integer.parseInt(vals[6]);
+		String rels = vals[7];
 
 		// get the parse for the desired subtree
-		String parse = getParse(gloss, m1_ind, m2_ind);
+		String parse = getParse(gloss, subject_entity, object_entity, subject_begin, subject_end, object_begin, object_end);
 
 		String output = makeOutput(parse, rels);
 		System.out.println(output);
@@ -85,56 +71,140 @@ public class ProcessData {
 	}
 
 	// Returns a string representing the subtree of the parse tree representing the lowest common ancestor of the 2 mentions.
-	// Assume ind1 and ind2 are sorted in increasing order by the caller.
-	public static String getParse(String text, int ind1, int ind2) {
-		// create an empty Annotation just with the given text
+	public static String getParse(String text, String subject_entity, String object_entity, int subject_begin, int subject_end, int object_begin, int object_end) {
 		Annotation document = new Annotation(text);
-
-		// run all Annotators on this text
 		pipeline.annotate(document);
-
-		// these are all the sentences in this document
-		// a CoreMap is essentially a Map that uses class objects as keys and has values with custom types
 		List<CoreMap> sentences = document.get(CoreAnnotations.SentencesAnnotation.class);
 
 		// we should never have more than a single sentence per line in the corpus
 		assert(sentences.size() <= 1);
 
 		CoreMap sentence = sentences.get(0);
-		Tree binarizedTree = sentence.get(TreeCoreAnnotations.BinarizedTreeAnnotation.class);
+		Tree binarizedTree = sentence.get(TreeCoreAnnotations.BinarizedTreeAnnotation.class); // the root
 		List<Tree> leaves = binarizedTree.getLeaves();
 
 		// indices in our data set (mention locations in the sentence) can be also indices into Tree.getLeaves()
 
-		int i = 0;
-		Tree t1 = null;
-		Tree t2 = null;
-		for (Tree leaf : leaves) {
-			if (i == ind1) t1 = leaf;
-			if (i == ind2) t2 = leaf;
-			i++;
+		// we define m1 to be the subject, and m2 to be the object
+
+		// get all the m1 and m2 nodes
+		// treemaps so that the indices are in sorted order
+		Map<Integer, Tree> m1Nodes = new TreeMap<Integer, Tree>();
+		Map<Integer, Tree> m2Nodes = new TreeMap<Integer, Tree>();
+
+		int m1_start = Math.min(subject_begin, subject_end);
+		int m1_end = Math.max(subject_begin, subject_end);
+		int m2_start = Math.min(object_begin, object_end);
+		int m2_end = Math.max(object_begin, object_end);
+
+		for (int i = 0; i < leaves.size(); i++) {
+			Tree currLeaf = leaves.get(i);
+			if (i >= m1_start && i < m1_end) m1Nodes.put(i, currLeaf);
+			if (i >= m2_start && i < m2_end) m2Nodes.put(i, currLeaf);
 		}
 
-		List<Tree> path = binarizedTree.pathNodeToNode(t1, t2);
+		// get the head node for m1 and m2 (highest node in the parse tree - lowest distance to root)
+		Tree m1Head = null;
+		Tree m2Head = null;
+		int m1HeadIndex = -1;
+		int m2HeadIndex = -1;
+		int m1MinDist = 10000;
+		int m2MinDist = 10000;
 
-		// the lowest node on the path through the dependency tree between the 2 mentions (this path has to go through the LCA)
+		for (Map.Entry<Integer, Tree> entry : m1Nodes.entrySet()) {
+			int index = entry.getKey();
+			Tree leaf = entry.getValue();
+
+			int distToRoot = leaf.depth(binarizedTree);
+			if (distToRoot < m1MinDist) {
+				m1MinDist = distToRoot;
+				m1Head = leaf;
+				m1HeadIndex = index;
+			}
+		}
+
+		for (Map.Entry<Integer, Tree> entry : m2Nodes.entrySet()) {
+			int index = entry.getKey();
+			Tree leaf = entry.getValue();
+
+			int distToRoot = leaf.depth(binarizedTree);
+			if (distToRoot < m2MinDist) {
+				m2MinDist = distToRoot;
+				m2Head = leaf;
+				m2HeadIndex = index;
+			}
+		}
+
+		// remove the non-head words from the tree
+		for (Map.Entry<Integer, Tree> entry : m1Nodes.entrySet()) {
+			int index = entry.getKey();
+			if (index == m1HeadIndex) continue;
+
+			// this is the node we want to remove
+			Tree leaf = entry.getValue(); // just the word
+			Tree parent = leaf.parent(binarizedTree); // (POS word) - this is what we want to remove
+			Tree parent2 = parent.parent(binarizedTree); // the parent of (POS word)
+
+			// get the index of parent in parent2's children list
+			int ind = -1;
+			for (int j = 0; j < parent2.children().length; j++) {
+				Tree child = parent2.children()[j];
+				if (child == parent) {
+					ind = j;
+				}
+			}
+			parent2.removeChild(ind);
+		}
+		for (Map.Entry<Integer, Tree> entry : m2Nodes.entrySet()) {
+			int index = entry.getKey();
+			if (index == m2HeadIndex) continue;
+
+			// this is the node we want to remove
+			Tree leaf = entry.getValue(); // just the word
+			Tree parent = leaf.parent(binarizedTree); // (POS word) - this is what we want to remove
+			Tree parent2 = parent.parent(binarizedTree); // the parent of (POS word)
+
+			// get the index of parent in parent2's children list
+			int ind = -1;
+			for (int j = 0; j < parent2.children().length; j++) {
+				Tree child = parent2.children()[j];
+				if (child == parent) {
+					ind = j;
+				}
+			}
+			parent2.removeChild(ind);
+		}
+
+		// replace the head node words with entity strings
+		m1Head.setValue(subject_entity);
+		m2Head.setValue(object_entity);
+
+		// now binarizedTree has the correct leaves (the mentions replaced by entity strings)
+		
+		// now get the LCA of the 2 heads
+		// there is only a single path between them, which is through their LCA.
+		// to get the LCA we need to find the highest node on the path, though (the one closest to the root)
+
+		List<Tree> path = binarizedTree.pathNodeToNode(m1Head, m2Head);
+
+		// the highest node on the path through the dependency tree between the 2 mentions (this path has to go through the LCA)
 		Tree lca = null;
 
-		// the height of the highest node through which the path goes
-		int maxHt = -1;
+		// the distance of the closest node to the root through which the path goes
+		// (which is not a node in either of the mentions!)
+		int maxDepth = -1;
 
 		for (Tree node : path) {
-			if (node.depth() > maxHt) {
-				maxHt = node.depth();
+			// skip this node if it's either of the heads
+			if (node == m1Head || node == m2Head) continue;
+
+			int depth = node.depth();
+			if (depth > maxDepth) {
+				maxDepth = depth;
 				lca = node;
 			}
 		}
 
-		// print the leaves on the path
-//		for (Tree leaf : lca.getLeaves()) {
-//			System.out.println(leaf.nodeString());
-//		}
-		
 		return lca.toString();
 	}
 }
