@@ -99,19 +99,24 @@ def process_line(line):
         m2_begin = 0
         temp = []
 
+        # Do we want to replace linked mention words ("Barack Obama") with their entity name (e.g. BarackObama)?
+        replace_mention_words_with_entity_str = False
+
         for i, word in enumerate(words):
             cur = word
-            if i == subject_begin:
-                cur = subject_entity
-                m1_begin = len(temp)
-            if i == object_begin:
-                cur = object_entity
-                m2_begin = len(temp)
 
-            if i > subject_begin and i < subject_end:
-                continue
-            if i > object_begin and i < object_end:
-                continue
+            if replace_mention_words_with_entity_str:
+                if i == subject_begin:
+                    cur = subject_entity
+                    m1_begin = len(temp)
+                if i == object_begin:
+                    cur = object_entity
+                    m2_begin = len(temp)
+
+                if i > subject_begin and i < subject_end:
+                    continue
+                if i > object_begin and i < object_end:
+                    continue
 
             if cur == '~^~COMMA~^~':
                 cur = ','
@@ -120,14 +125,19 @@ def process_line(line):
             
         new_gloss = ' '.join(temp)
 
-        # indices into the new gloss
-        ind1 = min(m1_begin, m2_begin)
-        ind2 = max(m1_begin, m2_begin)
+        if replace_mention_words_with_entity_str:
+            # indices into the new gloss
+            ind1 = min(m1_begin, m2_begin)
+            ind2 = max(m1_begin, m2_begin)
 
-        output = [new_gloss, str(ind1), str(ind2), relations]
-        #print json.dumps(output)
-        sys.stdout.write(json.dumps(output)) # maybe this will fix broken pipe error
-        sys.stdout.write("\n")
+            output = [new_gloss, str(ind1), str(ind2), relations]
+            #print json.dumps(output)
+            sys.stdout.write(json.dumps(output)) # maybe this will fix broken pipe error
+            sys.stdout.write("\n")
+        else:
+            output = [new_gloss, subject_entity, object_entity, str(subject_begin), str(subject_end), str(object_begin), str(object_end), relations]
+            sys.stdout.write(json.dumps(output)) # maybe this will fix broken pipe error
+            sys.stdout.write("\n")
 
 for line in sys.stdin:
     line = line.strip()
