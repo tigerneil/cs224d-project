@@ -180,9 +180,10 @@ class recurrent_model:
 		count = 1
 		if len(sample[0][0]) == len(sample[self.bs-1][0]):
 			return [list(xrange(0, self.bs))]
-		while count <= self.bs:
+		while count < self.bs:
 			if len(sample[count][0]) != len(sample[cur][0]):
 				batches.append(list(xrange(cur, count)))
 				cur = count
+			count += 1
 		batches.append(list(xrange(cur, self.bs)))
 		return batches
