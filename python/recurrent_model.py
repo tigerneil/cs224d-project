@@ -36,11 +36,11 @@ class recurrent_model:
         	self.wbw = theano.shared(name='wbw',value=0.2 * np.random.uniform(-1.0, 1.0, (self.sdim, self.wvdim)).astype(theano.config.floatX))
 		self.wf = theano.shared(name='wf', value=0.2 * np.random.uniform(-1.0, 1.0,(self.odim, self.sdim)).astype(theano.config.floatX))
 		self.wb = theano.shared(name='wb', value=0.2 * np.random.uniform(-1.0, 1.0,(self.odim, self.sdim)).astype(theano.config.floatX))
-		self.bf = theano.shared(name='bf',value=np.zeros(self.sdim,dtype=theano.config.floatX))
-		self.bb = theano.shared(name='bb',value=np.zeros(self.sdim,dtype=theano.config.floatX))
-        	self.b = theano.shared(name='b',value=np.zeros(self.odim,dtype=theano.config.floatX))
-        	self.hf = theano.shared(name='hf',value=np.zeros(self.sdim,dtype=theano.config.floatX))
-		self.hb = theano.shared(name='hb',value=np.zeros(self.sdim,dtype=theano.config.floatX))
+		self.bf = theano.shared(name='bf',value=np.zeros((self.sdim),dtype=theano.config.floatX))
+		self.bb = theano.shared(name='bb',value=np.zeros((self.sdim),dtype=theano.config.floatX))
+        	self.b = theano.shared(name='b',value=np.zeros((self.odim),dtype=theano.config.floatX))
+        	self.hf = theano.shared(name='hf',value=np.zeros((self.sdim),dtype=theano.config.floatX))
+		self.hb = theano.shared(name='hb',value=np.zeros((self.sdim),dtype=theano.config.floatX))
 		
 		self.dwfs = theano.shared(name='dwfs',value=np.zeros((self.sdim, self.sdim)).astype(theano.config.floatX))
 		self.dwbs = theano.shared(name='dwbs',value=np.zeros((self.sdim, self.sdim)).astype(theano.config.floatX))
@@ -48,11 +48,11 @@ class recurrent_model:
 		self.dwbw = theano.shared(name='dwbw',value=np.zeros((self.sdim, self.wvdim)).astype(theano.config.floatX))
 		self.dwf = theano.shared(name='dwf', value=np.zeros((self.odim, self.sdim)).astype(theano.config.floatX))
 		self.dwb = theano.shared(name='dwb', value=np.zeros((self.odim, self.sdim)).astype(theano.config.floatX))
-		self.dbf = theano.shared(name='dbf',value=np.zeros(self.sdim,dtype=theano.config.floatX))
-		self.dbb = theano.shared(name='dbb',value=np.zeros(self.sdim,dtype=theano.config.floatX))
-        	self.db = theano.shared(name='db',value=np.zeros(self.odim,dtype=theano.config.floatX))
-        	self.dhf = theano.shared(name='dhf',value=np.zeros(self.sdim,dtype=theano.config.floatX))
-		self.dhb = theano.shared(name='dhb',value=np.zeros(self.sdim,dtype=theano.config.floatX))	
+		self.dbf = theano.shared(name='dbf',value=np.zeros((self.sdim),dtype=theano.config.floatX))
+		self.dbb = theano.shared(name='dbb',value=np.zeros((self.sdim),dtype=theano.config.floatX))
+        	self.db = theano.shared(name='db',value=np.zeros((self.odim),dtype=theano.config.floatX))
+        	self.dhf = theano.shared(name='dhf',value=np.zeros((self.sdim),dtype=theano.config.floatX))
+		self.dhb = theano.shared(name='dhb',value=np.zeros((self.sdim),dtype=theano.config.floatX))	
 		#bundling
 		self.params = [self.wfs, self.wfw, self.wbs, self.wbw, self.wf, self.wb, self.bf,self.bb, self.b, self.hf, self.hb]
 		self.acc_grads = [self.dwfs, self.dwfw, self.dwbs, self.dwbw, self.dwf, self.dwb, self.dbf,self.dbb, self.db, self.dhf, self.dhb]
@@ -66,6 +66,7 @@ class recurrent_model:
 
 		# Compiling theano functions
 		x = T.ftensor3('x')
+		x2 = T.fmatrix('x2')
 		y = T.ivector('y')
 		alpha = T.scalar('alpha')
 		cost = self.forwardProp(x, y)
@@ -75,16 +76,28 @@ class recurrent_model:
 		param_updates = [(param_i, param_i - grad_i) for param_i, grad_i in zip(self.params, self.acc_grads)]
 		param_updates.extend([(grad_i, 0*grad_i) for grad_i in self.acc_grads])
 		self.update_params = theano.function([], [], updates = param_updates)
-		self.predict = theano.function([x], self.pred(x), allow_input_downcast = True)
+		self.predict = theano.function([x2], self.pred(x2), allow_input_downcast = True)
 		print 'Model initialized'
 
 	def get_fwd_state(self, x, h_tminus1):
 		p1 = T.dot(self.wfs, h_tminus1) 
 		p2 = T.dot(self.wfw, x)
+		p3 = p1 + p2 + T.outer(self.bf, T.ones_like(p1[0]))
+		return self.activ(p3)
+	
+	def get_fwd_state_test(self, x, h_tminus1):
+		p1 = T.dot(self.wfs, h_tminus1) 
+		p2 = T.dot(self.wfw, x)
 		p3 = p1 + p2 + self.bf
 		return self.activ(p3)
-
+	
 	def get_bwd_state(self, x, h_tplus1):
+		p1 = T.dot(self.wbs, h_tplus1) 
+		p2 = T.dot(self.wbw, x)
+		p3 = p1 + p2 + T.outer(self.bb, T.ones_like(p1[0]))
+		return self.activ(p3)
+	
+	def get_bwd_state_test(self, x, h_tplus1):
 		p1 = T.dot(self.wbs, h_tplus1) 
 		p2 = T.dot(self.wbw, x)
 		p3 = p1 + p2 + self.bb
@@ -92,24 +105,25 @@ class recurrent_model:
 
 	#Assumes x is a sequence of indices for words
 	def forwardProp(self, x, y):
-		hforward, _ = theano.scan(fn = self.get_fwd_state, outputs_info = self.hf, sequences = x, n_steps = x.shape[0])
-		hbackward, _ = theano.scan(fn = self.get_bwd_state, outputs_info = self.hb, sequences = x[::-1], n_steps = x.shape[0])
+		broad = T.ones_like(y)
+		hforward, _ = theano.scan(fn = self.get_fwd_state, outputs_info = T.outer(self.hf, broad), sequences = x, n_steps = x.shape[0])
+		hbackward, _ = theano.scan(fn = self.get_bwd_state, outputs_info = T.outer(self.hb, broad), sequences = x[::-1], n_steps = x.shape[0])
 		p1 = T.dot(self.wf, hforward[-1])
 		p2 = T.dot(self.wb, hbackward[-1])
-		p3 = p1 + p2 + self.b
+		p3 = p1 + p2 + T.outer(self.b, T.ones_like(p1[0]))
 		s = T.exp(p3 - T.max(p3, axis = 0))
 		s = s/T.sum(s, axis = 0)
-		return -T.log(s[y]) + T.mul(T.sum(T.pow(self.wfs, 2)) +T.sum(T.pow(self.wbs, 2)) + T.sum(T.pow(self.wbw, 2)) + T.sum(T.pow(self.wfw, 2)) + T.sum(T.pow(self.wf, 2)) + T.sum(T.pow(self.wb, 2)), self.reg)
+		return -T.sum(T.log(s[y, T.arange(y.shape[0])])) + T.mul(T.sum(T.pow(self.wfs, 2)) +T.sum(T.pow(self.wbs, 2)) + T.sum(T.pow(self.wbw, 2)) + T.sum(T.pow(self.wfw, 2)) + T.sum(T.pow(self.wf, 2)) + T.sum(T.pow(self.wb, 2)), self.reg)
 	
 	def pred(self, x):
-		hforward, _ = theano.scan(fn = self.get_fwd_state, outputs_info = self.hf, sequences = x, n_steps = x.shape[0])
-		hbackward, _ = theano.scan(fn = self.get_bwd_state, outputs_info = self.hb, sequences = x[::-1], n_steps = x.shape[0])
+		hforward, _ = theano.scan(fn = self.get_fwd_state_test, outputs_info = self.hf, sequences = x, n_steps = x.shape[0])
+		hbackward, _ = theano.scan(fn = self.get_bwd_state_test, outputs_info = self.hb, sequences = x[::-1], n_steps = x.shape[0])
 		p1 = T.dot(self.wf, hforward[-1])
 		p2 = T.dot(self.wb, hbackward[-1])
 		p3 = p1 + p2 + self.b
 		s = T.exp(p3 - T.max(p3, axis = 0))
 		s = s/T.sum(s, axis = 0) 
-		return T.argmax(s, axis = 0)
+		return T.argmax(s, axis = 0) + 1
 
 	def preprocess_data(self, data_loc, train = True):
 		f = open(data_loc)
@@ -133,11 +147,10 @@ class recurrent_model:
 		train_data = self.preprocess_data(data_loc)
 		ind = 0
 		N = len(train_data)
-		count = 0
 		for i in range(self.ep*N/self.bs):
-			alpha = self.lr/(1 + self.lrdecay*count)
+			alpha = self.lr/(1 + self.lrdecay*i*self.bs)
 			sample = train_data[ind:(ind + self.bs)]
-			batches = self.create_batches(ind, sample)
+			batches = self.create_batches(sample)
 			for batch in batches:
 				x = np.empty((len(sample[0][0]), self.wvdim, len(batch)))
 				y = np.empty((len(batch)))
@@ -147,11 +160,11 @@ class recurrent_model:
 				cost += self.step(x, y, alpha)
 			self.update_params()
 			ind = np.random.randint(0, N- self.bs)
-			if count * self.bs % print_every == 0:
-				print "Average cost after ", count*self.bs, " iterations is ", cost/print_every
+			if (i * self.bs) % print_every == 0:
+				print "Average cost after ", i*self.bs, " iterations is ", cost/print_every
 				cost = 0.0
-			if count * self.bs % save_every == 0:
-				pickle.dump(self, open(save_loc + "_iter_" + str(count*self.bs) + ".rnn", 'w'))
+			if (i * self.bs) % save_every == 0:
+				pickle.dump(self, open(save_loc + "_iter_" + str(i*self.bs) + ".rnn", 'w'))
 
 
 	def test(self, data_loc, out_loc):
@@ -161,7 +174,7 @@ class recurrent_model:
 			f.write(self.predict(self.embeddings[v[0]]))
 			f.write('\n')
 
-	def create_batches(sample):
+	def create_batches(self, sample):
 		batches = []
 		cur = 0
 		count = 1

@@ -13,12 +13,12 @@ test_file = "../data/kbp_dev.txt"
 
 num_words = 2675308
 word_dim = 300
-hidden_dimension = 300
+hidden_dimension = 500
 output_dimension = 42
 activ = 'sigmoid'
 nepochs = 50
-batch_size = 100
-printevery = 1000
+batch_size = 1000
+printevery = 10000
 saveevery = 100000
 lrate = 0.001
 ldecay = 0.000001
