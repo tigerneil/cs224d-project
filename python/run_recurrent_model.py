@@ -13,13 +13,13 @@ test_file = "../data/kbp_dev.txt"
 
 num_words = 2675308
 word_dim = 300
-hidden_dimension = 500
+hidden_dimension = 450
 output_dimension = 42
 activ = 'sigmoid'
-nepochs = 50
+nepochs = 10
 batch_size = 1000
-printevery = 1000
-saveevery = 100000
+printevery = 10000
+saveevery = 1000000
 lrate = 0.001
 ldecay = 0.000001
 reg = 0.01
@@ -32,5 +32,5 @@ rel = None
 print('Done reading relations and word vectors.')
 
 mod = recurrent_model(wv, rel, activ, num_words, word_dim, hidden_dimension, output_dimension, reg, lrate, ldecay, batch_size, nepochs)
-mod.train(train_file, model_loc, printevery, saveevery)
+mod.train(train_file, model_loc, printevery, saveevery, True)
 mod.test(test_file, output_file)
