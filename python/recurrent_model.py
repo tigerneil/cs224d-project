@@ -152,7 +152,7 @@ class recurrent_model:
 			sample = train_data[ind:(ind + self.bs)]
 			batches = self.create_batches(sample)
 			for batch in batches:
-				x = np.empty((len(sample[0][0]), self.wvdim, len(batch)))
+				x = np.empty((len(sample[batch[0]][0]), self.wvdim, len(batch)))
 				y = np.empty((len(batch)))
 				for c,sent in enumerate(batch):
 					x[:, :, c] = self.embeddings[sample[sent][0]]
@@ -160,10 +160,10 @@ class recurrent_model:
 				cost += self.step(x, y, alpha)
 			self.update_params()
 			ind = np.random.randint(0, N- self.bs)
-			if (i * self.bs) % print_every == 0:
-				print "Average cost after ", i*self.bs, " iterations is ", cost/print_every
+			if ((i+1)*self.bs) % print_every == 0:
+				print "Average cost after ", (i+1)*self.bs, " iterations is ", cost/print_every
 				cost = 0.0
-			if (i * self.bs) % save_every == 0:
+			if ((i+1)*self.bs) % save_every == 0:
 				pickle.dump(self, open(save_loc + "_iter_" + str(i*self.bs) + ".rnn", 'w'))
 
 
