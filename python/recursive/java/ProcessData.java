@@ -1,16 +1,9 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 import java.util.TreeMap;
 
 import com.google.gson.Gson;
@@ -30,18 +23,6 @@ public class ProcessData {
 	static Gson gson = new Gson();
 
 	public static void main(String[] args) throws IOException {
-		// the code around the call to processInput() just suppresses corenlp output so that we can pipe
-		// the output of this file through
-
-		// this is your print stream, store the reference
-		PrintStream err = System.err;
-
-		// now make all writes to the System.err stream silent 
-		//		System.setErr(new PrintStream(new OutputStream() {
-		//			public void write(int b) {
-		//			}
-		//		}));
-
 		// set up corenlp stuff
 		props = new Properties();
 		props.setProperty("annotators", "tokenize, ssplit, pos, parse");
@@ -49,9 +30,6 @@ public class ProcessData {
 		pipeline = new StanfordCoreNLP(props);
 
 		processInput();
-
-		// set everything back to its original state afterwards
-		System.setErr(err); 
 	}
 
 	// Processes input from stdin, and calls processLine on each line.
