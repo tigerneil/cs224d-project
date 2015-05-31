@@ -22,14 +22,14 @@ class recurrent_model:
 		self.ep = nepochs
 		# generating lookup table and dictionary from words to lookup table indices from word -> vector maps
 		self.word_to_ind = {}
-		embed = np.zeros((self.Vdim + 1, self.wvdim))
-		count = 1
-		for word, tensor in initial_embeddings.iteritems():
-			self.word_to_ind[word] = count
-			embed[count] = initial_embeddings[word]
-			count = count + 1
-		self.embeddings = theano.shared(name = 'embeddings', value = embed.astype(theano.config.floatX))
-		
+		embed = np.zeros((self.Vdim, self.wvdim), dtype ='float32')
+		#count = 1
+		for i, tensor in initial_embeddings.iteritems():
+			#self.word_to_ind[word] = count
+			embed[i] = initial_embeddings[i]
+			#count = count + 1
+		#self.embeddings = theano.shared(name = 'embeddings', value = embed.astype(theano.config.floatX))
+		self.embeddings = embed
         	self.wfs = theano.shared(name='wfs',value=(np.eye(self.sdim) + 0.2 * np.random.uniform(-1.0, 1.0, (self.sdim, self.sdim))).astype(theano.config.floatX))
 	 	self.wfw = theano.shared(name='wfw',value=0.2 * np.random.uniform(-1.0, 1.0, (self.sdim, self.wvdim)).astype(theano.config.floatX))
 		self.wbs = theano.shared(name='wbs',value=(np.eye(self.sdim) + 0.2 * np.random.uniform(-1.0, 1.0,(self.sdim, self.sdim))).astype(theano.config.floatX))
@@ -58,15 +58,15 @@ class recurrent_model:
 		self.acc_grads = [self.dwfs, self.dwfw, self.dwbs, self.dwbw, self.dwf, self.dwb, self.dbf,self.dbb, self.db, self.dhf, self.dhb]
 
 		# Relations to output index
-		self.rel_to_ind = {}
-		self.ind_to_rel = {}
-		for i,rel in enumerate(relations):
-			self.rel_to_ind[rel] = i
-			self.ind_to_rel[i] = rel
+		#self.rel_to_ind = {}
+		#self.ind_to_rel = {}
+		#for i,rel in enumerate(relations):
+		#	self.rel_to_ind[rel] = i
+		#	self.ind_to_rel[i] = rel
 
 		# Compiling theano functions
-		x = T.ivector('x')
-		y = T.iscalar('y')
+		x = T.ftensor3('x')
+		y = T.ivector('y')
 		alpha = T.scalar('alpha')
 		cost = self.forwardProp(x, y)
 		grads = T.grad(cost, self.params)
@@ -80,13 +80,13 @@ class recurrent_model:
 
 	def get_fwd_state(self, x, h_tminus1):
 		p1 = T.dot(self.wfs, h_tminus1) 
-		p2 = T.dot(self.wfw, self.embeddings[x])
+		p2 = T.dot(self.wfw, x)
 		p3 = p1 + p2 + self.bf
 		return self.activ(p3)
 
 	def get_bwd_state(self, x, h_tplus1):
 		p1 = T.dot(self.wbs, h_tplus1) 
-		p2 = T.dot(self.wbw, self.embeddings[x])
+		p2 = T.dot(self.wbw, x)
 		p3 = p1 + p2 + self.bb
 		return self.activ(p3)
 
@@ -97,8 +97,8 @@ class recurrent_model:
 		p1 = T.dot(self.wf, hforward[-1])
 		p2 = T.dot(self.wb, hbackward[-1])
 		p3 = p1 + p2 + self.b
-		s = T.exp(p3 - T.max(p3))
-		s = s/T.sum(s)
+		s = T.exp(p3 - T.max(p3, axis = 0))
+		s = s/T.sum(s, axis = 0)
 		return -T.log(s[y]) + T.mul(T.sum(T.pow(self.wfs, 2)) +T.sum(T.pow(self.wbs, 2)) + T.sum(T.pow(self.wbw, 2)) + T.sum(T.pow(self.wfw, 2)) + T.sum(T.pow(self.wf, 2)) + T.sum(T.pow(self.wb, 2)), self.reg)
 	
 	def pred(self, x):
@@ -107,20 +107,21 @@ class recurrent_model:
 		p1 = T.dot(self.wf, hforward[-1])
 		p2 = T.dot(self.wb, hbackward[-1])
 		p3 = p1 + p2 + self.b
-		s = T.exp(p3 - T.max(p3))
-		s = s/T.sum(s) 
+		s = T.exp(p3 - T.max(p3, axis = 0))
+		s = s/T.sum(s, axis = 0) 
 		return T.argmax(s, axis = 0)
 
 	def preprocess_data(self, data_loc, train = True):
 		f = open(data_loc)
 		data = []
 		for line in f:
-			row = line.split("\t")
-			words = np.asarray([self.word_to_ind.get(word, self.Vdim) for word in row[0].split(" ")])
+			#row = line.split("\t")
+			words = [int(word)-1 for word in line.split(" ")]
 			rel = None
 			if train:
 				try:
-					rel = self.rel_to_ind[row[1].strip()]
+					rel = words[0]
+					words = words[1:]
 				except:
 					print row
 			
@@ -132,23 +133,43 @@ class recurrent_model:
 		train_data = self.preprocess_data(data_loc)
 		ind = 0
 		N = len(train_data)
-		for i in range(self.ep*N):
-			count = i+1
+		count = 0
+		for i in range(self.ep*N/self.bs):
 			alpha = self.lr/(1 + self.lrdecay*count)
-			cost += self.step(train_data[ind][0], train_data[ind][1], alpha)
-			ind = (ind + 1) % N
-			if count % self.bs ==0:
-				self.update_params()
-				ind = np.random.randint(0, N)
-			if count % print_every == 0:
-				print "Average cost after ", count, " iterations is ", cost/count
-			if count % save_every == 0:
-				pickle.dump(self, open(save_loc + "_iter_" + str(count) + ".rnn", 'w'))
+			sample = train_data[ind:(ind + self.bs)]
+			batches = self.create_batches(ind, sample)
+			for batch in batches:
+				x = np.empty((len(sample[0][0]), self.wvdim, len(batch)))
+				y = np.empty((len(batch)))
+				for c,sent in enumerate(batch):
+					x[:, :, c] = self.embeddings[sample[sent][0]]
+					y[c] = sample[sent][1]
+				cost += self.step(x, y, alpha)
+			self.update_params()
+			ind = np.random.randint(0, N- self.bs)
+			if count * self.bs % print_every == 0:
+				print "Average cost after ", count*self.bs, " iterations is ", cost/print_every
+				cost = 0.0
+			if count * self.bs % save_every == 0:
+				pickle.dump(self, open(save_loc + "_iter_" + str(count*self.bs) + ".rnn", 'w'))
 
 
 	def test(self, data_loc, out_loc):
 		dat = self.preprocess_data(data_loc, False)
 		f = open(out_loc)
 		for k,v in dat.iteritems():
-			f.write(self.ind_to_rel(self.predict(v[0])))
+			f.write(self.predict(self.embeddings[v[0]]))
 			f.write('\n')
+
+	def create_batches(sample):
+		batches = []
+		cur = 0
+		count = 1
+		if len(sample[0][0]) == len(sample[self.bs-1][0]):
+			return [list(xrange(0, self.bs))]
+		while count <= self.bs:
+			if len(sample[count][0]) != len(sample[cur][0]):
+				batches.append(list(xrange(cur, count)))
+				cur = count
+		batches.append(list(xrange(cur, self.bs)))
+		return batches

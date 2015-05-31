@@ -36,6 +36,8 @@ import string
 import re
 import csv
 import numpy as np
+import pickle
+
 # the delimiter used to separate columns in the input
 ARR_DELIM = ','
 
@@ -194,18 +196,19 @@ def get_recurrent_features(row):
 def get_recurrent_features_new(row):
   #print row
   line = row.strip().split('\t')
-  dep_graph_str = string.replace(line[1], '\\t', '\t')
+  dep_graph_str = string.replace(line[8], '\\t', '\t')
   dep_graph_str = string.replace(dep_graph_str, '\\n', '\n')
   #dep_graph_str = string.replace(dep_graph_str, '\\\'', '\'')
-  lemma_str = line[3]
-  words_str = line[2][1:-1]
+  lemma_str = line[7]
+  words_str = line[6][1:-1]
   words_str = string.replace(words_str, "\",\"", "~^~")
   # skip sentences with empty dependency graphs
   #if dep_graph_str == "":
   #  return ""
-  types = [line[9], line[13]]
-  starts = [line[14], line[16]]
-  ends = [line[15], line[17]]
+  #types = [line[9], line[13]]
+  types = [None, None]
+  starts = [line[0], line[1]]
+  ends = [line[3], line[4]]
   lemma = lemma_str.split(ARR_DELIM)
   dep_graph = dep_graph_str.split("\n")
   #PATTERN = re.compile(r'''((?:"[^"]*")+)''')
@@ -214,15 +217,15 @@ def get_recurrent_features_new(row):
   for i,word in enumerate(words):
 	if word == "~^~":
 		words[i] = ','
-  mention_ids = [line[7], line[11]]
+  mention_ids = [line[2], line[5]]
   mention_words = [[words[int(starts[0]): int(ends[0])]],[words[int(starts[1]):int(ends[1])]]]
   # create a list of mentions
   mentions = zip(mention_ids, mention_words, types, starts, ends)
   mentions = map(lambda x: {"mention_id" : x[0], "word" : x[1], "type" : x[2], "start" : int(x[3]), "end" : int(x[4])}, mentions)
 
   relation = None
-  if len(line) == 21:
-	relation = line[18]
+  if len(line) == 10:
+	relation = line[9]
   #now we get the path from both mentions to the root
   # get a list of Word object
   obj = {}
@@ -230,20 +233,22 @@ def get_recurrent_features_new(row):
   obj['words'] = words
   obj['dep_graph'] = dep_graph
   word_obj_list = ddlib.unpack_words(obj, lemma='lemma', words='words', dep_graph='dep_graph', dep_graph_parser=dep_format_parser)
-
+  
   m1 = mentions[0]
   m2 = mentions[1]
- # print row
-  if m1 != m2:
-	link, path = ddlib.dep_path_between_words_new(word_obj_list, int(ends[0])-1, int(ends[1])-1)
-	feat = [m1["mention_id"], m2["mention_id"], m1["type"], m2["type"], path, link]
-	if relation is not None:
+  #print row
+  if m1["mention_id"] != m2["mention_id"]:
+	  link, path = ddlib.dep_path_between_words_new(word_obj_list, int(ends[0])-1, int(ends[1])-1)
+	  feat = [m1["mention_id"], m2["mention_id"], m1["type"], m2["type"], path, link]
+	  if relation is not None:
 		feat.append(relation)
-	return feat
+	  return feat
 
 #outputs just the words along the dependency path
 def get_basic_rnn_features(line):
 	lis = get_recurrent_features_new(line)
+	if lis is None:
+		return None, None, None
 	ret = []
 	ret.append(lis[0])
 	ret.extend(lis[5][1:-1])
@@ -257,19 +262,31 @@ def get_basic_rnn_features(line):
 	return ret, rel, lis[4]	
 
 dep_types = set()
+word_to_ind = pickle.load(open('word_to_num.bin', 'rb'))
+rel_to_ind = pickle.load(open('relation_to_num.bin', 'rb'))
+count = 0
 for line in sys.stdin:
 	temp, rel, link =  get_basic_rnn_features(line)
-	dep_types.update(link)
  	if temp == None:
-		break
+		print >> sys.stderr, line
+		continue
 	#print temp
-	out = " ".join(temp)
-	if rel is not None:
-		rel = rel[1:-1]
-		rel = rel.split(",")
-		#rel = rel[np.random.randint(0, len(rel))]
-		out = out + "\t" + rel[0]
-	print out
+	inds = []
+	try:
+		for t in temp:
+			inds.append(str(word_to_ind[t]))
+		out = " ".join(inds)
+		if rel is not None:
+			rel = rel[1:-1]
+			rel = rel.split(",")
+			#rel = rel[np.random.randint(0, len(rel))]
+			for r in rel:
+				print str(rel_to_ind[r]) + ' ' + out
+				count += 1
+		else:
+			print out
+	except:
+		print >> sys.stderr, " ".join(temp), rel
         #print '-----------------------------------------------------------------------------------------------------------------------'
-
+print >> sys.stderr, "Number of training samples", count
 #print len(dep_types)
