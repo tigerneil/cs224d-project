@@ -24,7 +24,11 @@ CURR_FILE=../../../data/train/100k/train_100k.tsv
 
 #head -100 $CURR_FILE | python ../process_kbp_data.py | $JAVA_PREFIX"java" -classpath $CP ProcessData > out.txt 
 
-cat $CURR_FILE | python ../process_kbp_data.py > temp.txt
-echo "Done preprocessing."
+#cat $CURR_FILE | python ../process_kbp_data.py > temp.txt
+#echo "Done preprocessing."
 
-cat temp.txt | $JAVA_PREFIX"java" -classpath $CP ProcessData > out.txt 
+#cat temp.txt | $JAVA_PREFIX"java" -classpath $CP ProcessData > out.txt 
+
+python ../process_kbp_data.py $CURR_FILE temp.txt
+echo "done processing"
+$JAVA_PREFIX"java" -classpath $CP ProcessData temp.txt out.txt

@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -15,6 +17,8 @@ import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.trees.TreeCoreAnnotations;
 import edu.stanford.nlp.util.CoreMap;
 
+// Usage: java ProcessData <inputFile> <outputFile>
+
 // Processes KBP data piped from process_kbp_data.py. Outputs to stdout the subtree of parse tree containing the 
 public class ProcessData {
 
@@ -28,8 +32,29 @@ public class ProcessData {
 		props.setProperty("annotators", "tokenize, ssplit, pos, parse");
 		props.setProperty("parse.binaryTrees", "true");
 		pipeline = new StanfordCoreNLP(props);
+		
+		String inputFilename = args[0];
+		String outputFilename = args[1];
 
-		processInput();
+		//processInput();
+		processInputFromFile(inputFilename, outputFilename);
+	}
+	
+	// Read/write from/to files.
+	public static void processInputFromFile(String inputFilename, String outputFilename) throws IOException {
+		BufferedReader in = new BufferedReader(new FileReader(inputFilename));
+		PrintWriter writer = new PrintWriter(outputFilename, "UTF-8");
+		String line;
+		while ((line = in.readLine()) != null) {
+			String result = processLine(line);
+			
+			if (result != null) {
+				// write to file
+				writer.println(result);
+			}
+		}
+		in.close();
+		writer.close();
 	}
 
 	// Processes input from stdin, and calls processLine on each line.
@@ -46,7 +71,7 @@ public class ProcessData {
 	}
 
 	// Processes each line of the python-processed KBP data. (needs to be the second step in that pipeline)
-	public static void processLine(String jsonLine) {
+	public static String processLine(String jsonLine) {
 		String[] vals = gson.fromJson(jsonLine, String[].class);
 
 		// [new_gloss, subject_entity, object_entity, str(subject_begin), str(subject_end), str(object_begin), str(object_end), relations]
@@ -65,7 +90,11 @@ public class ProcessData {
 		// parse is null if we have more than a single sentence on a given line
 		if (parse != null) {
 			String output = makeOutput(parse, rels);
-			System.out.println(output);	
+			//System.out.println(output);
+			return output;
+		}
+		else {
+			return null;
 		}
 	}
 
