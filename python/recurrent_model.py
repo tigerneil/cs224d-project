@@ -152,16 +152,18 @@ class recurrent_model:
 		if continu:
 			max_f = None
 			temp = save_loc.split('/')
-			files = os.listdir("/".join(temp[:(len(temp)-1)]))
+			files = os.listdir("saved_models")
 			for f in files:
 				if temp[len(temp)-1] in f:
-					temp2 = f.split('/')[len(temp2)-1].split('.')[0].split('_')
+					print 'found old file', f
+					temp2 = f.split('.')[0].split('_')
 					temp2 = int(temp2[len(temp2)-1])
+					print 'num iterations saved', temp2
 					if temp2 > init_count:
 						init_count = temp2
 						max_f = f
 			if max_f is not None:
-				load_params = pickle.load(open(max_f, 'r'))
+				load_params = pickle.load(open('saved_models/' + max_f, 'r'))
 				for i, param in enumerate(self.params):
 					param = load_params[i]
 					
