@@ -62,8 +62,11 @@ public class ProcessData {
 		// get the parse for the desired subtree
 		String parse = getParse(gloss, subject_entity, object_entity, subject_begin, subject_end, object_begin, object_end);
 
-		String output = makeOutput(parse, rels);
-		System.out.println(output);
+		// parse is null if we have more than a single sentence on a given line
+		if (parse != null) {
+			String output = makeOutput(parse, rels);
+			System.out.println(output);	
+		}
 	}
 
 	public static String makeOutput(String parse, String relations) {
@@ -75,9 +78,11 @@ public class ProcessData {
 		Annotation document = new Annotation(text);
 		pipeline.annotate(document);
 		List<CoreMap> sentences = document.get(CoreAnnotations.SentencesAnnotation.class);
-
+		
 		// we should never have more than a single sentence per line in the corpus
-		assert(sentences.size() <= 1);
+		if (sentences.size() > 1) {
+			return null;
+		}
 
 		CoreMap sentence = sentences.get(0);
 		Tree binarizedTree = sentence.get(TreeCoreAnnotations.BinarizedTreeAnnotation.class); // the root
@@ -175,7 +180,7 @@ public class ProcessData {
 			parent2.removeChild(ind);
 		}
 
-		// replace the head node words with entity strings
+		// replace the head node words with entity strings		
 		m1Head.setValue(subject_entity);
 		m2Head.setValue(object_entity);
 

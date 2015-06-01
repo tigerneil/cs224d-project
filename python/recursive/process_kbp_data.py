@@ -132,12 +132,12 @@ def process_line(line):
 
             output = [new_gloss, str(ind1), str(ind2), relations]
             #print json.dumps(output)
-            sys.stdout.write(json.dumps(output)) # maybe this will fix broken pipe error
+            sys.stdout.write(json.dumps(output))
             sys.stdout.write("\n")
             sys.stdout.flush()
         else:
             output = [new_gloss, subject_entity, object_entity, str(subject_begin), str(subject_end), str(object_begin), str(object_end), relations]
-            sys.stdout.write(json.dumps(output)) # maybe this will fix broken pipe error
+            sys.stdout.write(json.dumps(output))
             sys.stdout.write("\n")
             sys.stdout.flush()
 
