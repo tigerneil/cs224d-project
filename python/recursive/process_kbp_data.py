@@ -3,6 +3,11 @@ import csv
 import StringIO
 import json
 
+# Usage: python process_kbp_data.py <input_file> <output_file>
+
+input_filename = sys.argv[1]
+output_filename = sys.argv[2]
+
 mapping = {
     "per:country_of_death" : 0,
     "per:schools_attended" : 1,
@@ -132,16 +137,30 @@ def process_line(line):
 
             output = [new_gloss, str(ind1), str(ind2), relations]
             #print json.dumps(output)
-            sys.stdout.write(json.dumps(output))
-            sys.stdout.write("\n")
-            sys.stdout.flush()
+            #sys.stdout.write(json.dumps(output))
+            #sys.stdout.write("\n")
+            #sys.stdout.flush()
+            return json.dumps(output)
         else:
             output = [new_gloss, subject_entity, object_entity, str(subject_begin), str(subject_end), str(object_begin), str(object_end), relations]
-            sys.stdout.write(json.dumps(output))
-            sys.stdout.write("\n")
-            sys.stdout.flush()
+            #sys.stdout.write(json.dumps(output))
+            #sys.stdout.write("\n")
+            #sys.stdout.flush()
+            return json.dumps(output)
 
-for line in sys.stdin:
-    line = line.strip()
+f_in = open(input_filename, 'r')
+f_out = open(output_filename, 'w')
+
+# for line in sys.stdin:
+#     line = line.strip()
+#     if line and line != '':
+#         process_line(line)
+
+for line in f_in:
     if line and line != '':
-        process_line(line)
+        json_string = process_line(line)
+        f_out.write(json_string)
+        f_out.write('\n')
+
+f_in.close()
+f_out.close()
