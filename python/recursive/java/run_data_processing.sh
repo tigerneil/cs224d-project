@@ -22,4 +22,9 @@ CURR_FILE=../../../data/train/100k/train_100k.tsv
 # if on corn
 #CURR_FILE=/afs/.ir.stanford.edu/users/m/s/msushkov/cs224d-project/data/train/100k/train_100k.tsv
 
-head -100 $CURR_FILE | python ../process_kbp_data.py | $JAVA_PREFIX"java" -classpath $CP ProcessData > out.txt 
+#head -100 $CURR_FILE | python ../process_kbp_data.py | $JAVA_PREFIX"java" -classpath $CP ProcessData > out.txt 
+
+cat $CURR_FILE | python ../process_kbp_data.py > temp.txt
+echo "Done preprocessing."
+
+cat temp.txt | $JAVA_PREFIX"java" -classpath $CP ProcessData > out.txt 
