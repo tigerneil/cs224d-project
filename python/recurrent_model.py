@@ -143,12 +143,30 @@ class recurrent_model:
 			data.append((words, rel))
 		return data
 
-	def train(self, data_loc, save_loc, print_every, save_every, init_count = 0):
+	def train(self, data_loc, save_loc, print_every, save_every):
 		cost = 0.0
 		train_data = self.preprocess_data(data_loc)
 		N = len(train_data)
 		ind = np.random.randint(0, N-self.bs)
-						
+		init_count = 0
+		max_f = None
+		temp = save_loc.split('/')
+		files = os.listdir("saved_models")
+		for f in files:
+			if temp[len(temp)-1] in f:
+				print 'found old file', f
+				temp2 = f.split('.')
+				temp2 = temp2[len(temp2)-2].split('_')
+				temp2 = int(temp2[len(temp2)-1])
+				print 'num iterations saved', temp2
+				if temp2 > init_count:
+					init_count = temp2
+					max_f = f
+		if max_f is not None:
+			mod = cPickle.load(open('saved_models/' + max_f, 'rb'))
+			for i,param in enumerate(self.params):
+				param.set_value(mod[i])
+		
 		for i in range(init_count/self.bs, self.ep*N/self.bs):
 			alpha = self.lr/(1 + self.lrdecay*i*self.bs)
 			sample = train_data[ind:(ind + self.bs)]
@@ -172,7 +190,10 @@ class recurrent_model:
 				print "Average cost after ", (i+1)*self.bs, " iterations is ", cost/print_every
 				cost = 0.0
 			if ((i+1)*self.bs) % save_every == 0:
-				cPickle.dump(self, open(save_loc + "_iter_" + str(i*self.bs) + ".rnn", 'wb'))
+				temp = []
+				for param in self.params:
+					temp.append(param.get_value())
+				cPickle.dump(temp, open(save_loc + "_iter_" + str(i*self.bs) + ".rnn", 'wb'))
 
 
 	def test(self, data_loc, out_loc):
