@@ -1,5 +1,5 @@
 import utils
-import pickle
+import cPickle
 import theano
 import numpy as np
 import theano.tensor as T
@@ -143,29 +143,13 @@ class recurrent_model:
 			data.append((words, rel))
 		return data
 
-	def train(self, data_loc, save_loc, print_every, save_every, continu = False):
+	def train(self, data_loc, save_loc, print_every, save_every, init_count = 0):
 		cost = 0.0
 		train_data = self.preprocess_data(data_loc)
 		N = len(train_data)
 		ind = np.random.randint(0, N-self.bs)
-		init_count = 0
-		if continu:
-			max_f = None
-			temp = save_loc.split('/')
-			files = os.listdir("/".join(temp[:(len(temp)-1)]))
-			for f in files:
-				if temp[len(temp)-1] in f:
-					temp2 = f.split('/')[len(temp2)-1].split('.')[0].split('_')
-					temp2 = int(temp2[len(temp2)-1])
-					if temp2 > init_count:
-						init_count = temp2
-						max_f = f
-			if max_f is not None:
-				load_params = pickle.load(open(max_f, 'r'))
-				for i, param in enumerate(self.params):
-					param = load_params[i]
-					
-		for i in range(init_count, self.ep*N/self.bs):
+						
+		for i in range(init_count/self.bs, self.ep*N/self.bs):
 			alpha = self.lr/(1 + self.lrdecay*i*self.bs)
 			sample = train_data[ind:(ind + self.bs)]
 			batches = self.create_batches(sample)
@@ -188,7 +172,7 @@ class recurrent_model:
 				print "Average cost after ", (i+1)*self.bs, " iterations is ", cost/print_every
 				cost = 0.0
 			if ((i+1)*self.bs) % save_every == 0:
-				pickle.dump(self.params, open(save_loc + "_iter_" + str(i*self.bs) + ".rnn", 'w'))
+				cPickle.dump(self, open(save_loc + "_iter_" + str(i*self.bs) + ".rnn", 'wb'))
 
 
 	def test(self, data_loc, out_loc):
