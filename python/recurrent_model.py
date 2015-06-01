@@ -3,7 +3,8 @@ import pickle
 import theano
 import numpy as np
 import theano.tensor as T
-
+import sys
+import os
 #Bi-directional recurrent model, we accumulate the state from both directions along the dependency path and use the concatenated vector for prediction
 class recurrent_model:
 	def __init__(self, initial_embeddings, relations, activation, num_words, word_dim, state_dimension, output_dimension, regularization, l_r, l_r_decay, batch_size, nepochs):
@@ -142,21 +143,44 @@ class recurrent_model:
 			data.append((words, rel))
 		return data
 
-	def train(self, data_loc, save_loc, print_every, save_every):
+	def train(self, data_loc, save_loc, print_every, save_every, continu = False):
 		cost = 0.0
 		train_data = self.preprocess_data(data_loc)
-		ind = 0
 		N = len(train_data)
-		for i in range(self.ep*N/self.bs):
+		ind = np.random.randint(0, N-self.bs)
+		init_count = 0
+		if continu:
+			max_f = None
+			temp = save_loc.split('/')
+			files = os.listdir("/".join(temp[:(len(temp)-1)]))
+			for f in files:
+				if temp[len(temp)-1] in f:
+					temp2 = f.split('/')[len(temp2)-1].split('.')[0].split('_')
+					temp2 = int(temp2[len(temp2)-1])
+					if temp2 > init_count:
+						init_count = temp2
+						max_f = f
+			if max_f is not None:
+				load_params = pickle.load(open(max_f, 'r'))
+				for i, param in enumerate(self.params):
+					param = load_params[i]
+					
+		for i in range(init_count, self.ep*N/self.bs):
 			alpha = self.lr/(1 + self.lrdecay*i*self.bs)
 			sample = train_data[ind:(ind + self.bs)]
 			batches = self.create_batches(sample)
-			for batch in batches:
+			for batch in batches.values():
 				x = np.empty((len(sample[batch[0]][0]), self.wvdim, len(batch)))
 				y = np.empty((len(batch)))
 				for c,sent in enumerate(batch):
-					x[:, :, c] = self.embeddings[sample[sent][0]]
-					y[c] = sample[sent][1]
+					try:
+						x[:, :, c] = self.embeddings[sample[sent][0]]
+						y[c] = sample[sent][1]
+					except:
+						print len(sample[batch[0]][0]), len(sample[batch[c]][0])
+						print c
+						print batches
+						return
 				cost += self.step(x, y, alpha)
 			self.update_params()
 			ind = np.random.randint(0, N- self.bs)
@@ -164,7 +188,7 @@ class recurrent_model:
 				print "Average cost after ", (i+1)*self.bs, " iterations is ", cost/print_every
 				cost = 0.0
 			if ((i+1)*self.bs) % save_every == 0:
-				pickle.dump(self, open(save_loc + "_iter_" + str(i*self.bs) + ".rnn", 'w'))
+				pickle.dump(self.params, open(save_loc + "_iter_" + str(i*self.bs) + ".rnn", 'w'))
 
 
 	def test(self, data_loc, out_loc):
@@ -175,15 +199,19 @@ class recurrent_model:
 			f.write('\n')
 
 	def create_batches(self, sample):
-		batches = []
+		batches = {}
 		cur = 0
 		count = 1
-		if len(sample[0][0]) == len(sample[self.bs-1][0]):
-			return [list(xrange(0, self.bs))]
+		dis = 0
+		#if len(sample[0][0]) == len(sample[self.bs-1][0]):
+		#	return {0: list(xrange(0, self.bs))}
 		while count < self.bs:
 			if len(sample[count][0]) != len(sample[cur][0]):
-				batches.append(list(xrange(cur, count)))
+				#print 'discontinous'
+				batches[dis] = list(xrange(cur, count))
 				cur = count
+				#print count
+				dis += 1
 			count += 1
-		batches.append(list(xrange(cur, self.bs)))
+		batches[dis] = list(xrange(cur, self.bs))
 		return batches
