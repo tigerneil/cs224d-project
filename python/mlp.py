@@ -9,24 +9,23 @@ import os
 class mlp:
     def __init__(self, initial_embeddings, activation, num_words, word_dim, hdim, odim, reg, l_r, l_r_decay, batch_size, nepochs):
         self.sdim = hdim
-		self.odim = odim
-		self.wvdim = word_dim
-		self.Vdim = num_words
-		if activation == 'relu':
-			self.activ = lambda x: 0.5*(x + np.abs(x))
-		elif activation == 'sigmoid':
-			self.activ = T.nnet.sigmoid
-		self.reg = reg
-		self.lr = l_r
-		self.lrdecay = l_r_decay
-		self.batch_size = batch_size
-		self.ep = nepochs
-		# generating lookup table and dictionary from words to lookup table indices from word -> vector maps
-		embed = np.zeros((self.Vdim, self.wvdim), dtype ='float32')
-		#count = 1
-		for i, tensor in initial_embeddings.iteritems():
-			#self.word_to_ind[word] = count
-			embed[i] = initial_embeddings[i]
+        self.odim = odim
+        self.wvdim = word_dim
+        self.Vdim = num_words
+        if activation == 'relu':
+            self.activ = lambda x: 0.5*(x + np.abs(x))
+        elif activation == 'sigmoid':
+            self.activ = T.nnet.sigmoid
+        self.reg = reg
+        self.lr = l_r
+        self.lrdecay = l_r_decay
+        self.batch_size = batch_size
+        self.ep = nepochs
+        # generating lookup table and dictionary from words to lookup table indices from word -> vector maps
+        embed = np.zeros((self.Vdim, self.wvdim), dtype ='float32')
+        #count = 1
+        for i, tensor in initial_embeddings.iteritems():
+            embed[i] = initial_embeddings[i]
         self.embeddings = embed
         self.wh1 = theano.shared(name='wh1', value=(0.2 * np.random.uniform(-1.0, 1.0, (self.sdim, self.wvdim))).astype(theano.config.floatX))
         self.b1 = theano.shared(name='b1', value=np.zeros(self.sdim, dtype=theano.config.floatX))
@@ -46,23 +45,24 @@ class mlp:
         self.acc_grads = [self.dwh1, self.dws, self.db1, self.dbs]
         
         x = T.fmatrix('x')
-		y = T.ivector('y')
+        y = T.ivector('y')
         alpha = T.scalar('alpha')
         cost = self.forwardProp(x, y)
         grads = T.grad(cost, self.params)
         updates = [(acc_grad_i, acc_grad_i + alpha*grad_i) for acc_grad_i, grad_i in zip(self.acc_grads, grads)]
         self.step = theano.function([x, y, alpha], cost, updates = updates, allow_input_downcast = True)
-		param_updates = [(param_i, param_i - grad_i) for param_i, grad_i in zip(self.params, self.acc_grads)]
-		param_updates.extend([(grad_i, 0*grad_i) for grad_i in self.acc_grads])
-		self.update_params = theano.function([], [], updates = param_updates)
-		self.predict = theano.function([x], self.pred(x), allow_input_downcast = True)
-		print 'Model initialized'
+        param_updates = [(param_i, param_i - grad_i) for param_i, grad_i in zip(self.params, self.acc_grads)]
+        param_updates.extend([(grad_i, 0*grad_i) for grad_i in self.acc_grads])
+        self.update_params = theano.function([], [], updates = param_updates)
+        self.predict = theano.function([x], self.pred(x), allow_input_downcast = True)
+        print 'Model initialized'
 
 
-        def forwardProp(self, x, y):
+    def forwardProp(self, x, y):
         h = self.activ(T.dot(self.wh1, x) + self.b1)
-        s = T.exp(h - T.max(h, axis = 0))
-        s = s/T.sum(h, axis = 0)
+        p = T.dot(self.ws, h) + self.bs
+        s = T.exp(p - T.max(p, axis = 0))
+        s = s/T.sum(s, axis = 0)
         return -T.sum(T.log(s[y, T.arange(y.shape[0])])) + T.mul(T.sum(T.pow(self.ws, 2)) + T.sum(T.pow(self.wh1, 2)), self.reg)
 
     def pred(self, x):
