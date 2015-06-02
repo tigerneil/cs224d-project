@@ -75,7 +75,6 @@ class mlp:
         f = open(data_loc)
         data = []
         for line in f:
-            #row = line.split("\t")
             words = [int(word)-1 for word in line.split(" ")]
             rel = None
             if train:
@@ -83,12 +82,12 @@ class mlp:
                     rel = words[0]
                     words = words[[1, len(words - 1)]]
                 except:
-                    print row
+                    print line
             else:
                 try:
                     words = words[[0, len(words - 1)]]
                 except:
-                    print row
+                    print line
             data.append((words, rel))
         return data
 
