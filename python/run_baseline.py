@@ -22,7 +22,7 @@ printevery = 10000
 saveevery = 2000000
 lrate = 0.001
 ldecay = 0.000001
-reg = 0.001
+reg = 0.01
 output_file = "../data/test/test_out/predictions_ep_" + str(nepochs) + "_lr_" + str(lrate) + "_reg_" + str(reg) + "_bs_" + str(batch_size) + "_lrdecay_" + str(ldecay) + ".mlpout"
 model_loc = "saved_models/hd_" + str(hidden_dimension) + "_lr_" + str(lrate) + "_reg_" + str(reg) + "_bs_" + str(batch_size) + "_lrdecay_" + str(ldecay)
 

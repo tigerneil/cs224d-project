@@ -60,17 +60,17 @@ class mlp:
 
     def forwardProp(self, x, y):
         h = self.activ(T.dot(x, self.wh1) + self.b1)
-        p = T.dot(h, self.ws) + self.bs
-        s = T.exp(p - np.transpose(T.max(p, axis = 1)))
-        s = s/np.transpose(T.sum(s, axis = 1))
-        return -T.sum(T.log(s[T.arange(y.shape[0]), y])) + T.mul(T.sum(T.pow(self.ws, 2)) + T.sum(T.pow(self.wh1, 2)), self.reg)
+        p = T.transpose(T.dot(h, self.ws) + self.bs)
+        s = T.exp(p - T.max(p, axis = 0))
+        s = s/T.sum(s, axis = 0)
+        return -T.sum(T.log(s[y, T.arange(y.shape[0])])) + T.mul(T.sum(T.pow(self.ws, 2)) + T.sum(T.pow(self.wh1, 2)), self.reg)
 
     def pred(self, x):
         h = self.activ(T.dot(x, self.wh1) + self.b1)
-        p = T.dot(h, self.ws) + self.bs
-        s = T.exp(p - np.transpose(T.max(p, axis = 1)))
-        s = s/np.transpose(T.sum(s, axis = 1))
-        return T.argmax(s, axis=1) + 1
+        p = T.transpose(T.dot(h, self.ws) + self.bs)
+        s = T.exp(p - T.max(p, axis = 0))
+        s = s/T.sum(s, axis = 0)
+        return T.argmax(s, axis=0) + 1
 
     def preprocess_data(self, data_loc, train = True):
         f = open(data_loc)
