@@ -27,17 +27,17 @@ class mlp:
         for i, tensor in initial_embeddings.iteritems():
             embed[i] = initial_embeddings[i]
         self.embeddings = embed
-        self.wh1 = theano.shared(name='wh1', value=(0.2 * np.random.uniform(-1.0, 1.0, (self.sdim, self.wvdim))).astype(theano.config.floatX))
+        self.wh1 = theano.shared(name='wh1', value=(0.2 * np.random.uniform(-1.0, 1.0, (2 * self.wvdim, self.sdim))).astype(theano.config.floatX))
         self.b1 = theano.shared(name='b1', value=np.zeros(self.sdim, dtype=theano.config.floatX))
         #self.wh2 = theano.shared(name='wh2', value=(0.2 * np.random.uniform(-1.0, 1.0, (self.sdim, self.wvdim))).astype(theano.config.floatX))
-        self.ws = theano.shared(name='ws', value=(0.2 * np.random.uniform(-1.0, 1.0, (self.odim, self.sdim))).astype(theano.config.floatX))
+        self.ws = theano.shared(name='ws', value=(0.2 * np.random.uniform(-1.0, 1.0, (self.sdim, self.odim))).astype(theano.config.floatX))
         self.bs = theano.shared(name='bs', value=np.zeros((self.odim), dtype=theano.config.floatX))
 
         # derivatives
-        self.dwh1 = theano.shared(name='dwh1', value=np.zeros((self.sdim, self.wvdim)).astype(theano.config.floatX))
+        self.dwh1 = theano.shared(name='dwh1', value=np.zeros((2 * self.wvdim, self.sdim)).astype(theano.config.floatX))
         self.db1 = theano.shared(name='db1', value=np.zeros(self.sdim, dtype=theano.config.floatX))
         #self.dwh2 = theano.shared(name='dwh2', value=np.zeros((self.sdim, self.wvdim)).astype(theano.config.floatX))
-        self.dws = theano.shared(name='dws', value=np.zeros((self.odim, self.sdim)).astype(theano.config.floatX))
+        self.dws = theano.shared(name='dws', value=np.zeros((self.sdim, self.odim)).astype(theano.config.floatX))
         self.dbs = theano.shared(name='dbs', value=np.zeros((self.odim), dtype=theano.config.floatX))
 
         #bundling
@@ -59,17 +59,18 @@ class mlp:
 
 
     def forwardProp(self, x, y):
-        h = self.activ(T.dot(self.wh1, x) + self.b1)
-        p = T.dot(self.ws, h) + self.bs
-        s = T.exp(p - T.max(p, axis = 0))
-        s = s/T.sum(s, axis = 0)
-        return -T.sum(T.log(s[y, T.arange(y.shape[0])])) + T.mul(T.sum(T.pow(self.ws, 2)) + T.sum(T.pow(self.wh1, 2)), self.reg)
+        h = self.activ(T.dot(x, self.wh1) + self.b1)
+        p = T.dot(h, self.ws) + self.bs
+        s = T.exp(p - np.transpose(T.max(p, axis = 1)))
+        s = s/np.transpose(T.sum(s, axis = 1))
+        return -T.sum(T.log(s[T.arange(y.shape[0]), y])) + T.mul(T.sum(T.pow(self.ws, 2)) + T.sum(T.pow(self.wh1, 2)), self.reg)
 
     def pred(self, x):
-        h = self.activ(T.dot(self.wh1, x) + self.b1)
-        s = T.exp(h - T.max(h, axis = 0))
-        s = s/T.sum(h, axis = 0)
-        return T.argmax(s, axis=0) + 1
+        h = self.activ(T.dot(x, self.wh1) + self.b1)
+        p = T.dot(h, self.ws) + self.bs
+        s = T.exp(p - np.transpose(T.max(p, axis = 1)))
+        s = s/np.transpose(T.sum(s, axis = 1))
+        return T.argmax(s, axis=1) + 1
 
     def preprocess_data(self, data_loc, train = True):
         f = open(data_loc)
@@ -80,13 +81,15 @@ class mlp:
             if train:
                 try:
                     rel = words[0]
-                    words = words[[1, len(words - 1)]]
-                except:
+                    words = [words[1] , words[len(words) - 1]]
+                except e:
+                    print e
                     print line
             else:
                 try:
-                    words = words[[0, len(words - 1)]]
-                except:
+                    words = [words[0], words[len(words) - 1]]
+                except e:
+                    print e
                     print line
             data.append((words, rel))
         return data
