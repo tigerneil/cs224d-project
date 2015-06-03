@@ -1,15 +1,9 @@
 import numpy as np
 import collections
 import pdb
-
+from tree import load_word_vectors
 
 # This is a 2-Layer Deep Recursive Neural Netowrk with two ReLU Layers and a softmax layer
-# You must update the forward and backward propogation functions of this file.
-
-# You can run this file via 'python rnn2deep.py' to perform a gradient check
-
-# tip: insert pdb.set_trace() in places where you are unsure whats going on
-
 
 def relu(x):
     return np.maximum(x, 0)
@@ -44,7 +38,8 @@ class RNN2:
         np.random.seed(12341)
 
         # Word vectors
-        self.L = 0.01*np.random.randn(self.wvecDim,self.numWords)
+        #self.L = 0.01*np.random.randn(self.wvecDim,self.numWords)
+        self.L = load_word_vectors().T # shape is (num_words, word_dim)
 
         # Hidden activation weights for layer 1
         self.W1 = 0.01*np.random.randn(self.wvecDim,2*self.wvecDim)
@@ -103,16 +98,42 @@ class RNN2:
 
         # Forward prop each tree in minibatch
         for tree in mbdata: 
-            c,tot = self.forwardProp(tree.root,correct,guess)
-            cost += c
-            total += tot
-            
+            # do forward propagation (basically the end result of this is root.hActs1)
+            self.forwardProp(tree.root)
+
+            # compute the probabilities only at the tree level, not at the node level
+            tree.root.hActs2 = relu(np.dot(self.W2, tree.root.hActs1) + self.b2)
+            y_hat = softmax(np.dot(self.Ws, tree.root.hActs2) + self.bs)
+            tree.probs = y_hat
+            cost -= np.log(y_hat[tree.relation_label])
+            correct.append(tree.relation_label)
+            guess.append(np.argmax(y_hat))  
+
+            total += 1
         if test:
-            return (1./len(mbdata))*cost,correct, guess, total
+            return (1./len(mbdata))*cost,correct,guess,total
 
         # Back prop each tree in minibatch
         for tree in mbdata:
-            self.backProp(tree.root)
+            # error from root is y_hat - y
+            delta5 = tree.probs
+            delta5[tree.relation_label] -= 1.0
+
+            self.dbs += delta5
+
+            # dU
+            self.dWs += np.outer(delta5, tree.root.hActs2)
+
+            delta4 = np.dot(self.Ws.T, delta5)
+            delta3 = delta4 * (tree.root.hActs2 > 0)
+
+            self.db2 += delta3
+            self.dW2 += np.outer(delta3, tree.root.hActs1)
+
+            delta2 = np.dot(self.W2.T, delta3)
+
+            # the error from the relation label doesn't get added anywhere else besides the root
+            self.backProp(tree.root, delta2)
 
         # scale cost and grad by mb size
         scale = (1./self.mbSize)
@@ -128,74 +149,58 @@ class RNN2:
                                    scale*(self.dW2 + self.rho*self.W2),scale*self.db2,
                                    scale*(self.dWs+self.rho*self.Ws),scale*self.dbs]
 
-    def forwardProp(self,node, correct=[], guess=[]):
-        cost  =  total = 0.0
-
+    # same as fprop in rnn.py since the "deep" layer is only added at the label, which happens
+    # outside of this method at the top of the root
+    def forwardProp(self, node):
+        # if this node has only 1 child, just pass through
+        if len(node.children) == 1:
+            self.forwardProp(node.children[0])
+            node.hActs1 = node.children[0].hActs1
         # if we are in a leaf node, set hActs1 to be the word vector
-        if node.isLeaf:
-            node.hActs1 = self.L[:, node.word] # shape is (10,)
+        elif node.isLeaf:
+            node.hActs1 = self.L[:, node.word_index] # shape is (10,)
         else:
-            # if haven't finished doing forward prop on the left child, do it
-            if not node.left.fprop:
-                cost_left, total_left = self.forwardProp(node.left, correct, guess)
-                cost += cost_left
-                total += total_left
-            # if haven't finished doing forward prop on the right child, do it
-            if not node.right.fprop:
-                cost_right, total_right = self.forwardProp(node.right, correct, guess)
-                cost += cost_right
-                total += total_right
+            assert len(node.children) == 2
+            left = node.children[0]
+            right = node.children[1]
 
-            # both left and right child now have hActs1
-            node.hActs1 = relu(np.dot(self.W1, np.hstack([node.left.hActs1, node.right.hActs1])) + self.b1)
+            # if haven't finished doing forward prop on the first child, do it
+            if not left.fprop:
+                self.forwardProp(left)
+            # if haven't finished doing forward prop on the second child, do it
+            if not right.fprop:
+                self.forwardProp(right)
+
+            # both children now have hActs1
+            node.hActs1 = relu(np.dot(self.W1, np.hstack([left.hActs1, right.hActs1])) + self.b1)
         
-        node.hActs2 = relu(np.dot(self.W2, node.hActs1) + self.b2)
-        y_hat = softmax(np.dot(self.Ws, node.hActs2) + self.bs)
-        node.probs = y_hat
-        cost -= np.log(y_hat[node.label])
         node.fprop = True
-        correct.append(node.label)
-        guess.append(np.argmax(y_hat))        
-
-        return cost, total + 1
 
 
-    def backProp(self,node,error=None):
-
+    # same as backprop in rnn.py since the "deep" layer is only added at the label, which happens
+    # outside of this method at the top of the root
+    def backProp(self, node, delta2):
         # Clear nodes
         node.fprop = False
 
-        # y_hat - y
-        delta5 = node.probs
-        delta5[node.label] -= 1.0
-
-        self.dbs += delta5
-
-        # dU
-        self.dWs += np.outer(delta5, node.hActs2)
-
-        delta4 = np.dot(self.Ws.T, delta5)
-        delta3 = delta4 * (node.hActs2 > 0)
-
-        self.db2 += delta3
-        self.dW2 += np.outer(delta3, node.hActs1)
-
-        delta2 = np.dot(self.W2.T, delta3)
-
-        if error is not None:
-            delta2 += error
-
-        if node.isLeaf:
-            self.dL[node.word] += delta2
+        # if this node has only 1 child, just pass through
+        if len(node.children) == 1:
+            self.backProp(node.children[0], delta2)
         else:
-            delta1 = delta2 * (node.hActs1 > 0)
-            self.db1 += delta1
-            self.dW1 += np.outer(delta1, np.hstack([node.left.hActs1, node.right.hActs1]))
-            delta0 = np.dot(self.W1.T, delta1)
-            self.backProp(node.left, delta0[:self.wvecDim])
-            self.backProp(node.right, delta0[self.wvecDim:])
-        
+            if node.isLeaf:
+                self.dL[node.word_index] += delta2
+            else:
+                assert len(node.children) == 2 
+                left = node.children[0]
+                right = node.children[1]
 
+                delta1 = delta2 * (node.hActs1 > 0)
+                self.db1 += delta1
+                self.dW1 += np.outer(delta1, np.hstack([left.hActs1, right.hActs1]))
+                delta0 = np.dot(self.W1.T, delta1)
+                self.backProp(left, delta0[:self.wvecDim])
+                self.backProp(right, delta0[self.wvecDim:])
+        
         
     def updateParams(self,scale,update,log=False):
         """
@@ -270,16 +275,15 @@ class RNN2:
             print "Grad Check Failed for dL: Sum of Error = %.9f" % (err2/count)
 
 if __name__ == '__main__':
-
     import tree as treeM
-    train = treeM.loadTrees()
-    numW = len(treeM.loadWordMap())
+    train = treeM.load_trees()
+    numW = len(treeM.load_word_to_index_map())
 
-    wvecDim = 10
-    middleDim = 10
-    outputDim = 5
+    wvecDim = 4
+    middleDim = 4
+    outputDim = 42
 
-    rnn = RNN2(wvecDim,middleDim,outputDim,numW,mbSize=4)
+    rnn = RNN2(wvecDim, middleDim, outputDim, numW, mbSize=4)
     rnn.initParams()
 
     mbData = train[:4]

@@ -2,11 +2,9 @@ import optparse
 import cPickle as pickle
 
 import sgd as optimizer
-from rntn import RNTN
-from rnn2deep import RNN2
+#from rntn import RNTN
+#from rnn2deep import RNN2
 from rnn import RNN
-#from dcnn import DCNN
-from rnn_changed import RNN3
 import tree as tr
 import time
 import matplotlib.pyplot as plt
@@ -14,15 +12,9 @@ import numpy as np
 import pdb
 from matplotlib.pyplot import *
 
+TRAIN_DATA_FILE = os.environ['TRAIN_DATA_FILE']
+DEV_DATA_FILE = os.environ['DEV_DATA_FILE']
 
-# This is the main training function of the codebase. You are intended to run this function via command line 
-# or by ./run.sh
-
-# You should update run.sh accordingly before you run it!
-
-
-# TODO:
-# Create your plots here
 
 def run(args=None):
     usage = "usage : %prog [options]"
@@ -42,12 +34,6 @@ def run(args=None):
     parser.add_option("--outputDim",dest="outputDim",type="int",default=5)
     parser.add_option("--wvecDim",dest="wvecDim",type="int",default=30)
 
-    # for DCNN only
-    parser.add_option("--ktop",dest="ktop",type="int",default=5)
-    parser.add_option("--m1",dest="m1",type="int",default=10)
-    parser.add_option("--m2",dest="m2",type="int",default=7)
-    parser.add_option("--n1",dest="n1",type="int",default=6)
-    parser.add_option("--n2",dest="n2",type="int",default=12)
     
     parser.add_option("--outFile",dest="outFile",type="string",
         default="models/test.bin")
@@ -65,15 +51,16 @@ def run(args=None):
 
     # Testing
     if opts.test:
-        test(opts.inFile,opts.data,opts.model)
+        test(opts.inFile, opts.data, opts.model)
         return
     
     print "Loading data..."
     train_accuracies = []
     dev_accuracies = []
+
     # load training data
-    trees = tr.loadTrees('train')
-    opts.numWords = len(tr.loadWordMap())
+    trees = tr.load_trees(TRAIN_DATA_FILE)
+    opts.numWords = len(tr.load_word_to_index_map())
 
     if (opts.model=='RNTN'):
         nn = RNTN(opts.wvecDim,opts.outputDim,opts.numWords,opts.minibatch)
@@ -81,67 +68,66 @@ def run(args=None):
         nn = RNN(opts.wvecDim,opts.outputDim,opts.numWords,opts.minibatch)
     elif(opts.model=='RNN2'):
         nn = RNN2(opts.wvecDim,opts.middleDim,opts.outputDim,opts.numWords,opts.minibatch)
-    elif(opts.model=='RNN3'):
-        nn = RNN3(opts.wvecDim,opts.middleDim,opts.outputDim,opts.numWords,opts.minibatch)
-    elif(opts.model=='DCNN'):
-        nn = DCNN(opts.wvecDim,opts.ktop,opts.m1,opts.m2, opts.n1, opts.n2,0, opts.outputDim,opts.numWords, 2, opts.minibatch,rho=1e-4)
-        trees = cnn.tree2matrix(trees)
     else:
-        raise '%s is not a valid neural network so far only RNTN, RNN, RNN2, RNN3, and DCNN'%opts.model
+        raise '%s is not a valid neural network so far only RNTN, RNN, RNN2' % opts.model
     
     nn.initParams()
 
-    sgd = optimizer.SGD(nn,alpha=opts.step,minibatch=opts.minibatch,
-        optimizer=opts.optimizer)
+    sgd = optimizer.SGD(nn, alpha=opts.step, minibatch=opts.minibatch, optimizer=opts.optimizer)
 
-
-    dev_trees = tr.loadTrees("dev")
+    dev_trees = tr.load_trees(DEV_DATA_FILE)
     for e in range(opts.epochs):
         start = time.time()
-        print "Running epoch %d"%e
+        print "Running epoch %d" % e
         sgd.run(trees)
         end = time.time()
-        print "Time per epoch : %f"%(end-start)
+        print "Time per epoch : %f" % (end-start)
 
         with open(opts.outFile,'w') as fid:
             pickle.dump(opts,fid)
             pickle.dump(sgd.costt,fid)
             nn.toFile(fid)
         if evaluate_accuracy_while_training:
-            print "testing on training set real quick"
-            train_accuracies.append(test(opts.outFile,"train",opts.model,trees))
-            print "testing on dev set real quick"
-            dev_accuracies.append(test(opts.outFile,"dev",opts.model,dev_trees))
+            print "testing on training set..."
+            train_accuracies.append(test(opts.outFile, "train", opts.model, trees))
+            
+            print "testing on dev set..."
+            dev_accuracies.append(test(opts.outFile, "dev", opts.model, dev_trees))
+            
             # clear the fprop flags in trees and dev_trees
             for tree in trees:
-                tr.leftTraverse(tree.root,nodeFn=tr.clearFprop)
+                tr.traverse(tree.root, func=tr.clear_fprop)
             for tree in dev_trees:
-                tr.leftTraverse(tree.root,nodeFn=tr.clearFprop)
+                tr.traverse(tree.root, func=tr.clear_fprop)
             print "fprop in trees cleared"
 
 
     if evaluate_accuracy_while_training:
-        #pdb.set_trace()
         #print train_accuracies
         #print dev_accuracies
-        # Plot train/dev_accuracies here?
+        # Plot train/dev_accuracies here
         x = range(opts.epochs)
         figure(figsize=(6,4))
         plot(x, train_accuracies, color='b', marker='o', linestyle='-', label="training")
         plot(x, dev_accuracies, color='g', marker='o', linestyle='-', label="dev")
-        title("Accuracy vs num epochs for wvecdim = 30.")
+        title("Accuracy vs num epochs for wvecdim = 300.")
         xlabel("Epochs")
         ylabel("Accuracy")
         #ylim(ymin=0, ymax=max(1.1*max(train_accuracies),3*min(train_accuracies)))
         legend()
-        savefig("train_dev_acc_rnn2.png")
+        savefig("train_dev_acc.png")
         #pdb.set_trace()
 
 def test(netFile,dataSet, model='RNN', trees=None):
-    if trees==None:
-        trees = tr.loadTrees(dataSet)
+    if trees == None:
+        if dataSet == "train":
+            trees = tr.loadTrees(TRAIN_DATA_FILE)
+        elif dataSet == "dev":
+            trees = tr.loadTrees(DEV_DATA_FILE)
+    
     assert netFile is not None, "Must give model to test"
-    print "Testing netFile %s"%netFile
+    print "Testing netFile %s" % netFile
+
     with open(netFile,'r') as fid:
         opts = pickle.load(fid)
         _ = pickle.load(fid)
@@ -152,26 +138,20 @@ def test(netFile,dataSet, model='RNN', trees=None):
             nn = RNN(opts.wvecDim,opts.outputDim,opts.numWords,opts.minibatch)
         elif(model=='RNN2'):
             nn = RNN2(opts.wvecDim,opts.middleDim,opts.outputDim,opts.numWords,opts.minibatch)
-        elif(opts.model=='RNN3'):
-            nn = RNN3(opts.wvecDim,opts.middleDim,opts.outputDim,opts.numWords,opts.minibatch)
-        elif(model=='DCNN'):
-            nn = DCNN(opts.wvecDim,opts.ktop,opts.m1,opts.m2, opts.n1, opts.n2,0, opts.outputDim,opts.numWords, 2, opts.minibatch,rho=1e-4)
-            trees = cnn.tree2matrix(trees)
         else:
-            raise '%s is not a valid neural network so far only RNTN, RNN, RNN2, RNN3, and DCNN'%opts.model
+            raise '%s is not a valid neural network so far only RNTN, RNN, and RNN2'%opts.model
         
         nn.initParams()
         nn.fromFile(fid)
 
     print "Testing %s..."%model
 
-    cost,correct, guess, total = nn.costAndGrad(trees,test=True)
+    cost, correct, guess, total = nn.costAndGrad(trees,test=True)
     correct_sum = 0
-    for i in xrange(0,len(correct)):        
-        correct_sum+=(guess[i]==correct[i])
+    for i in xrange(0, len(correct)):        
+        correct_sum += (guess[i] == correct[i])
     
-    # TODO
-    # Plot the confusion matrix?
+    # confusion matrix
     conf_arr = np.zeros((5, 5))
     for i in xrange(len(correct)):
         curr_correct = correct[i]
@@ -180,9 +160,8 @@ def test(netFile,dataSet, model='RNN', trees=None):
 
     #makeconf(conf_arr)
     
-    
-    print "Cost %f, Acc %f"%(cost,correct_sum/float(total))
-    return correct_sum/float(total)
+    print "Cost %f, Acc %f" % (cost, correct_sum / float(total))
+    return correct_sum / float(total)
 
 
 def makeconf(conf_arr):

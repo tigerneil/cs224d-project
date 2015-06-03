@@ -1,146 +1,175 @@
 import collections
-UNK = 'UNK'
-# This file contains the dataset in a useful way. We populate a list of Trees to train/test our Neural Nets such that each Tree contains any number of Node objects.
+import cPickle as pickle
+import os
+import re
+import pdb
+import numpy as np
 
-# The best way to get a feel for how these objects are used in the program is to drop pdb.set_trace() in a few places throughout the codebase
-# to see how the trees are used.. look where loadtrees() is called etc..
+#WORDS_FILE = '/juicer/scr82/scr/nlp/data/tac-kbp/tackbp2015/master/tmp/wordVecTrain/words.txt'
+#WORD_VECTORS = '/juicer/scr82/scr/nlp/data/tac-kbp/tackbp2015/master/tmp/wordVecTrain/trunk/kbp_vectors_new.txt'
+WORD_VECTORS = 'vectors.txt'
+WORDS_FILE = 'words.txt'
+TRAIN_DATA_FILE = 'java/out.txt'
 
+#WORD_VECTORS = os.environ['WORD_VECTORS']
+#WORDS_FILE = os.environ['WORDS_FILE']
+#TRAIN_DATA_FILE = os.environ['TRAIN_DATA_FILE']
+
+REGEX = '( )|(\()|(\))'
+UNK = 'UUNNKK'
 
 class Node: # a node in the tree
-    def __init__(self,label,word=None):
-        self.label = label 
-        self.word = word # NOT a word vector, but index into L.. i.e. wvec = L[:,node.word]
+    def __init__(self, label=None, word_index=None):
+        self.label = label # the label for a given node (NP, JJ, etc. - not the relation)
+        self.word_index = word_index # NOT a word vector, but index into L.. i.e. wvec = L[:,node.word]
         self.parent = None # reference to parent
-        self.left = None # reference to left child
-        self.right = None # reference to right child
+        self.children = []
         self.isLeaf = False # true if I am a leaf (could have probably derived this from if I have a word)
         self.fprop = False # true if we have finished performing fowardprop on this node (note, there are many ways to implement the recursion.. some might not require this flag)
         self.hActs1 = None # h1 from the handout
         self.hActs2 = None # h2 from the handout (only used for RNN2)
-        self.probs = None # yhat
 
+# Each Tree has a single relation as a label.
 class Tree:
+    # tree_string is something like (NP (NP (JJ chief) (@NP (NN scientist) (NNS 10044_Squyres))) (PP (IN of) (NP (NN Cornell_University))))
+    # label is an int (index of relation)
+    def __init__(self, tree_string, relation_label):
+        self.relation_label = relation_label
+        self.probs = None # y_hat
+        self.tree_string = tree_string
 
-    def __init__(self,treeString,openChar='(',closeChar=')'):
-        tokens = []
-        self.open = '('
-        self.close = ')'
-        for toks in treeString.strip().split():
-            tokens += list(toks)
+        tokens = [x for x in re.split(REGEX, tree_string) if x is not None and x.strip() != '']
         self.root = self.parse(tokens)
 
+    def tree_to_string(self):
+        return tree_to_string(self.root, '')
+
+    # example tree:
+    # (NP (NP (JJ chief) (@NP (NN scientist) (NNS 10044_Squyres))) (PP (IN of) (NP (NN Cornell_University))))
     def parse(self, tokens, parent=None):
-        assert tokens[0] == self.open, "Malformed tree"
-        assert tokens[-1] == self.close, "Malformed tree"
+        if len(tokens) == 0:
+            return None
 
         split = 2 # position after open and label
-        countOpen = countClose = 0
+        count_open = count_close = 0
 
-        if tokens[split] == self.open: 
-            countOpen += 1
+        if tokens[split] == '(': 
+            count_open += 1
             split += 1
         # Find where left child and right child split
-        while countOpen != countClose:
-            if tokens[split] == self.open:
-                countOpen += 1
-            if tokens[split] == self.close:
-                countClose += 1
+        while count_open != count_close:
+            if tokens[split] == '(':
+                count_open += 1
+            if tokens[split] == ')':
+                count_close += 1
             split += 1
 
-        # New node
-        node = Node(int(tokens[1])) # zero index labels
-
+        node = Node(tokens[1].strip())
         node.parent = parent 
 
         # leaf Node
-        if countOpen == 0:
-            node.word = ''.join(tokens[2:-1]).lower() # lower case?
+        if count_open == 0:
+            node.word_index = ''.join(tokens[2:-1])
             node.isLeaf = True
             return node
 
-        node.left = self.parse(tokens[2:split],parent=node)
-        node.right = self.parse(tokens[split:-1],parent=node)
+        left_child = self.parse(tokens[2:split], parent=node)
+        right_child = self.parse(tokens[split:-1], parent=node)
+        if left_child is not None:
+            node.children.append(left_child)
+        if right_child is not None:
+            node.children.append(right_child)
 
         return node
 
-        
 
-def leftTraverse(root,nodeFn=None,args=None):
-    """
-    Recursive function traverses tree
-    from left to right. 
-    Calls nodeFn at each node
-    """
-    nodeFn(root,args)
-    if root.left is not None:
-        leftTraverse(root.left,nodeFn,args)
-    if root.right is not None:
-        leftTraverse(root.right,nodeFn,args)
-
-
-def countWords(node,words):
+# (NP (NP (JJ chief) (@NP (NN scientist) (NNS 10044_Squyres))) (PP (IN of) (NP (NN Cornell_University))))
+def tree_to_string(node, string_repr):
+    string_repr += '('
+    string_repr += node.label
+    string_repr += ' '
     if node.isLeaf:
-        words[node.word] += 1
+        string_repr += str(node.word)
+        string_repr += ')'
+    else:
+        for i, child in enumerate(node.children):
+            string_repr += tree_to_string(child, '')
+            
+            # if we are not at the last index
+            # (insert spaces between the children but not after the last one)
+            if i != len(node.children) - 1:
+                string_repr += ' '
+            else:
+                string_repr += ')'
+    return string_repr
 
-def clearFprop(node,words):
+# DFS on a tree
+def traverse(root, func=None, args=None):
+    func(root, args)
+    for child in root.children:
+        traverse(child, func, args)
+
+def clear_fprop(node, words):
     node.fprop = False
 
-def mapWords(node,wordMap):
+def map_words(node, word_to_index_map):
     if node.isLeaf:
-        if node.word not in wordMap:
-            node.word = wordMap[UNK]
+        if node.word_index not in word_to_index_map:
+            node.word_index = word_to_index_map[UNK]
         else:
-            node.word = wordMap[node.word]
-    
+            node.word_index = word_to_index_map[node.word_index]
 
-def loadWordMap():
-    import cPickle as pickle
-    
-    with open('wordMap.bin','r') as fid:
-        return pickle.load(fid)
+# Returns a 2D numpy array of shape (num_words, word_dim)
+def load_word_vectors(filename=WORD_VECTORS):
+    embeddings = []
+    dim = -1
+    with open(filename) as f:
+        for i, line in enumerate(f):
+            # skip the first line
+            if i == 0:
+                continue
 
-def buildWordMap():
-    """
-    Builds map of all words in training set
-    to integer values.
-    """
+            temp = line.split(" ")
+            arr = np.array(map(float, temp[0:len(temp)]))
+            dim = arr.shape[0]
+            embeddings.append(arr)
 
-    import cPickle as pickle
-    file = 'trees/train.txt'
-    print "Reading trees to build word map.."
-    with open(file,'r') as fid:
-        trees = [Tree(l) for l in fid.readlines()]
+    # create a word vector for UNK
+    unk_vec = np.random.uniform(0.0, 0.1, (dim,))
+    embeddings.append(unk_vec)
 
-    print "Counting words to give each word an index.."
-    
-    words = collections.defaultdict(int)
+    return np.array(embeddings)
+
+def load_word_to_index_map(filename=WORDS_FILE):
+    word_to_index = {}
+    c = 0
+    with open(filename, 'r') as f:
+        for line in f:
+            word = line.strip()
+            word_to_index[word] = c
+            c += 1
+    word_to_index[UNK] = c
+    return word_to_index
+
+def load_trees(filename=TRAIN_DATA_FILE):
+    word_to_index_map = load_word_to_index_map()
+    trees = []
+    with open(filename, 'r') as f:
+        for line in f:
+            vals = line.strip().rsplit('\t', 1) # split on the last tab in this line
+            tree_string = vals[0]
+            relations = vals[1].split(',')
+            for rel in relations:
+                curr_tree = Tree(tree_string, int(rel))
+                trees.append(curr_tree)
+
+    # instead of the actual words at the leaves, use their indices into the word map
     for tree in trees:
-        leftTraverse(tree.root,nodeFn=countWords,args=words)
-    
-    wordMap = dict(zip(words.iterkeys(),xrange(len(words))))
-    wordMap[UNK] = len(words) # Add unknown as word
-    
-    print "Saving wordMap to wordMap.bin"
-    with open('wordMap.bin','w') as fid:
-        pickle.dump(wordMap,fid)
+        traverse(tree.root, func=map_words, args=word_to_index_map)
 
-def loadTrees(dataSet='train'):
-    """
-    Loads training trees. Maps leaf node words to word ids.
-    """
-    wordMap = loadWordMap()
-    file = 'trees/%s.txt'%dataSet
-    print "Loading %sing trees.."%dataSet
-    with open(file,'r') as fid:
-        trees = [Tree(l) for l in fid.readlines()]
-    for tree in trees:
-        leftTraverse(tree.root,nodeFn=mapWords,args=wordMap)
+    print "Loaded %d datapoints." % len(trees)
+    
     return trees
       
 if __name__=='__main__':
-    buildWordMap()
-    
-    train = loadTrees()
-
-    print "Now you can do something with this list of trees!"
-
+    train_trees = load_trees()
