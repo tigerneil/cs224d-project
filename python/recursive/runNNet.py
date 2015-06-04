@@ -47,7 +47,7 @@ def run(args=None):
 
 
     # make this false if you dont care about your accuracies per epoch, makes things faster!
-    evaluate_accuracy_while_training = False
+    evaluate_accuracy_while_training = True
 
     # Testing
     if opts.test:
@@ -91,18 +91,19 @@ def run(args=None):
             print "testing on training set..."
             train_accuracies.append(test(opts.outFile, "train", opts.model, trees))
             
-            print "testing on dev set..."
-            dev_accuracies.append(test(opts.outFile, "dev", opts.model, dev_trees))
+            #print "testing on dev set..."
+            #dev_accuracies.append(test(opts.outFile, "dev", opts.model, dev_trees))
             
             # clear the fprop flags in trees and dev_trees
             for tree in trees:
                 tr.traverse(tree.root, func=tr.clear_fprop)
-            for tree in dev_trees:
-                tr.traverse(tree.root, func=tr.clear_fprop)
+            #for tree in dev_trees:
+                #tr.traverse(tree.root, func=tr.clear_fprop)
             print "fprop in trees cleared"
 
 
-    if evaluate_accuracy_while_training:
+    if False: # don't do this for now
+    #if evaluate_accuracy_while_training:
         #print train_accuracies
         #print dev_accuracies
         # Plot train/dev_accuracies here
@@ -110,7 +111,7 @@ def run(args=None):
         figure(figsize=(6,4))
         plot(x, train_accuracies, color='b', marker='o', linestyle='-', label="training")
         plot(x, dev_accuracies, color='g', marker='o', linestyle='-', label="dev")
-        title("Accuracy vs num epochs for wvecdim = 300.")
+        title("Accuracy vs num epochs.")
         xlabel("Epochs")
         ylabel("Accuracy")
         #ylim(ymin=0, ymax=max(1.1*max(train_accuracies),3*min(train_accuracies)))
@@ -118,12 +119,12 @@ def run(args=None):
         savefig("train_dev_acc.png")
         #pdb.set_trace()
 
-def test(netFile,dataSet, model='RNN', trees=None):
+def test(netFile, dataSet, model='RNN', trees=None):
     if trees == None:
         if dataSet == "train":
-            trees = tr.loadTrees(TRAIN_DATA_FILE)
+            trees = tr.load_trees(TRAIN_DATA_FILE)
         elif dataSet == "dev":
-            trees = tr.loadTrees(DEV_DATA_FILE)
+            trees = tr.load_trees(DEV_DATA_FILE)
     
     assert netFile is not None, "Must give model to test"
     print "Testing netFile %s" % netFile
@@ -144,9 +145,9 @@ def test(netFile,dataSet, model='RNN', trees=None):
         nn.initParams()
         nn.fromFile(fid)
 
-    print "Testing %s..."%model
+    print "Testing %s..." % model
 
-    cost, correct, guess, total = nn.costAndGrad(trees,test=True)
+    cost, correct, guess, total = nn.costAndGrad(trees, test=True)
     correct_sum = 0
     for i in xrange(0, len(correct)):        
         correct_sum += (guess[i] == correct[i])

@@ -208,7 +208,6 @@ class RNN:
         self.stack = pickle.load(fid)
 
     def check_grad(self,data,epsilon=1e-6):
-
         cost, grad = self.costAndGrad(data)
 
         err1 = 0.0

@@ -10,7 +10,7 @@ class SGD:
         assert self.model is not None, "Must define a function to optimize"
         self.it = 0
         self.alpha = alpha # learning rate
-        self.minibatch = minibatch # minibatch
+        self.minibatch = minibatch # minibatch size
         self.optimizer = optimizer
         if self.optimizer == 'sgd':
             print "Using sgd.."
@@ -35,7 +35,13 @@ class SGD:
         # randomly shuffle data
         random.shuffle(trees)
 
-        for i in xrange(0,m-self.minibatch+1,self.minibatch):
+        num_batches = len(range(0, m - self.minibatch + 1, self.minibatch))
+        curr_count = 0
+
+        for i in xrange(0, m - self.minibatch + 1, self.minibatch):
+            print "On minibatch %d out of %d (minibatch size = %d)..." % (cutt_count, num_batches, self.minibatch)
+            curr_count += 1
+
             self.it += 1
 
             mb_data = trees[i:i+self.minibatch]
@@ -75,5 +81,5 @@ class SGD:
 
             self.costt.append(cost)
             if self.it%1 == 0:
-                print "Iter %d : Cost=%.4f, ExpCost=%.4f."%(self.it,cost,self.expcost[-1])
+                print "Iter %d : Cost=%.4f, ExpCost=%.4f." % (self.it, cost, self.expcost[-1])
             

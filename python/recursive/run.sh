@@ -7,7 +7,7 @@ export TRAIN_DATA_FILE="/juicer/scr82/scr/nlp/data/tac-kbp/tackbp2015/master/tmp
 export DEV_DATA_FILE=""
 
 # training params
-epochs=48
+epochs=5
 step=1e-2
 wvecDim=300
 outputDim=42
