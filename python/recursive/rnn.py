@@ -2,6 +2,7 @@ import numpy as np
 import collections
 import pdb
 import sys
+import cPickle as pickle
 from tree import load_word_vectors
 
 # This is a simple Recursive Neural Netowrk with one ReLU Layer and a softmax layer.
@@ -199,13 +200,11 @@ class RNN:
         for j in dL.iterkeys():
             self.L[:,j] += scale*dL[j]
 
-    def toFile(self,fid):
-        import cPickle as pickle
-        pickle.dump(self.stack,fid)
+    def toFile(self, f):
+        pickle.dump(self.stack, f)
 
-    def fromFile(self,fid):
-        import cPickle as pickle
-        self.stack = pickle.load(fid)
+    def fromFile(self, f):
+        self.stack = pickle.load(f)
 
     def check_grad(self,data,epsilon=1e-6):
         cost, grad = self.costAndGrad(data)

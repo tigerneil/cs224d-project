@@ -44,8 +44,8 @@ def run(args=None):
 
     parser.add_option("--model",dest="model",type="string",default="RNN")
 
-    (opts,args)=parser.parse_args(args)
-
+    (opts, args) = parser.parse_args(args)
+    
 
     # make this false if you dont care about your accuracies per epoch, makes things faster!
     evaluate_accuracy_while_training = True
@@ -84,10 +84,13 @@ def run(args=None):
         end = time.time()
         print "Time per epoch : %f" % (end-start)
 
-        with open(opts.outFile,'wb') as fid:
-            pickle.dump(opts,fid)
-            pickle.dump(sgd.costt,fid)
-            nn.toFile(fid)
+        # save the net to the output file
+        f = open(opts.outFile, 'wb')
+        pickle.dump(opts, f)
+        pickle.dump(sgd.costt, f)
+        nn.toFile(f)
+        f.close()
+
         if evaluate_accuracy_while_training:
             print "testing on training set..."
             train_accuracies.append(test(opts.outFile, "train", opts.model, trees))
@@ -130,21 +133,22 @@ def test(netFile, dataSet, model='RNN', trees=None):
     assert netFile is not None, "Must give model to test"
     print "Testing netFile %s" % netFile
 
-    with open(netFile,'rb') as fid:
-        opts = pickle.load(fid)
-        _ = pickle.load(fid)
-        
-        if (model=='RNTN'):
-            nn = RNTN(opts.wvecDim,opts.outputDim,opts.numWords,opts.minibatch)
-        elif(model=='RNN'):
-            nn = RNN(opts.wvecDim,opts.outputDim,opts.numWords,opts.minibatch)
-        elif(model=='RNN2'):
-            nn = RNN2(opts.wvecDim,opts.middleDim,opts.outputDim,opts.numWords,opts.minibatch)
-        else:
-            raise '%s is not a valid neural network so far only RNTN, RNN, and RNN2'%opts.model
-        
-        nn.initParams()
-        nn.fromFile(fid)
+    f = open(netFile, 'rb')
+    opts = pickle.load(f)
+    _ = pickle.load(f)
+    
+    if (model=='RNTN'):
+        nn = RNTN(opts.wvecDim,opts.outputDim,opts.numWords,opts.minibatch)
+    elif(model=='RNN'):
+        nn = RNN(opts.wvecDim,opts.outputDim,opts.numWords,opts.minibatch)
+    elif(model=='RNN2'):
+        nn = RNN2(opts.wvecDim,opts.middleDim,opts.outputDim,opts.numWords,opts.minibatch)
+    else:
+        raise '%s is not a valid neural network so far only RNTN, RNN, and RNN2'%opts.model
+    
+    nn.initParams()
+    nn.fromFile(f)
+    f.close()
 
     print "Testing %s..." % model
 
