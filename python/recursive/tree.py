@@ -129,8 +129,8 @@ def load_word_vectors(filename=WORD_VECTORS):
             if i == 0:
                 continue
 
-            temp = line.split(" ")
-            arr = np.array(map(float, temp[1:len(temp)]))
+            temp = line.strip().split(" ")
+            arr = np.array(map(float, temp[1:]))
             dim = arr.shape[0]
             embeddings.append(arr)
 
