@@ -92,14 +92,14 @@ def run(args=None):
             print "testing on training set..."
             train_accuracies.append(test(opts.outFile, "train", opts.model, trees))
             
-            #print "testing on dev set..."
-            #dev_accuracies.append(test(opts.outFile, "dev", opts.model, dev_trees))
+            print "testing on dev set..."
+            dev_accuracies.append(test(opts.outFile, "dev", opts.model, dev_trees))
             
             # clear the fprop flags in trees and dev_trees
             for tree in trees:
                 tr.traverse(tree.root, func=tr.clear_fprop)
-            #for tree in dev_trees:
-                #tr.traverse(tree.root, func=tr.clear_fprop)
+            for tree in dev_trees:
+                tr.traverse(tree.root, func=tr.clear_fprop)
             print "fprop in trees cleared"
 
 
