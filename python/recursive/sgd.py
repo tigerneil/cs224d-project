@@ -39,7 +39,7 @@ class SGD:
         curr_count = 0
 
         for i in xrange(0, m - self.minibatch + 1, self.minibatch):
-            print "On minibatch %d out of %d (minibatch size = %d)..." % (cutt_count, num_batches, self.minibatch)
+            print "On minibatch %d out of %d (minibatch size = %d)..." % (curr_count, num_batches, self.minibatch)
             curr_count += 1
 
             self.it += 1
