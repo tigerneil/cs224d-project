@@ -7,13 +7,13 @@ import numpy as np
 
 #WORDS_FILE = '/juicer/scr82/scr/nlp/data/tac-kbp/tackbp2015/master/tmp/wordVecTrain/words.txt'
 #WORD_VECTORS = '/juicer/scr82/scr/nlp/data/tac-kbp/tackbp2015/master/tmp/wordVecTrain/trunk/kbp_vectors_new.txt'
-WORD_VECTORS = 'vectors.txt'
-WORDS_FILE = 'words.txt'
-TRAIN_DATA_FILE = 'java/out.txt'
+#WORD_VECTORS = 'vectors.txt'
+#WORDS_FILE = 'words.txt'
+#TRAIN_DATA_FILE = 'java/out.txt'
 
-#WORD_VECTORS = os.environ['WORD_VECTORS']
-#WORDS_FILE = os.environ['WORDS_FILE']
-#TRAIN_DATA_FILE = os.environ['TRAIN_DATA_FILE']
+WORD_VECTORS = os.environ['WORD_VECTORS']
+WORDS_FILE = os.environ['WORDS_FILE']
+TRAIN_DATA_FILE = os.environ['TRAIN_DATA_FILE']
 
 REGEX = '( )|(\()|(\))'
 UNK = 'UUNNKK'
