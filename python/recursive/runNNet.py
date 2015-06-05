@@ -7,10 +7,10 @@ import sgd as optimizer
 from rnn import RNN
 import tree as tr
 import time
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import numpy as np
 import pdb
-from matplotlib.pyplot import *
+#from matplotlib.pyplot import *
 import os
 
 TRAIN_DATA_FILE = os.environ['TRAIN_DATA_FILE']
@@ -84,7 +84,7 @@ def run(args=None):
         end = time.time()
         print "Time per epoch : %f" % (end-start)
 
-        with open(opts.outFile,'w') as fid:
+        with open(opts.outFile,'wb') as fid:
             pickle.dump(opts,fid)
             pickle.dump(sgd.costt,fid)
             nn.toFile(fid)
@@ -130,7 +130,7 @@ def test(netFile, dataSet, model='RNN', trees=None):
     assert netFile is not None, "Must give model to test"
     print "Testing netFile %s" % netFile
 
-    with open(netFile,'r') as fid:
+    with open(netFile,'rb') as fid:
         opts = pickle.load(fid)
         _ = pickle.load(fid)
         

@@ -38,11 +38,11 @@ class RNN:
         np.random.seed(12341)
 
         # Word vectors
-        #self.L = 0.01*np.random.randn(self.wvecDim,self.numWords)
-        self.L = load_word_vectors().T # shape is (num_words, word_dim)
+        self.L = 0.01*np.random.randn(self.wvecDim,self.numW)
+        #self.L = load_word_vectors().T # shape is (num_words, word_dim)
 
         # Hidden layer parameters
-        MULT = 1.0
+        MULT = 0.01
         self.W = MULT * np.random.randn(self.wvecDim, 2*self.wvecDim)
         self.b = np.zeros((self.wvecDim))
 
