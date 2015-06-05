@@ -72,6 +72,7 @@ public class ProcessData {
 
 	// Processes each line of the python-processed KBP data. (needs to be the second step in that pipeline)
 	public static String processLine(String jsonLine) {
+		//System.err.println(jsonLine);
 		String[] vals = gson.fromJson(jsonLine, String[].class);
 
 		// [new_gloss, subject_entity, object_entity, str(subject_begin), str(subject_end), str(object_begin), str(object_end), relations]
@@ -83,6 +84,10 @@ public class ProcessData {
 		int object_begin = Integer.parseInt(vals[5]);
 		int object_end = Integer.parseInt(vals[6]);
 		String rels = vals[7];
+
+		if (subject_begin == object_begin || subject_begin < 0 || subject_end < 0 || object_begin < 0 || object_end < 0) {
+			return null;
+		}
 
 		// get the parse for the desired subtree
 		String parse = getParse(gloss, subject_entity, object_entity, subject_begin, subject_end, object_begin, object_end);
