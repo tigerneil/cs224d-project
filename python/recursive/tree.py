@@ -130,7 +130,7 @@ def load_word_vectors(filename=WORD_VECTORS):
                 continue
 
             temp = line.split(" ")
-            arr = np.array(map(float, temp[0:len(temp)]))
+            arr = np.array(map(float, temp[1:len(temp)]))
             dim = arr.shape[0]
             embeddings.append(arr)
 
