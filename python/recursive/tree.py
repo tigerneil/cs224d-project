@@ -154,8 +154,13 @@ def load_word_to_index_map(filename=WORDS_FILE):
 def load_trees(filename=TRAIN_DATA_FILE):
     word_to_index_map = load_word_to_index_map()
     trees = []
+    count = 0
     with open(filename, 'r') as f:
         for line in f:
+            if count % 1000 == 0:
+                print "Processed %d lines..." % count
+                count += 1
+
             vals = line.strip().rsplit('\t', 1) # split on the last tab in this line
             tree_string = vals[0]
             relations = vals[1].split(',')
