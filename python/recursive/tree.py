@@ -125,19 +125,17 @@ def load_word_vectors(filename=WORD_VECTORS):
     dim = -1
     with open(filename) as f:
         for i, line in enumerate(f):
+            print line
             # skip the first line
             if i == 0:
                 continue
-
             temp = line.strip().split(" ")
-            arr = np.array(map(float, temp[1:]))
+            arr = np.array(map(float, temp[1:-1]))
             dim = arr.shape[0]
             embeddings.append(arr)
-
     # create a word vector for UNK
     unk_vec = np.random.uniform(0.0, 0.1, (dim,))
     embeddings.append(unk_vec)
-
     return np.array(embeddings)
 
 def load_word_to_index_map(filename=WORDS_FILE):
