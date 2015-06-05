@@ -159,7 +159,7 @@ def load_trees(filename=TRAIN_DATA_FILE):
         for line in f:
             if count % 1000 == 0:
                 print "Processed %d lines..." % count
-                count += 1
+            count += 1
 
             vals = line.strip().rsplit('\t', 1) # split on the last tab in this line
             tree_string = vals[0]
