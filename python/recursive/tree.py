@@ -125,7 +125,6 @@ def load_word_vectors(filename=WORD_VECTORS):
     dim = -1
     with open(filename) as f:
         for i, line in enumerate(f):
-            print line
             # skip the first line
             if i == 0:
                 continue
