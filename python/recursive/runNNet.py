@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pdb
 from matplotlib.pyplot import *
+import os
 
 TRAIN_DATA_FILE = os.environ['TRAIN_DATA_FILE']
 DEV_DATA_FILE = os.environ['DEV_DATA_FILE']
