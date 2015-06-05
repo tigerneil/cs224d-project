@@ -45,7 +45,7 @@ def run(args=None):
     parser.add_option("--model",dest="model",type="string",default="RNN")
 
     (opts, args) = parser.parse_args(args)
-    
+
 
     # make this false if you dont care about your accuracies per epoch, makes things faster!
     evaluate_accuracy_while_training = True
@@ -86,9 +86,9 @@ def run(args=None):
 
         # save the net to the output file
         f = open(opts.outFile, 'wb')
-        pickle.dump(opts, f)
-        pickle.dump(sgd.costt, f)
-        nn.toFile(f)
+        pickle.dump(opts, f, -1)
+        pickle.dump(sgd.costt, f, -1)
+        pickle.dump(nn.stack, f, -1)
         f.close()
 
         if evaluate_accuracy_while_training:
@@ -144,10 +144,10 @@ def test(netFile, dataSet, model='RNN', trees=None):
     elif(model=='RNN2'):
         nn = RNN2(opts.wvecDim,opts.middleDim,opts.outputDim,opts.numWords,opts.minibatch)
     else:
-        raise '%s is not a valid neural network so far only RNTN, RNN, and RNN2'%opts.model
+        raise '%s is not a valid neural network so far only RNTN, RNN, and RNN2' % opts.model
     
     nn.initParams()
-    nn.fromFile(f)
+    nn.stack = pickle.load(f)
     f.close()
 
     print "Testing %s..." % model
