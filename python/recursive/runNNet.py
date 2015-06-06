@@ -157,7 +157,7 @@ def test(netFile, dataSet, model='RNN', trees=None):
     #nn.stack = pickle.load(f)
     #nn.stack = np.load(f)
     nn.stack = joblib.load(netFile + "_stack")
-    f.close()
+    #f.close()
 
     print "Testing %s..." % model
 
@@ -167,7 +167,7 @@ def test(netFile, dataSet, model='RNN', trees=None):
         correct_sum += (guess[i] == correct[i])
     
     # confusion matrix
-    conf_arr = np.zeros((5, 5))
+    conf_arr = np.zeros((opts.outputDim, opts.outputDim))
     for i in xrange(len(correct)):
         curr_correct = correct[i]
         curr_guess = guess[i]
