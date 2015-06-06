@@ -12,6 +12,7 @@ import numpy as np
 import pdb
 #from matplotlib.pyplot import *
 import os
+import joblib
 
 TRAIN_DATA_FILE = os.environ['TRAIN_DATA_FILE']
 DEV_DATA_FILE = os.environ['DEV_DATA_FILE']
@@ -85,12 +86,15 @@ def run(args=None):
         print "Time per epoch : %f" % (end-start)
 
         # save the net to the output file
-        f = open(opts.outFile, 'wb')
-        pickle.dump(opts, f, -1)
-        pickle.dump(sgd.costt, f, -1)
+        #f = open(opts.outFile, 'wb')
+        #pickle.dump(opts, f, -1)
+        #pickle.dump(sgd.costt, f, -1)
         #pickle.dump(nn.stack, f, -1)
-        np.save(f, nn.stack)
-        f.close()
+        #np.save(f, nn.stack)
+        #f.close()
+        joblib.dump(opts, opts.outFile + "_opts")
+        joblib.dump(sgd.costt, opts.outFile + "_cost")
+        joblib.dump(nn.stack, opts.outFile + "_stack")
 
         if evaluate_accuracy_while_training:
             print "testing on training set..."
@@ -134,9 +138,11 @@ def test(netFile, dataSet, model='RNN', trees=None):
     assert netFile is not None, "Must give model to test"
     print "Testing netFile %s" % netFile
 
-    f = open(netFile, 'rb')
-    opts = pickle.load(f)
-    _ = pickle.load(f)
+    #f = open(netFile, 'rb')
+    #opts = pickle.load(f)
+    #_ = pickle.load(f)
+    opts = joblib.load(netFile + "_opts")
+    _ = joblib.load(netFile + "_cost")
     
     if (model=='RNTN'):
         nn = RNTN(opts.wvecDim,opts.outputDim,opts.numWords,opts.minibatch)
@@ -149,7 +155,8 @@ def test(netFile, dataSet, model='RNN', trees=None):
     
     nn.initParams()
     #nn.stack = pickle.load(f)
-    nn.stack = np.load(f)
+    #nn.stack = np.load(f)
+    nn.stack = joblib.load(netFile + "_stack")
     f.close()
 
     print "Testing %s..." % model
