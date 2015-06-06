@@ -158,9 +158,6 @@ def load_trees(filename=TRAIN_DATA_FILE):
                 print "Processed %d lines..." % count
             count += 1
 
-            if count == 10:
-                break
-
             vals = line.strip().rsplit('\t', 1) # split on the last tab in this line
             tree_string = vals[0]
             relations = vals[1].split(',')

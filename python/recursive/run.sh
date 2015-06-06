@@ -6,7 +6,7 @@ export WORD_VECTORS="/juicer/scr82/scr/nlp/data/tac-kbp/tackbp2015/master/tmp/wo
 export TRAIN_DATA_FILE="/juicer/scr82/scr/nlp/data/tac-kbp/tackbp2015/master/tmp/wordVecTrain/micheal_data/output/100k/combined.txt"
 export DEV_DATA_FILE="/juicer/scr82/scr/nlp/data/tac-kbp/tackbp2015/master/tmp/wordVecTrain/micheal_data/dev_out_processed.txt"
 
-export TRAIN_DATA_FILE="/juicer/scr82/scr/nlp/data/tac-kbp/tackbp2015/master/tmp/wordVecTrain/micheal_data/output/100k/aa.txt"
+#export TRAIN_DATA_FILE="/juicer/scr82/scr/nlp/data/tac-kbp/tackbp2015/master/tmp/wordVecTrain/micheal_data/output/100k/aa.txt"
 
 # training params
 epochs=5
