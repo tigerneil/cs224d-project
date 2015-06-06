@@ -88,7 +88,8 @@ def run(args=None):
         f = open(opts.outFile, 'wb')
         pickle.dump(opts, f, -1)
         pickle.dump(sgd.costt, f, -1)
-        pickle.dump(nn.stack, f, -1)
+        #pickle.dump(nn.stack, f, -1)
+        np.save(f, nn.stack)
         f.close()
 
         if evaluate_accuracy_while_training:
@@ -147,7 +148,8 @@ def test(netFile, dataSet, model='RNN', trees=None):
         raise '%s is not a valid neural network so far only RNTN, RNN, and RNN2' % opts.model
     
     nn.initParams()
-    nn.stack = pickle.load(f)
+    #nn.stack = pickle.load(f)
+    nn.stack = np.load(f)
     f.close()
 
     print "Testing %s..." % model
