@@ -153,6 +153,8 @@ class recurrent_model:
 		temp = save_loc.split('/')
 		files = os.listdir("saved_models")
 		for f in files:
+			if '.rnn' not in f:
+				continue
 			if temp[len(temp)-1] in f:
 				print 'found old file', f
 				temp2 = f.split('.')
@@ -197,11 +199,17 @@ class recurrent_model:
 
 
 	def test(self, data_loc, out_loc):
-		dat = self.preprocess_data(data_loc, False)
-		f = open(out_loc)
-		for k,v in dat.iteritems():
-			f.write(self.predict(self.embeddings[v[0]]))
+		dat = self.preprocess_data(data_loc, True)
+		f = open(out_loc, 'w')
+		acc = 0.0
+		for count, v in enumerate(dat):
+			pred = self.predict(self.embeddings[v[0]])
+			f.write(pred)
 			f.write('\n')
+			if pred == v[1]+1:
+				acc += 1
+		print 'Accuracy on dev set is ', acc/count
+			
 
 	def create_batches(self, sample):
 		batches = {}

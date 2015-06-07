@@ -2,6 +2,10 @@
 
 
 TODO
+6/6/15
+- Train baseline and recurrent on 100k set to compare with recursive
+- Train a separate model to predict relation/no relation and integrate with baseline and recurrent for kbp pipeline
+- Generate plots from the data in rnn_xxx_dev_perf.log
 
 5/26/15:
 - Melvin: concat 2 entity vectors, predict softmax of relation at the top

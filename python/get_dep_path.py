@@ -207,8 +207,8 @@ def get_recurrent_features_new(row):
   #  return ""
   #types = [line[9], line[13]]
   types = [None, None]
-  starts = [line[0], line[1]]
-  ends = [line[3], line[4]]
+  starts = [line[0], line[3]]
+  ends = [line[1], line[4]]
   lemma = lemma_str.split(ARR_DELIM)
   dep_graph = dep_graph_str.split("\n")
   #PATTERN = re.compile(r'''((?:"[^"]*")+)''')
@@ -222,10 +222,9 @@ def get_recurrent_features_new(row):
   # create a list of mentions
   mentions = zip(mention_ids, mention_words, types, starts, ends)
   mentions = map(lambda x: {"mention_id" : x[0], "word" : x[1], "type" : x[2], "start" : int(x[3]), "end" : int(x[4])}, mentions)
-
   relation = None
-  if len(line) == 10:
-	relation = line[9]
+  if len(line) >= 10:
+	relation = line[len(line)-1].strip()
   #now we get the path from both mentions to the root
   # get a list of Word object
   obj = {}
@@ -237,12 +236,12 @@ def get_recurrent_features_new(row):
   m1 = mentions[0]
   m2 = mentions[1]
   #print row
-  if m1["mention_id"] != m2["mention_id"]:
-	  link, path = ddlib.dep_path_between_words_new(word_obj_list, int(ends[0])-1, int(ends[1])-1)
-	  feat = [m1["mention_id"], m2["mention_id"], m1["type"], m2["type"], path, link]
-	  if relation is not None:
-		feat.append(relation)
-	  return feat
+  #if m1["mention_id"] != m2["mention_id"]:
+  link, path = ddlib.dep_path_between_words_new(word_obj_list, int(ends[0])-1, int(ends[1])-1)
+  feat = [m1["mention_id"], m2["mention_id"], m1["type"], m2["type"], path, link]
+  if relation is not None:
+	feat.append(relation)
+  return feat
 
 #outputs just the words along the dependency path
 def get_basic_rnn_features(line):
@@ -262,31 +261,64 @@ def get_basic_rnn_features(line):
 	return ret, rel, lis[4]	
 
 dep_types = set()
-word_to_ind = pickle.load(open('word_to_num.bin', 'rb'))
-rel_to_ind = pickle.load(open('relation_to_num.bin', 'rb'))
+word_to_ind = pickle.load(open('../../word_to_num.bin', 'rb'))
+rel_to_ind = pickle.load(open('../../relation_to_num.bin', 'rb'))
 count = 0
 for line in sys.stdin:
-	temp, rel, link =  get_basic_rnn_features(line)
+	#print line
+	##Preprocess for dev set
+	#print >> sys.stderr, line
+	#line = line.strip()
+	#row = line.split("\t")
+	#temp = row[1:]
+	#temp.append(row[0])
+	#line = "\t".join(temp)
+	#print line
+	##End preprocess
+	try:
+		temp, rel, link =  get_basic_rnn_features(line)
+	except:
+		print >> sys.stderr, line
+		continue
  	if temp == None:
 		print >> sys.stderr, line
 		continue
 	#print temp
 	inds = []
 	try:
-		for t in temp:
+		#print temp, link
+		for i,t in enumerate(temp):
 			inds.append(str(word_to_ind[t]))
+			#inds.append(t)
+			#if i < len(link):
+				#link[i] = link[i].strip()
+				#dep_link = link[i].split("_")
+				#if len(dep_link) > 1:
+					#inds.append(str(word_to_ind[dep_link[1]]))
+				#	inds.append(" ".join(dep_link[1:]))
+				#elif link[i] == 'punct':
+					#inds.append(str(word_to_ind[","]))
+				#	inds.append([","])
+				#elif link[i] == 'poss':
+					#inds.append(str(word_to_ind["\'s"]))
+				#	inds.append(["\'s"])
+				#else:
+				#	pass
+
 		out = " ".join(inds)
 		if rel is not None:
+			#print >> sys.stderr, "found rel"
 			rel = rel[1:-1]
 			rel = rel.split(",")
 			#rel = rel[np.random.randint(0, len(rel))]
+			length = str(len(out.split()))
 			for r in rel:
-				print str(rel_to_ind[r]) + ' ' + out
+				print length + ' ' + str(rel_to_ind[r]) + ' ' + out
 				count += 1
 		else:
-			print out
+			print >> sys.stderr, out
 	except:
-		print >> sys.stderr, " ".join(temp), rel
+		pass
         #print '-----------------------------------------------------------------------------------------------------------------------'
 print >> sys.stderr, "Number of training samples", count
 #print len(dep_types)

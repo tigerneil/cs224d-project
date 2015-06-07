@@ -146,8 +146,13 @@ class mlp:
                 cPickle.dump(temp, open(save_loc + "_iter_" + str(i*self.batch_size) + ".mlp", 'wb'))
 
     def test(self, data_loc, out_loc):    
-        dat = self.preprocess_data(data_loc, False)
+        dat = self.preprocess_data(data_loc, True)
         f = open(out_loc)
-        for k,v in dat.iteritems():
-            f.write(self.predict(np.reshape(self.embeddings[v[0]], (1, -1))))
-            f.write('\n')
+	acc = 0.0
+	count = 0
+        for v in dat:
+	    count += 1
+	    temp = self.predict(np.reshape(self.embeddings[v[0]], (1, -1)))
+            if temp == v[1] + 1:
+		acc += 1
+	print acc/count

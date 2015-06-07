@@ -1,0 +1,895 @@
+Loading word vectors from  ../data/word2vec_300_new.txt
+Done reading relations and word vectors.
+Model initialized
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_39499000.rnn
+Accuracy on dev set is  0.269356597601
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_31499000.rnn
+Accuracy on dev set is  0.284623773173
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_36499000.rnn
+Accuracy on dev set is  0.297709923664
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_35999000.rnn
+Accuracy on dev set is  0.312977099237
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_33999000.rnn
+Accuracy on dev set is  0.249727371865
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_42499000.rnn
+Accuracy on dev set is  0.308615049073
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_35999000.rnn
+Accuracy on dev set is  0.251908396947
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_26499000.rnn
+Accuracy on dev set is  0.170119956379
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_13999000.rnn
+Accuracy on dev set is  0.169029443839
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_17499000.rnn
+Accuracy on dev set is  0.285714285714
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_3999000.rnn
+Accuracy on dev set is  0.0806979280262
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_24499000.rnn
+Accuracy on dev set is  0.194111232279
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_20999000.rnn
+Accuracy on dev set is  0.314067611778
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_25999000.rnn
+Accuracy on dev set is  0.284623773173
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_34499000.rnn
+Accuracy on dev set is  0.239912758997
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_30499000.rnn
+Accuracy on dev set is  0.274809160305
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_43499000.rnn
+Accuracy on dev set is  0.284623773173
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_37499000.rnn
+Accuracy on dev set is  0.30534351145
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_3499000.rnn
+Accuracy on dev set is  0.157033805889
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_7499000.rnn
+Accuracy on dev set is  0.103598691385
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_999000.rnn
+Accuracy on dev set is  0.109051254089
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_18499000.rnn
+Accuracy on dev set is  0.270447110142
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_35499000.rnn
+Accuracy on dev set is  0.312977099237
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_12499000.rnn
+Accuracy on dev set is  0.241003271538
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_34999000.rnn
+Accuracy on dev set is  0.300981461287
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_39499000.rnn
+Accuracy on dev set is  0.19520174482
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_36999000.rnn
+Accuracy on dev set is  0.210468920393
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_49999000.rnn
+Accuracy on dev set is  0.285714285714
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_12999000.rnn
+Accuracy on dev set is  0.135223555071
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_32499000.rnn
+Accuracy on dev set is  0.298800436205
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_33499000.rnn
+Accuracy on dev set is  0.26826608506
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_38999000.rnn
+Accuracy on dev set is  0.287895310796
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_24999000.rnn
+Accuracy on dev set is  0.245365321701
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_14999000.rnn
+Accuracy on dev set is  0.273718647764
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_13999000.rnn
+Accuracy on dev set is  0.282442748092
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_35999000.rnn
+Accuracy on dev set is  0.308615049073
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_25499000.rnn
+Accuracy on dev set is  0.291166848419
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_7999000.rnn
+Accuracy on dev set is  0.145038167939
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_22499000.rnn
+Accuracy on dev set is  0.214830970556
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_46999000.rnn
+Accuracy on dev set is  0.225736095965
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_45499000.rnn
+Accuracy on dev set is  0.299890948746
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_14999000.rnn
+Accuracy on dev set is  0.263904034896
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_41499000.rnn
+Accuracy on dev set is  0.275899672846
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_5999000.rnn
+Accuracy on dev set is  0.179934569248
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_48499000.rnn
+Accuracy on dev set is  0.282442748092
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_9999000.rnn
+Accuracy on dev set is  0.139585605234
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_999000.rnn
+Accuracy on dev set is  0.0316248636859
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_21999000.rnn
+Accuracy on dev set is  0.199563794984
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_18499000.rnn
+Accuracy on dev set is  0.124318429662
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_15999000.rnn
+Accuracy on dev set is  0.115594329335
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_20999000.rnn
+Accuracy on dev set is  0.142857142857
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_40499000.rnn
+Accuracy on dev set is  0.251908396947
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_37499000.rnn
+Accuracy on dev set is  0.223555070883
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_2999000.rnn
+Accuracy on dev set is  0.0730643402399
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_26999000.rnn
+Accuracy on dev set is  0.274809160305
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_4499000.rnn
+Accuracy on dev set is  0.0883315158124
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_499000.rnn
+Accuracy on dev set is  0.071973827699
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_5499000.rnn
+Accuracy on dev set is  0.118865866957
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_15499000.rnn
+Accuracy on dev set is  0.259541984733
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_33499000.rnn
+Accuracy on dev set is  0.300981461287
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_2999000.rnn
+Accuracy on dev set is  0.191930207197
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_36499000.rnn
+Accuracy on dev set is  0.198473282443
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_19499000.rnn
+Accuracy on dev set is  0.269356597601
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_7499000.rnn
+Accuracy on dev set is  0.18320610687
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_42999000.rnn
+Accuracy on dev set is  0.254089422028
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_18499000.rnn
+Accuracy on dev set is  0.246455834242
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_8499000.rnn
+Accuracy on dev set is  0.130861504907
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_32999000.rnn
+Accuracy on dev set is  0.181025081788
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_499000.rnn
+Accuracy on dev set is  0.0861504907306
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_31499000.rnn
+Accuracy on dev set is  0.260632497274
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_27499000.rnn
+Accuracy on dev set is  0.203925845147
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_19499000.rnn
+Accuracy on dev set is  0.201744820065
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_4999000.rnn
+Accuracy on dev set is  0.130861504907
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_27999000.rnn
+Accuracy on dev set is  0.303162486369
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_1499000.rnn
+Accuracy on dev set is  0.0839694656489
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_22499000.rnn
+Accuracy on dev set is  0.229007633588
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_30499000.rnn
+Accuracy on dev set is  0.191930207197
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_39499000.rnn
+Accuracy on dev set is  0.263904034896
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_21499000.rnn
+Accuracy on dev set is  0.285714285714
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_32999000.rnn
+Accuracy on dev set is  0.220283533261
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_7499000.rnn
+Accuracy on dev set is  0.21919302072
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_20499000.rnn
+Accuracy on dev set is  0.221374045802
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_9499000.rnn
+Accuracy on dev set is  0.129770992366
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_7999000.rnn
+Accuracy on dev set is  0.165757906216
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_30999000.rnn
+Accuracy on dev set is  0.242093784079
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_4999000.rnn
+Accuracy on dev set is  0.20719738277
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_15999000.rnn
+Accuracy on dev set is  0.235550708833
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_499000.rnn
+Accuracy on dev set is  0.00545256270447
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_38499000.rnn
+Accuracy on dev set is  0.217011995638
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_12999000.rnn
+Accuracy on dev set is  0.224645583424
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_18499000.rnn
+Accuracy on dev set is  0.169029443839
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_999000.rnn
+Accuracy on dev set is  0.0141766630316
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_11999000.rnn
+Accuracy on dev set is  0.123227917121
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_38999000.rnn
+Accuracy on dev set is  0.315158124318
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_40499000.rnn
+Accuracy on dev set is  0.275899672846
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_34499000.rnn
+Accuracy on dev set is  0.30534351145
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_33999000.rnn
+Accuracy on dev set is  0.282442748092
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_3499000.rnn
+Accuracy on dev set is  0.126499454744
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_17499000.rnn
+Accuracy on dev set is  0.200654307525
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_8499000.rnn
+Accuracy on dev set is  0.155943293348
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_27999000.rnn
+Accuracy on dev set is  0.274809160305
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_29499000.rnn
+Accuracy on dev set is  0.241003271538
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_19999000.rnn
+Accuracy on dev set is  0.302071973828
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_10499000.rnn
+Accuracy on dev set is  0.175572519084
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_18999000.rnn
+Accuracy on dev set is  0.297709923664
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_17499000.rnn
+Accuracy on dev set is  0.220283533261
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_16999000.rnn
+Accuracy on dev set is  0.205016357688
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_28499000.rnn
+Accuracy on dev set is  0.237731733915
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_32499000.rnn
+Accuracy on dev set is  0.172300981461
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_7499000.rnn
+Accuracy on dev set is  0.12213740458
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_2999000.rnn
+Accuracy on dev set is  0.116684841876
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_20999000.rnn
+Accuracy on dev set is  0.147219193021
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_44499000.rnn
+Accuracy on dev set is  0.281352235551
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_11499000.rnn
+Accuracy on dev set is  0.140676117775
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_18999000.rnn
+Accuracy on dev set is  0.258451472192
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_43999000.rnn
+Accuracy on dev set is  0.273718647764
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_6499000.rnn
+Accuracy on dev set is  0.0861504907306
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_24499000.rnn
+Accuracy on dev set is  0.217011995638
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_28999000.rnn
+Accuracy on dev set is  0.159214830971
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_15999000.rnn
+Accuracy on dev set is  0.14612868048
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_2499000.rnn
+Accuracy on dev set is  0.0905125408942
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_26999000.rnn
+Accuracy on dev set is  0.284623773173
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_8999000.rnn
+Accuracy on dev set is  0.127589967285
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_13499000.rnn
+Accuracy on dev set is  0.178844056707
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_28999000.rnn
+Accuracy on dev set is  0.321701199564
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_16999000.rnn
+Accuracy on dev set is  0.25627044711
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_10999000.rnn
+Accuracy on dev set is  0.127589967285
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_30499000.rnn
+Accuracy on dev set is  0.309705561614
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_27999000.rnn
+Accuracy on dev set is  0.157033805889
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_8999000.rnn
+Accuracy on dev set is  0.155943293348
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_5999000.rnn
+Accuracy on dev set is  0.11014176663
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_37499000.rnn
+Accuracy on dev set is  0.224645583424
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_35499000.rnn
+Accuracy on dev set is  0.308615049073
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_7999000.rnn
+Accuracy on dev set is  0.21919302072
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_25499000.rnn
+Accuracy on dev set is  0.282442748092
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_3499000.rnn
+Accuracy on dev set is  0.0381679389313
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_6499000.rnn
+Accuracy on dev set is  0.137404580153
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_38999000.rnn
+Accuracy on dev set is  0.202835332606
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_15499000.rnn
+Accuracy on dev set is  0.127589967285
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_1999000.rnn
+Accuracy on dev set is  0.0839694656489
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_26999000.rnn
+Accuracy on dev set is  0.197382769902
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_37999000.rnn
+Accuracy on dev set is  0.170119956379
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_11499000.rnn
+Accuracy on dev set is  0.21919302072
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_28499000.rnn
+Accuracy on dev set is  0.147219193021
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_24999000.rnn
+Accuracy on dev set is  0.191930207197
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_8499000.rnn
+Accuracy on dev set is  0.116684841876
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_30999000.rnn
+Accuracy on dev set is  0.270447110142
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_25999000.rnn
+Accuracy on dev set is  0.284623773173
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_3999000.rnn
+Accuracy on dev set is  0.200654307525
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_8999000.rnn
+Accuracy on dev set is  0.145038167939
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_5499000.rnn
+Accuracy on dev set is  0.176663031625
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_15499000.rnn
+Accuracy on dev set is  0.263904034896
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_21999000.rnn
+Accuracy on dev set is  0.295528898582
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_11999000.rnn
+Accuracy on dev set is  0.18320610687
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_35499000.rnn
+Accuracy on dev set is  0.225736095965
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_45499000.rnn
+Accuracy on dev set is  0.276990185387
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_28999000.rnn
+Accuracy on dev set is  0.311886586696
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_35999000.rnn
+Accuracy on dev set is  0.185387131952
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_48999000.rnn
+Accuracy on dev set is  0.262813522356
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_10499000.rnn
+Accuracy on dev set is  0.126499454744
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_39999000.rnn
+Accuracy on dev set is  0.211559432933
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_25999000.rnn
+Accuracy on dev set is  0.163576881134
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_36499000.rnn
+Accuracy on dev set is  0.261723009815
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_25499000.rnn
+Accuracy on dev set is  0.150490730643
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_48499000.rnn
+Accuracy on dev set is  0.262813522356
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_5999000.rnn
+Accuracy on dev set is  0.159214830971
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_15999000.rnn
+Accuracy on dev set is  0.212649945474
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_499000.rnn
+Accuracy on dev set is  0.0436205016358
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_8999000.rnn
+Accuracy on dev set is  0.127589967285
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_24499000.rnn
+Accuracy on dev set is  0.279171210469
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_12999000.rnn
+Accuracy on dev set is  0.125408942203
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_33999000.rnn
+Accuracy on dev set is  0.218102508179
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_24499000.rnn
+Accuracy on dev set is  0.165757906216
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_14499000.rnn
+Accuracy on dev set is  0.218102508179
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_22999000.rnn
+Accuracy on dev set is  0.298800436205
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_17999000.rnn
+Accuracy on dev set is  0.177753544166
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_3999000.rnn
+Accuracy on dev set is  0.041439476554
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_16999000.rnn
+Accuracy on dev set is  0.118865866957
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_1499000.rnn
+Accuracy on dev set is  0.0883315158124
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_23999000.rnn
+Accuracy on dev set is  0.143947655398
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_24499000.rnn
+Accuracy on dev set is  0.320610687023
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_12499000.rnn
+Accuracy on dev set is  0.258451472192
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_31499000.rnn
+Accuracy on dev set is  0.164667393675
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_29999000.rnn
+Accuracy on dev set is  0.304252998909
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_31499000.rnn
+Accuracy on dev set is  0.181025081788
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_35499000.rnn
+Accuracy on dev set is  0.248636859324
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_39999000.rnn
+Accuracy on dev set is  0.259541984733
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_30999000.rnn
+Accuracy on dev set is  0.14612868048
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_13499000.rnn
+Accuracy on dev set is  0.212649945474
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_12499000.rnn
+Accuracy on dev set is  0.258451472192
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_31999000.rnn
+Accuracy on dev set is  0.160305343511
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_46999000.rnn
+Accuracy on dev set is  0.319520174482
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_6499000.rnn
+Accuracy on dev set is  0.143947655398
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_17499000.rnn
+Accuracy on dev set is  0.272628135224
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_10499000.rnn
+Accuracy on dev set is  0.214830970556
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_21499000.rnn
+Accuracy on dev set is  0.252998909487
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_39999000.rnn
+Accuracy on dev set is  0.276990185387
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_21999000.rnn
+Accuracy on dev set is  0.125408942203
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_9499000.rnn
+Accuracy on dev set is  0.18320610687
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_29499000.rnn
+Accuracy on dev set is  0.150490730643
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_39499000.rnn
+Accuracy on dev set is  0.316248636859
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_6999000.rnn
+Accuracy on dev set is  0.127589967285
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_17999000.rnn
+Accuracy on dev set is  0.123227917121
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_15499000.rnn
+Accuracy on dev set is  0.155943293348
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_6499000.rnn
+Accuracy on dev set is  0.150490730643
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_9999000.rnn
+Accuracy on dev set is  0.174482006543
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_7999000.rnn
+Accuracy on dev set is  0.129770992366
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_20499000.rnn
+Accuracy on dev set is  0.26826608506
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_29999000.rnn
+Accuracy on dev set is  0.233369683751
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_40999000.rnn
+Accuracy on dev set is  0.26826608506
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_47999000.rnn
+Accuracy on dev set is  0.278080697928
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_9499000.rnn
+Accuracy on dev set is  0.140676117775
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_28499000.rnn
+Accuracy on dev set is  0.307524536532
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_27999000.rnn
+Accuracy on dev set is  0.174482006543
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_38999000.rnn
+Accuracy on dev set is  0.315158124318
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_21499000.rnn
+Accuracy on dev set is  0.29225736096
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_8999000.rnn
+Accuracy on dev set is  0.179934569248
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_19499000.rnn
+Accuracy on dev set is  0.155943293348
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_33999000.rnn
+Accuracy on dev set is  0.331515812432
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_27499000.rnn
+Accuracy on dev set is  0.196292257361
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_4999000.rnn
+Accuracy on dev set is  0.141766630316
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_26999000.rnn
+Accuracy on dev set is  0.191930207197
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_25499000.rnn
+Accuracy on dev set is  0.273718647764
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_29499000.rnn
+Accuracy on dev set is  0.281352235551
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_3999000.rnn
+Accuracy on dev set is  0.188658669575
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_28499000.rnn
+Accuracy on dev set is  0.299890948746
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_26499000.rnn
+Accuracy on dev set is  0.241003271538
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_34499000.rnn
+Accuracy on dev set is  0.246455834242
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_34999000.rnn
+Accuracy on dev set is  0.239912758997
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_32499000.rnn
+Accuracy on dev set is  0.263904034896
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_9999000.rnn
+Accuracy on dev set is  0.112322791712
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_14499000.rnn
+Accuracy on dev set is  0.198473282443
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_8499000.rnn
+Accuracy on dev set is  0.112322791712
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_23499000.rnn
+Accuracy on dev set is  0.293347873501
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_18999000.rnn
+Accuracy on dev set is  0.130861504907
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_10999000.rnn
+Accuracy on dev set is  0.197382769902
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_11999000.rnn
+Accuracy on dev set is  0.136314067612
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_23999000.rnn
+Accuracy on dev set is  0.267175572519
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_5999000.rnn
+Accuracy on dev set is  0.215921483097
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_33499000.rnn
+Accuracy on dev set is  0.177753544166
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_42999000.rnn
+Accuracy on dev set is  0.262813522356
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_8499000.rnn
+Accuracy on dev set is  0.19520174482
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_6999000.rnn
+Accuracy on dev set is  0.187568157034
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_36499000.rnn
+Accuracy on dev set is  0.326063249727
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_21499000.rnn
+Accuracy on dev set is  0.199563794984
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_14999000.rnn
+Accuracy on dev set is  0.127589967285
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_11999000.rnn
+Accuracy on dev set is  0.201744820065
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_25999000.rnn
+Accuracy on dev set is  0.279171210469
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_32999000.rnn
+Accuracy on dev set is  0.164667393675
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_2499000.rnn
+Accuracy on dev set is  0.12213740458
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_21999000.rnn
+Accuracy on dev set is  0.212649945474
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_22499000.rnn
+Accuracy on dev set is  0.295528898582
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_2499000.rnn
+Accuracy on dev set is  0.130861504907
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_12499000.rnn
+Accuracy on dev set is  0.121046892039
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_11499000.rnn
+Accuracy on dev set is  0.152671755725
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_45999000.rnn
+Accuracy on dev set is  0.293347873501
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_10499000.rnn
+Accuracy on dev set is  0.197382769902
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_4499000.rnn
+Accuracy on dev set is  0.138495092694
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_3499000.rnn
+Accuracy on dev set is  0.184296619411
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_37999000.rnn
+Accuracy on dev set is  0.303162486369
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_29499000.rnn
+Accuracy on dev set is  0.220283533261
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_16999000.rnn
+Accuracy on dev set is  0.197382769902
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_46499000.rnn
+Accuracy on dev set is  0.340239912759
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_7499000.rnn
+Accuracy on dev set is  0.202835332606
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_26499000.rnn
+Accuracy on dev set is  0.178844056707
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_20499000.rnn
+Accuracy on dev set is  0.131952017448
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_20999000.rnn
+Accuracy on dev set is  0.248636859324
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_1999000.rnn
+Accuracy on dev set is  0.193020719738
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_5499000.rnn
+Accuracy on dev set is  0.136314067612
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_38999000.rnn
+Accuracy on dev set is  0.155943293348
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_16499000.rnn
+Accuracy on dev set is  0.21919302072
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_14499000.rnn
+Accuracy on dev set is  0.118865866957
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_42499000.rnn
+Accuracy on dev set is  0.194111232279
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_23499000.rnn
+Accuracy on dev set is  0.165757906216
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_16499000.rnn
+Accuracy on dev set is  0.136314067612
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_26499000.rnn
+Accuracy on dev set is  0.284623773173
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_10999000.rnn
+Accuracy on dev set is  0.174482006543
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_13499000.rnn
+Accuracy on dev set is  0.210468920393
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_1999000.rnn
+Accuracy on dev set is  0.0839694656489
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_22999000.rnn
+Accuracy on dev set is  0.250817884406
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_29499000.rnn
+Accuracy on dev set is  0.297709923664
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_1499000.rnn
+Accuracy on dev set is  0.0763358778626
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_16499000.rnn
+Accuracy on dev set is  0.137404580153
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_11999000.rnn
+Accuracy on dev set is  0.138495092694
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_33499000.rnn
+Accuracy on dev set is  0.293347873501
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_23999000.rnn
+Accuracy on dev set is  0.299890948746
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_9999000.rnn
+Accuracy on dev set is  0.141766630316
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_44999000.rnn
+Accuracy on dev set is  0.293347873501
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_37999000.rnn
+Accuracy on dev set is  0.262813522356
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_22499000.rnn
+Accuracy on dev set is  0.262813522356
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_32999000.rnn
+Accuracy on dev set is  0.295528898582
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_13999000.rnn
+Accuracy on dev set is  0.19520174482
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_16499000.rnn
+Accuracy on dev set is  0.23227917121
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_37999000.rnn
+Accuracy on dev set is  0.263904034896
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_30499000.rnn
+Accuracy on dev set is  0.311886586696
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_4499000.rnn
+Accuracy on dev set is  0.170119956379
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_5499000.rnn
+Accuracy on dev set is  0.151581243184
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_23999000.rnn
+Accuracy on dev set is  0.177753544166
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_33999000.rnn
+Accuracy on dev set is  0.138495092694
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_38499000.rnn
+Accuracy on dev set is  0.326063249727
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_20499000.rnn
+Accuracy on dev set is  0.148309705562
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_49499000.rnn
+Accuracy on dev set is  0.266085059978
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_16499000.rnn
+Accuracy on dev set is  0.28026172301
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_9999000.rnn
+Accuracy on dev set is  0.155943293348
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_50499000.rnn
+Accuracy on dev set is  0.251908396947
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_22999000.rnn
+Accuracy on dev set is  0.160305343511
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_39499000.rnn
+Accuracy on dev set is  0.285714285714
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_34499000.rnn
+Accuracy on dev set is  0.206106870229
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_40499000.rnn
+Accuracy on dev set is  0.318429661941
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_19999000.rnn
+Accuracy on dev set is  0.136314067612
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_49999000.rnn
+Accuracy on dev set is  0.247546346783
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_22999000.rnn
+Accuracy on dev set is  0.284623773173
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_25999000.rnn
+Accuracy on dev set is  0.179934569248
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_28999000.rnn
+Accuracy on dev set is  0.273718647764
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_31999000.rnn
+Accuracy on dev set is  0.300981461287
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_29999000.rnn
+Accuracy on dev set is  0.220283533261
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_19999000.rnn
+Accuracy on dev set is  0.254089422028
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_20999000.rnn
+Accuracy on dev set is  0.270447110142
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_23499000.rnn
+Accuracy on dev set is  0.173391494002
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_28999000.rnn
+Accuracy on dev set is  0.150490730643
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_34999000.rnn
+Accuracy on dev set is  0.23118865867
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_22499000.rnn
+Accuracy on dev set is  0.222464558342
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_23499000.rnn
+Accuracy on dev set is  0.320610687023
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_36999000.rnn
+Accuracy on dev set is  0.23227917121
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_33499000.rnn
+Accuracy on dev set is  0.181025081788
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_6499000.rnn
+Accuracy on dev set is  0.157033805889
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_11499000.rnn
+Accuracy on dev set is  0.188658669575
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_35499000.rnn
+Accuracy on dev set is  0.272628135224
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_41999000.rnn
+Accuracy on dev set is  0.259541984733
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_28499000.rnn
+Accuracy on dev set is  0.175572519084
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_12999000.rnn
+Accuracy on dev set is  0.206106870229
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_36499000.rnn
+Accuracy on dev set is  0.255179934569
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_31999000.rnn
+Accuracy on dev set is  0.296619411123
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_38499000.rnn
+Accuracy on dev set is  0.191930207197
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_20499000.rnn
+Accuracy on dev set is  0.270447110142
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_47999000.rnn
+Accuracy on dev set is  0.298800436205
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_1499000.rnn
+Accuracy on dev set is  0.0796074154853
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_14999000.rnn
+Accuracy on dev set is  0.147219193021
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_17999000.rnn
+Accuracy on dev set is  0.257360959651
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_34999000.rnn
+Accuracy on dev set is  0.151581243184
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_36999000.rnn
+Accuracy on dev set is  0.23118865867
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_19999000.rnn
+Accuracy on dev set is  0.215921483097
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_13499000.rnn
+Accuracy on dev set is  0.221374045802
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_14499000.rnn
+Accuracy on dev set is  0.222464558342
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_17999000.rnn
+Accuracy on dev set is  0.271537622683
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_14999000.rnn
+Accuracy on dev set is  0.145038167939
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_25499000.rnn
+Accuracy on dev set is  0.212649945474
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_10999000.rnn
+Accuracy on dev set is  0.149400218103
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_30499000.rnn
+Accuracy on dev set is  0.209378407852
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_35999000.rnn
+Accuracy on dev set is  0.283533260632
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_999000.rnn
+Accuracy on dev set is  0.0436205016358
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_19499000.rnn
+Accuracy on dev set is  0.270447110142
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_41499000.rnn
+Accuracy on dev set is  0.326063249727
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_5499000.rnn
+Accuracy on dev set is  0.139585605234
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_13499000.rnn
+Accuracy on dev set is  0.161395856052
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_10999000.rnn
+Accuracy on dev set is  0.238822246456
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_999000.rnn
+Accuracy on dev set is  0.0665212649945
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_32499000.rnn
+Accuracy on dev set is  0.175572519084
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_49499000.rnn
+Accuracy on dev set is  0.297709923664
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_10499000.rnn
+Accuracy on dev set is  0.138495092694
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_5999000.rnn
+Accuracy on dev set is  0.131952017448
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_30999000.rnn
+Accuracy on dev set is  0.179934569248
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_18999000.rnn
+Accuracy on dev set is  0.213740458015
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_6999000.rnn
+Accuracy on dev set is  0.119956379498
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_27499000.rnn
+Accuracy on dev set is  0.288985823337
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_4499000.rnn
+Accuracy on dev set is  0.118865866957
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_41999000.rnn
+Accuracy on dev set is  0.300981461287
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_36999000.rnn
+Accuracy on dev set is  0.275899672846
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_37499000.rnn
+Accuracy on dev set is  0.327153762268
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_4999000.rnn
+Accuracy on dev set is  0.160305343511
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_21999000.rnn
+Accuracy on dev set is  0.271537622683
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_6999000.rnn
+Accuracy on dev set is  0.102508178844
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_3499000.rnn
+Accuracy on dev set is  0.153762268266
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_16999000.rnn
+Accuracy on dev set is  0.297709923664
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_19499000.rnn
+Accuracy on dev set is  0.177753544166
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_1999000.rnn
+Accuracy on dev set is  0.11014176663
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_18499000.rnn
+Accuracy on dev set is  0.295528898582
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_13999000.rnn
+Accuracy on dev set is  0.127589967285
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_23499000.rnn
+Accuracy on dev set is  0.284623773173
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_17999000.rnn
+Accuracy on dev set is  0.270447110142
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_1999000.rnn
+Accuracy on dev set is  0.119956379498
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_34999000.rnn
+Accuracy on dev set is  0.330425299891
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_47499000.rnn
+Accuracy on dev set is  0.312977099237
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_19999000.rnn
+Accuracy on dev set is  0.167938931298
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_27999000.rnn
+Accuracy on dev set is  0.258451472192
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_43999000.rnn
+Accuracy on dev set is  0.278080697928
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_9499000.rnn
+Accuracy on dev set is  0.198473282443
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_43499000.rnn
+Accuracy on dev set is  0.297709923664
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_29999000.rnn
+Accuracy on dev set is  0.239912758997
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_50499000.rnn
+Accuracy on dev set is  0.306434023991
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_31999000.rnn
+Accuracy on dev set is  0.197382769902
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_32999000.rnn
+Accuracy on dev set is  0.284623773173
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_40499000.rnn
+Accuracy on dev set is  0.316248636859
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_23999000.rnn
+Accuracy on dev set is  0.28026172301
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_26999000.rnn
+Accuracy on dev set is  0.230098146129
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_40999000.rnn
+Accuracy on dev set is  0.291166848419
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_3999000.rnn
+Accuracy on dev set is  0.177753544166
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_48999000.rnn
+Accuracy on dev set is  0.297709923664
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_44499000.rnn
+Accuracy on dev set is  0.331515812432
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_38499000.rnn
+Accuracy on dev set is  0.242093784079
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_36999000.rnn
+Accuracy on dev set is  0.28026172301
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_15999000.rnn
+Accuracy on dev set is  0.279171210469
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_40499000.rnn
+Accuracy on dev set is  0.188658669575
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_9499000.rnn
+Accuracy on dev set is  0.205016357688
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_2499000.rnn
+Accuracy on dev set is  0.127589967285
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_22999000.rnn
+Accuracy on dev set is  0.210468920393
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_39999000.rnn
+Accuracy on dev set is  0.252998909487
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_15499000.rnn
+Accuracy on dev set is  0.259541984733
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_17499000.rnn
+Accuracy on dev set is  0.149400218103
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_1499000.rnn
+Accuracy on dev set is  0.105779716467
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_2499000.rnn
+Accuracy on dev set is  0.0643402399128
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_37999000.rnn
+Accuracy on dev set is  0.294438386041
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_38499000.rnn
+Accuracy on dev set is  0.318429661941
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_44999000.rnn
+Accuracy on dev set is  0.252998909487
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_7999000.rnn
+Accuracy on dev set is  0.153762268266
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_26499000.rnn
+Accuracy on dev set is  0.296619411123
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_32499000.rnn
+Accuracy on dev set is  0.281352235551
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_2999000.rnn
+Accuracy on dev set is  0.102508178844
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_31499000.rnn
+Accuracy on dev set is  0.278080697928
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_34499000.rnn
+Accuracy on dev set is  0.254089422028
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_47499000.rnn
+Accuracy on dev set is  0.254089422028
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_12999000.rnn
+Accuracy on dev set is  0.167938931298
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_40999000.rnn
+Accuracy on dev set is  0.306434023991
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_499000.rnn
+Accuracy on dev set is  0.0130861504907
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_39999000.rnn
+Accuracy on dev set is  0.291166848419
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_6999000.rnn
+Accuracy on dev set is  0.150490730643
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_2999000.rnn
+Accuracy on dev set is  0.149400218103
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_46499000.rnn
+Accuracy on dev set is  0.250817884406
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_24999000.rnn
+Accuracy on dev set is  0.287895310796
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_21499000.rnn
+Accuracy on dev set is  0.133042529989
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_4499000.rnn
+Accuracy on dev set is  0.141766630316
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_31999000.rnn
+Accuracy on dev set is  0.229007633588
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_14499000.rnn
+Accuracy on dev set is  0.211559432933
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_29999000.rnn
+Accuracy on dev set is  0.306434023991
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_24999000.rnn
+Accuracy on dev set is  0.278080697928
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_27499000.rnn
+Accuracy on dev set is  0.13413304253
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_13999000.rnn
+Accuracy on dev set is  0.258451472192
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_37499000.rnn
+Accuracy on dev set is  0.260632497274
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_18999000.rnn
+Accuracy on dev set is  0.263904034896
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_11499000.rnn
+Accuracy on dev set is  0.137404580153
+hd_300_lr_0.001_reg_0.01_bs_1000_lrdecay_1e-06_iter_30999000.rnn
+Accuracy on dev set is  0.319520174482
+hd_300_lr_0.001_reg_0.02_bs_1000_lrdecay_1e-06_iter_45999000.rnn
+Accuracy on dev set is  0.255179934569
+hd_300_lr_0.001_reg_0.005_bs_1000_lrdecay_1e-06_iter_27499000.rnn
+Accuracy on dev set is  0.299890948746
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_4999000.rnn
+Accuracy on dev set is  0.173391494002
+hd_300_lr_0.001_reg_0.001_bs_1000_lrdecay_1e-06_iter_12499000.rnn
+Accuracy on dev set is  0.151581243184
+hd_300_lr_0.001_reg_0.05_bs_1000_lrdecay_1e-06_iter_24999000.rnn
+Accuracy on dev set is  0.213740458015

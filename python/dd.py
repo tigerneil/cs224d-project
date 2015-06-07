@@ -158,7 +158,6 @@ def dep_path_between_words_new(words, begin_idx, end_idx):
 	for word in path_to_root2:
 		if word in common: 
 			path_right.append(word.word)
-			link_right.append(word.dep_label)
 			break
 		path_right.append(word.word)
 		link_right.append(word.dep_label)
