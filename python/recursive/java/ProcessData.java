@@ -32,14 +32,14 @@ public class ProcessData {
 		props.setProperty("annotators", "tokenize, ssplit, pos, parse");
 		props.setProperty("parse.binaryTrees", "true");
 		pipeline = new StanfordCoreNLP(props);
-		
+
 		String inputFilename = args[0];
 		String outputFilename = args[1];
 
 		//processInput();
 		processInputFromFile(inputFilename, outputFilename);
 	}
-	
+
 	// Read/write from/to files.
 	public static void processInputFromFile(String inputFilename, String outputFilename) throws IOException {
 		BufferedReader in = new BufferedReader(new FileReader(inputFilename));
@@ -47,7 +47,7 @@ public class ProcessData {
 		String line;
 		while ((line = in.readLine()) != null) {
 			String result = processLine(line);
-			
+
 			if (result != null) {
 				// write to file
 				writer.println(result);
@@ -72,6 +72,7 @@ public class ProcessData {
 
 	// Processes each line of the python-processed KBP data. (needs to be the second step in that pipeline)
 	public static String processLine(String jsonLine) {
+		//System.err.println(jsonLine);
 		String[] vals = gson.fromJson(jsonLine, String[].class);
 
 		// [new_gloss, subject_entity, object_entity, str(subject_begin), str(subject_end), str(object_begin), str(object_end), relations]
@@ -83,6 +84,10 @@ public class ProcessData {
 		int object_begin = Integer.parseInt(vals[5]);
 		int object_end = Integer.parseInt(vals[6]);
 		String rels = vals[7];
+
+		if (subject_begin == object_begin || subject_begin < 0 || subject_end < 0 || object_begin < 0 || object_end < 0) {
+			return null;
+		}
 
 		// get the parse for the desired subtree
 		String parse = getParse(gloss, subject_entity, object_entity, subject_begin, subject_end, object_begin, object_end);
@@ -107,7 +112,7 @@ public class ProcessData {
 		Annotation document = new Annotation(text);
 		pipeline.annotate(document);
 		List<CoreMap> sentences = document.get(CoreAnnotations.SentencesAnnotation.class);
-		
+
 		// we should never have more than a single sentence per line in the corpus
 		if (sentences.size() > 1) {
 			return null;
@@ -179,15 +184,18 @@ public class ProcessData {
 			Tree parent = leaf.parent(binarizedTree); // (POS word) - this is what we want to remove
 			Tree parent2 = parent.parent(binarizedTree); // the parent of (POS word)
 
-			// get the index of parent in parent2's children list
-			int ind = -1;
-			for (int j = 0; j < parent2.children().length; j++) {
-				Tree child = parent2.children()[j];
-				if (child == parent) {
-					ind = j;
-				}
+			// parent2 is the parent of parent, and parent is the node we want to remove
+			removeNode(parent2, parent);
+
+			// if parent2 now has no children, we need to remove parent2 also (so get his parent and remove parent2)
+			Tree parentAbove = parent2;
+
+			// keep going up the tree and removing the parent if he no longer has children
+			while (parentAbove.children().length == 0) {
+				Tree parentAboveAbove = parentAbove.parent(binarizedTree);
+				removeNode(parentAboveAbove, parentAbove);
+				parentAbove = parentAboveAbove; // move up the tree
 			}
-			parent2.removeChild(ind);
 		}
 		for (Map.Entry<Integer, Tree> entry : m2Nodes.entrySet()) {
 			int index = entry.getKey();
@@ -198,15 +206,18 @@ public class ProcessData {
 			Tree parent = leaf.parent(binarizedTree); // (POS word) - this is what we want to remove
 			Tree parent2 = parent.parent(binarizedTree); // the parent of (POS word)
 
-			// get the index of parent in parent2's children list
-			int ind = -1;
-			for (int j = 0; j < parent2.children().length; j++) {
-				Tree child = parent2.children()[j];
-				if (child == parent) {
-					ind = j;
-				}
+			// parent2 is the parent of parent, and parent is the node we want to remove
+			removeNode(parent2, parent);
+
+			// if parent2 now has no children, we need to remove parent2 also (so get his parent and remove parent2)
+			Tree parentAbove = parent2;
+
+			// keep going up the tree and removing the parent if he no longer has children
+			while (parentAbove.children().length == 0) {
+				Tree parentAboveAbove = parentAbove.parent(binarizedTree);
+				removeNode(parentAboveAbove, parentAbove);
+				parentAbove = parentAboveAbove; // move up the tree
 			}
-			parent2.removeChild(ind);
 		}
 
 		// replace the head node words with entity strings		
@@ -214,7 +225,7 @@ public class ProcessData {
 		m2Head.setValue(object_entity);
 
 		// now binarizedTree has the correct leaves (the mentions replaced by entity strings)
-		
+
 		// now get the LCA of the 2 heads
 		// there is only a single path between them, which is through their LCA.
 		// to get the LCA we need to find the highest node on the path, though (the one closest to the root)
@@ -240,5 +251,18 @@ public class ProcessData {
 		}
 
 		return lca.toString();
+	}
+
+	// Removes child_to_remove from parent.
+	public static void removeNode(Tree parent, Tree child_to_remove) {
+		// get the index of child_to_remove in parent's children list
+		int ind = -1;
+		for (int j = 0; j < parent.children().length; j++) {
+			Tree curr_child = parent.children()[j];
+			if (curr_child == child_to_remove) {
+				ind = j;
+			}
+		}
+		parent.removeChild(ind);
 	}
 }
